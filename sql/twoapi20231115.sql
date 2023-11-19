@@ -39,6 +39,7 @@ CREATE TABLE `channels`  (
   `used_quota` bigint(255) DEFAULT 0,
   `model_mapping` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `exchange_rate` decimal(16, 8) DEFAULT 1.00000000,
+  `limits` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_channels_key`(`key`) USING BTREE,
   INDEX `idx_channels_name`(`name`) USING BTREE

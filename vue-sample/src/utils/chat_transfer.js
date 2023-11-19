@@ -10,6 +10,19 @@ export function initBaseMessage(messages, model = "gpt-3.5-turbo-16k", stream = 
     };
 } 
 
+export function initSummaryMessage(messages, urls, model = "gpt-3.5-turbo-16k", stream = true) {
+    return {
+        urls,
+        messages,
+        stream: stream,
+        model,
+        temperature: 0.5,
+        presence_penalty: 0,
+        frequency_penalty: 0,
+        top_p: 1
+    };
+} 
+
 export function initBaseChatLogSection(type = "reply", content = "", chatId = 0, userId = 0) {
     return {
         chat_id: chatId,

@@ -1,94 +1,3 @@
-export function getMainMenus() {
-    var menus = [
-        {
-            "job": "默认",
-            "items": [
-                {
-                    "title": "对话",
-                    "links": [
-                        { title: "对话", href: "/chat/base/0/7" },
-                        { title: "联网", href: "/chat/base/8/5" },
-                        { title: "智脑", href: "/chat/base/11/45" },
-                        { title: "智谱", href: "/chat/base/12/65" },
-                        { title: "分析", href: "/chat/base/6/7" },
-                        { title: "周报生成", href: "/chat/base/110/8" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/7" },
-                        { title: "词汇老师", href: "/chat/base/103/4" }
-                    ]
-                },
-                {
-                    "title": "绘图",
-                    "links": [
-                        { title: "Midjourney", href: "/chat/base/9/32" },
-                        { title: "Dalle-3", href: "/chat/base/9/17" },
-                    ]
-                }
-            ]
-        },
-        {
-            "job": "名人",
-            "items": [
-                {
-                    "title": "名人",
-                    "links": [
-                        { title: "助手", href: "/chat/base/3/4" },
-                        { title: "祖母", href: "/chat/base/5/7" },
-                        { title: "半仙", href: "/chat/base/4/7" },
-                        { title: "佛祖", href: "/chat/base/106/8" },
-                        { title: "牛破天", href: "/chat/base/102/7" },
-                    ]
-                }
-            ]
-        },
-        {
-            "job": "程序员",
-            "items": [
-                {
-                    "title": "程序员",
-                    "links": [
-                        { title: "助手-1", href: "/chat/base/3/7" },
-                        { title: "助手-2", href: "/chat/base/12/65" },
-                        { title: "助手-3", href: "/chat/base/11/45" },
-                        { title: "助手-4", href: "/chat/base/13/11" },
-                        { title: "DBA", href: "/chat/base/104/7" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/7" },
-                        { title: "网页总结", href: "/chat/summary/111/7" }
-                    ]
-                }
-            ]
-        },
-        {
-            "job": "撰写家",
-            "items": [
-                {
-                    "title": "撰写家",
-                    "links": [
-                        { title: "助手", href: "/chat/base/3/7" },
-                        { title: "小说家", href: "/chat/base/2/7" },
-                        { title: "小红书创作", href: "/chat/base/107/7" },
-                        { title: "爆款作家", href: "/chat/base/108/11" },
-                        { title: "好评生成器", href: "/chat/base/109/7" },
-                        { title: "项目起名大师", href: "/chat/base/100/7" },
-                        { title: "Slogan生成大师", href: "/chat/base/105/7" }
-                    ]
-                }
-            ]
-        }
-    ]
-    var job = localStorage.getItem('job') ?? '默认';
-    var matchedMenu = menus.find(function (menu) {
-        return menu.job === job;
-    });
-
-    if (matchedMenu) {
-        return matchedMenu.items;
-    } else {
-        return menus[0].items;
-    }
-}
-
 export function getChannelStatus(status) {
     switch (status) {
         case 1:
@@ -100,6 +9,21 @@ export function getChannelStatus(status) {
     }
 }
 
+export function getGroups() {
+    return [{
+        "value": "default",
+        "label": "default",
+    },
+    {
+        "value": "vip",
+        "label": "vip",
+    },
+    {
+        "value": "svip",
+        "label": "svip",
+    }]
+}
+
 export function getTokenStatus(status) {
     switch (status) {
         case 1:
@@ -109,6 +33,28 @@ export function getTokenStatus(status) {
         default:
             return "未知"
     }
+}
+
+export function getActivatedChannelTypes() {
+    return [{
+        "value": 1,
+        "label": "OpenAI",
+    }, {
+        "value": 2,
+        "label": "讯飞星火",
+    }, {
+        "value": 3,
+        "label": "百度文心",
+    }, {
+        "value": 11,
+        "label": "360智脑",
+    }, {
+        "value": 5,
+        "label": "ChatGLM",
+    }, {
+        "value": 13,
+        "label": "百川AI",
+    }]
 }
 
 export function getRedemptionStatus(status) {
@@ -124,6 +70,133 @@ export function getRedemptionStatus(status) {
     }
 }
 
+export function getAllModels(channelType = -1) {
+    if (channelType == 2) {
+        return [
+            "SparkDesk",
+            "SparkDesk2",
+            "SparkDesk3",
+        ]
+    }
+    if (channelType == 3) {
+        return [
+            "ERNIE-Bot",
+            "ERNIE-Bot-turbo",
+            "ERNIE-Bot-Pro",
+        ]
+    }
+
+    if (channelType == 11) {
+        return [
+            "360GPT_S2_V9",
+            "360GPT_S2_V9.4"
+        ]
+    }
+
+    if (channelType == 13) {
+        return ["Baichuan2-53B",
+            "baichuan2-7b-chat-v1",
+            "baichuan-7b-v1"]
+    }
+    if (channelType == 5) {
+        return [
+            "chatglm_turbo",
+            "chatglm_pro",
+            "chatglm_std",
+            "chatglm_lite",
+            "characterglm"
+        ]
+    }
+
+    if (channelType == 1 || channelType == -1) {
+        return [
+            "ada",
+            "babbage",
+            "curie",
+            "davinci",
+            "gpt-3.5-turbo",
+            "gpt-3.5-turbo-0301",
+            "gpt-3.5-turbo-0613",
+            "gpt-3.5-turbo-16k",
+            "gpt-3.5-turbo-16k-0613",
+            "gpt-3.5-turbo-1106",
+            "gpt-3.5-turbo-instruct",
+            "gpt-3.5-turbo-instruct-0914",
+            "gpt-4",
+            "gpt-4-0314",
+            "gpt-4-0613",
+            "gpt-4-32k",
+            "gpt-4-32k-0314",
+            "gpt-4-32k-0613",
+            "gpt-4-dalle",
+            "gpt-4-v",
+            "gpt-4-all",
+            "gpt-4-bing",
+            "gpt-4-1106-preview",
+            "gpt-4-1106-vision-preview",
+            "google-palm",
+            "llama-2-70b",
+            "llama-2-13b",
+            "llama-2-7b",
+            "llama2-7b-chat-v2",
+            "llama2-13b-chat-v2",
+            "code-llama-34b",
+            "code-llama-13b",
+            "code-llama-7b",
+            "claude-1-100k",
+            "claude-2-100k",
+            "claude-instant-1",
+            "claude-2",
+            "net-gpt-3.5-turbo-16k",
+            "net-gpt-4",
+            "midjourney",
+            "mj",
+            "ERNIE-Bot",
+            "ERNIE-Bot-turbo",
+            "ERNIE-Bot-Pro",
+            "chatglm",
+            "chatglm_pro",
+            "chatglm_std",
+            "chatglm_lite",
+            "characterglm",
+            "chatglm-6b-v2",
+            "qwen-v1",
+            "qwen-plus-v1",
+            "qwen-turbo",
+            "qwen-plus",
+            "qwen-14b-chat",
+            "qwen-7b-chat",
+            "semantic_similarity_s1_v1",
+            "SparkDesk",
+            "SparkDesk2",
+            "SparkDesk3",
+            "360GPT_S2_V9",
+            "360GPT_S2_V9.4",
+            "dall-e",
+            "DALL·E 3",
+            "stable-diffusion",
+            "tts-1",
+            "text-embedding-ada-002",
+            "text-davinci-003",
+            "text-davinci-002",
+            "text-ada-001",
+            "text-babbage-001",
+            "text-curie-001",
+            "text-davinci-edit-001",
+            "text-moderation-latest",
+            "text-moderation-stable",
+            "code-davinci-edit-001",
+            "text-search-ada-doc-001",
+            "whisper-1",
+            "Embedding-V1",
+            "PaLM-2",
+            "embedding-bert-512-v1",
+            "embedding_s1_v1",
+            "Baichuan2-53B"
+        ];
+    }
+}
+
 export function getChannelType(status) {
     switch (status) {
         case 1:
@@ -132,6 +205,12 @@ export function getChannelType(status) {
             return "讯飞星火"
         case 3:
             return "百度文心"
+        case 5:
+            return "智谱AI"
+        case 11:
+            return "360智脑"
+        case 13:
+            return "百川AI"
         default:
             return "未知"
     }
