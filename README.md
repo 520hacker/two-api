@@ -105,9 +105,9 @@
 
 ```
    ports:
-      - 7001:80
+      - 7001:8080
    environment:
-      - MYSQL_HOST=172.17.0.1
+      - MYSQL_HOST=您的MYSQL服务器地址/ip
       - MYSQL_USER=您的MYSQL用户名
       - MYSQL_PWD=您的MYSQL密码
       - MYSQL_DB=您的MYSQL数据库地址
