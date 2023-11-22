@@ -177,6 +177,9 @@ export function getTokenStatus(status) {
 
 export function getActivatedChannelTypes() {
     return [{
+        "value": 0,
+        "label": "OpenAI经典",
+    }, {
         "value": 1,
         "label": "OpenAI",
     }, {
@@ -333,6 +336,30 @@ export function getAllModels(channelType = -1) {
             "embedding-bert-512-v1",
             "embedding_s1_v1",
             "Baichuan2-53B"
+        ];
+    }
+
+    if (channelType == 0) {
+        return [
+            "gpt-3.5-turbo",
+            "gpt-3.5-turbo-0301",
+            "gpt-3.5-turbo-0613",
+            "gpt-3.5-turbo-16k",
+            "gpt-3.5-turbo-16k-0613",
+            "gpt-3.5-turbo-1106",
+            "gpt-3.5-turbo-instruct",
+            "gpt-3.5-turbo-instruct-0914",
+            "gpt-4",
+            "gpt-4-0314",
+            "gpt-4-0613",
+            "gpt-4-32k",
+            "gpt-4-32k-0314",
+            "gpt-4-32k-0613",
+            "gpt-4-dalle",
+            "gpt-4-v",
+            "gpt-4-all",
+            "gpt-4-1106-preview",
+            "gpt-4-1106-vision-preview",
         ];
     }
 }

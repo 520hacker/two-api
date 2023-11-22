@@ -30,14 +30,15 @@
                                     </el-checkbox-group>
                                 </el-form-item>
                                 <el-form-item label="模型">
-                                    <el-input v-model="form.models" />
+                                    <el-input v-model="form.models" readonly="true" />
                                     <div style="height: 10px; width:  100%;"></div>
                                     <el-checkbox-group v-model="form.models">
                                         <el-checkbox :label="model" :key="model" v-for="model in models" border />
                                     </el-checkbox-group>
                                 </el-form-item>
                                 <el-form-item label="密钥">
-                                    <el-input v-model="form.key" placeholder="input your channel key" />
+                                    <el-input v-model="form.keys" :autosize="{ minRows: 2, maxRows: 10 }" type="textarea"
+                                        placeholder="key,一行一个" />
                                 </el-form-item>
                                 <el-form-item label="代理">
                                     <el-input v-model="form.baseUrl"
@@ -54,6 +55,12 @@
                                 </el-form-item>
                             </el-tab-pane>
                             <el-tab-pane label="高级设置">
+                                <el-form-item label="默认启用">
+                                    <el-radio-group v-model="form.status">
+                                        <el-radio-button label="1">启用</el-radio-button>
+                                        <el-radio-button label="2">禁用</el-radio-button>
+                                    </el-radio-group>
+                                </el-form-item>
                                 <el-form-item label="并发权重">
                                     <el-input v-model="form.weight" placeholder="3" />
                                 </el-form-item>
@@ -130,15 +137,16 @@ export default {
         const models = ref([])
         const types = getActivatedChannelTypes()
         const form = reactive({
-            type: 1,
+            type: 0,
             name: '',
             group: ['default'],
             models: ['gpt-3.5-turbo'],
             modelMapping: {},
-            key: '',
+            keys: '',
             baseUrl: '',
             limits: {},
-            weight: 100
+            weight: 100,
+            status: 1
         })
         const defaultValues = ref({
             limits: {
@@ -153,7 +161,7 @@ export default {
 
         const onLoad = () => {
             CheckLogin()
-            models.value = getAllModels(-1);
+            models.value = getAllModels(0);
         };
         onLoad();
 
@@ -162,16 +170,18 @@ export default {
         }
 
         const onSubmit = () => {
+            var keys = form.keys.split("\n")
             addChannel({
-                type: form.type,
+                type: form.type == 0 ? 1 : form.type,
                 name: form.name,
                 group: form.group.join(','),
                 models: form.models.join(','),
-                key: form.key,
+                keys: keys,
                 weight: form.weight,
                 modelMapping: JSON.stringify(form.modelMapping),
                 limits: JSON.stringify(form.limits),
-                baseUrl: form.baseUrl
+                baseUrl: form.baseUrl,
+                status: form.status
             }).then(data => {
                 if (data.success) {
                     ElMessageBox({
