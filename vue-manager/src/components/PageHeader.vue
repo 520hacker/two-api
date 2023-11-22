@@ -4,11 +4,7 @@
             <div class="header-container">
                 <div class="logo-container">
                     <div class="logo-container">
-                        <!-- <a href="/#"></a> -->
-                        <!-- <img class="logo"
-                                src="https://memosfile.qiangtu.com/picgo/assets/2023/06/18202306_18014611.png?x-oss-process=image/resize,h_28,w_114"
-                                alt="Memos RSS square Logo"> -->
-                        <strong @click="goHomePage">TWO API</strong>
+                        <strong @click="goHomePage">{{ customHeader.siteName }}</strong>
                     </div>
                 </div>
                 <div class="content">
@@ -40,35 +36,34 @@
                     <nav class="navbar-menu menu">
                         <router-link to="/"
                             :class="'link-item link is-menu-link ' + (pathname == '/' ? 'active' : '')">首页</router-link>
-                        <a href="https://twoapi-ui.qiangtu.com" class="link-item link is-menu-link">DEMO</a>
-                        <!-- 
-                        <router-link to="/about" class="link-item link is-menu-link">关于</router-link> -->
+                        <a v-for="item in customHeader.menus" v-bind:key="item" :href="item.href"
+                            class="link-item link is-menu-link">{{ item.title }}</a>
                         <router-link to="/login" class="link-item link is-menu-link" v-if="!logged">登录</router-link>
                         <router-link to="javascript:void(0)" class="link-item link is-menu-link" v-if="logged"
                             @click.prevent="logout">登出</router-link>
-
-                        <!-- <a class="link-item link is-menu-link active" href="#">渠道</a>
-                        <a class="link-item link is-menu-link" href="#"  >令牌</a>
-                        <a class="link-item link is-menu-link" href="#" >日志</a> -->
                     </nav>
                     <div class="theme-toggler-content theme-toggler">
                         <button class="switch" role="switch" aria-label="切换暗色主题" aria-checked="false"
                             v-on:click="toggleDarkMode">
                             <div class="switch__action">
-                                <div class="switch__icon"><i class="el-icon" style="font-size:13px;" data-v-3de418c2=""><svg
-                                            viewBox="0 0 24 24" class="dark-icon" data-v-3de418c2="">
+                                <div class="switch__icon">
+                                    <i class="el-icon" style="font-size:13px;" data-v-3de418c2="">
+                                        <svg viewBox="0 0 24 24" class="dark-icon" data-v-3de418c2="">
                                             <path
                                                 d="M11.01 3.05C6.51 3.54 3 7.36 3 12a9 9 0 0 0 9 9c4.63 0 8.45-3.5 8.95-8c.09-.79-.78-1.42-1.54-.95A5.403 5.403 0 0 1 11.1 7.5c0-1.06.31-2.06.84-2.89c.45-.67-.04-1.63-.93-1.56z"
                                                 fill="currentColor"></path>
-                                        </svg><svg viewBox="0 0 24 24" class="light-icon" data-v-3de418c2="">
+                                        </svg>
+                                        <svg viewBox="0 0 24 24" class="light-icon" data-v-3de418c2="">
                                             <path
                                                 d="M6.05 4.14l-.39-.39a.993.993 0 0 0-1.4 0l-.01.01a.984.984 0 0 0 0 1.4l.39.39c.39.39 1.01.39 1.4 0l.01-.01a.984.984 0 0 0 0-1.4zM3.01 10.5H1.99c-.55 0-.99.44-.99.99v.01c0 .55.44.99.99.99H3c.56.01 1-.43 1-.98v-.01c0-.56-.44-1-.99-1zm9-9.95H12c-.56 0-1 .44-1 .99v.96c0 .55.44.99.99.99H12c.56.01 1-.43 1-.98v-.97c0-.55-.44-.99-.99-.99zm7.74 3.21c-.39-.39-1.02-.39-1.41-.01l-.39.39a.984.984 0 0 0 0 1.4l.01.01c.39.39 1.02.39 1.4 0l.39-.39a.984.984 0 0 0 0-1.4zm-1.81 15.1l.39.39a.996.996 0 1 0 1.41-1.41l-.39-.39a.993.993 0 0 0-1.4 0c-.4.4-.4 1.02-.01 1.41zM20 11.49v.01c0 .55.44.99.99.99H22c.55 0 .99-.44.99-.99v-.01c0-.55-.44-.99-.99-.99h-1.01c-.55 0-.99.44-.99.99zM12 5.5c-3.31 0-6 2.69-6 6s2.69 6 6 6s6-2.69 6-6s-2.69-6-6-6zm-.01 16.95H12c.55 0 .99-.44.99-.99v-.96c0-.55-.44-.99-.99-.99h-.01c-.55 0-.99.44-.99.99v.96c0 .55.44.99.99.99zm-7.74-3.21c.39.39 1.02.39 1.41 0l.39-.39a.993.993 0 0 0 0-1.4l-.01-.01a.996.996 0 0 0-1.41 0l-.39.39c-.38.4-.38 1.02.01 1.41z"
                                                 fill="currentColor"></path>
-                                        </svg></i></div>
+                                        </svg>
+                                    </i>
+                                </div>
                             </div>
                         </button>
                     </div>
-                    <div class="social-links" v-if="false">
+                    <div class="social-links" v-if="customHeader.showGitHub">
                         <a href="https://github.com/520hacker" title="GitHub" target="_blank" rel="noreferrer noopener"
                             class="social-link">
                             <i class="el-icon" style="font-size:24px;">
@@ -91,7 +86,8 @@
 import { useRouter } from 'vue-router';
 import { inject, ref, h } from 'vue';
 import { ElMessageBox } from 'element-plus'
-
+import { getContent } from '@/api/public'
+import { getDefaultOptions } from '@/utils/enums'
 export default {
     name: 'PageHeader',
     props: {
@@ -106,12 +102,29 @@ export default {
                 document.documentElement.classList.remove('dark');
             }
         },
-
     },
     setup() {
         const pathname = ref('/');
         const logged = ref(false);
         const router = useRouter();
+        const customHeader = ref({});
+        const onLoad = () => {
+            var options = getDefaultOptions()
+            const selectedOption = options.find(item => item.value === 'SiteInfo');
+            if (selectedOption) {
+                customHeader.value = selectedOption.default;
+            }
+
+            getContent({
+                key: 'SiteInfo',
+            }).then(data => {
+                if (data.item) {
+                    customHeader.value = JSON.parse(data.item)
+                    document.title = customHeader.value.siteName;
+                }
+            });
+        };
+        onLoad();
         const logout = () => {
             localStorage.removeItem('SK');
             localStorage.removeItem('Role');
@@ -156,7 +169,8 @@ export default {
             pathname,
             logged,
             triggerSearch,
-            logout
+            logout,
+            customHeader
         };
     }
 }

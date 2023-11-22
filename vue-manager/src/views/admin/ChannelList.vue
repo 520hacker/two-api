@@ -312,7 +312,9 @@ export default {
 
             for (var rowIndex in tableData.value) {
                 var row = tableData.value[rowIndex]
-                getItemResponseTime(row.id, row.name)
+                if (row.status == 1) {
+                    getItemResponseTime(row.id, row.name)
+                }
             }
 
             setTimeout(function () {

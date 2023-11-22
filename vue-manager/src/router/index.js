@@ -20,6 +20,8 @@ import TokenEdit from '../views/admin/TokenEdit.vue';
 import RedemptionList from '../views/admin/RedemptionList.vue';
 import RedemptionAdd from '../views/admin/RedemptionAdd.vue';
 import RedemptionEdit from '../views/admin/RedemptionEdit.vue';
+
+import InstallOrUpgrade from '../views/admin/InstallOrUpgrade.vue';
  
 import LogList from '../views/admin/LogList.vue';
 import LogDetail from '../views/admin/LogDetail.vue';
@@ -55,6 +57,7 @@ const routes = [
   { path: '/redemptions/new', component: RedemptionAdd },
   { path: '/logs', component: LogList },
   { path: '/logs/:id', component: LogDetail },
+  { path: '/install', component: InstallOrUpgrade },
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
   { path: '/user/profile', component: UserProfile },

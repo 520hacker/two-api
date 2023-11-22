@@ -7,7 +7,7 @@ const baseURL = window.location.hostname === 'localhost'
 const service = axios.create({
   baseURL,
   withCredentials: false,
-  timeout: 30000,
+  timeout: 300000,
 });
 
 service.interceptors.request.use(config => {

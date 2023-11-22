@@ -146,6 +146,8 @@ export default {
                     return "配置";
                 case 32:
                     return "禁用频道";
+                case 128:
+                    return "频道降权";
                 default:
                     return "默认";
             }

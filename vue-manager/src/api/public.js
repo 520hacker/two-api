@@ -15,3 +15,31 @@ export function getContent(param) {
         return data;
     });
 }
+
+export function getUpgradeStatus(param) { 
+  
+    // 将id添加到URL中
+    const url = `/twoapi/upgrade/status`;
+
+    return request({
+        url: url,
+        params: param,
+        method: 'get'
+    }).then(data => { 
+        return data;
+    });
+}
+
+export function installOrUpgrade(param) { 
+  
+    // 将id添加到URL中
+    const url = `/twoapi/upgrade/init`;
+
+    return request({
+        url: url,
+        params: param,
+        method: 'get'
+    }).then(data => { 
+        return data;
+    });
+}

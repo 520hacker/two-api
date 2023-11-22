@@ -143,8 +143,8 @@ export default {
         const defaultValues = ref({
             limits: {
                 "minute": 3,
-                "hour": 100,
-                "day": 500
+                "hour": 60,
+                "day": 200
             }
         })
         const setDefaultLimit = () => {
