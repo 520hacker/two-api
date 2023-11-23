@@ -9,29 +9,55 @@
                     <p>您可以设置多个渠道用以优化访问策略。</p>
                 </div>
                 <div class="example">
-                    <el-button-group class="ml-4">
-                        <el-button type="primary" :icon="Edit" @click="handleNew" />
-                        <el-button type="primary" :icon="Grid" @click="goModels" />
-                        <el-button type="primary" :icon="Money" @click="handleRefreshBalanceAll" />
-                        <el-button type="primary" :icon="Refresh" @click="handleTestAll" />
-                    </el-button-group>
-                    <div class="mt-4" v-show="false">
-                        <el-input v-model="input3" placeholder="Please input" class="input-with-select">
+                    <el-row>
+                        <el-col :span="18">
+                            <el-button-group class="ml-4">
+                                <el-button type="primary" :icon="Edit" @click="handleNew" />
+                                <el-button type="primary" :icon="Grid" @click="goModels" />
+                                <el-button type="primary" :icon="Money" @click="handleRefreshBalanceAll" />
+                                <el-button type="primary" :icon="Refresh" @click="handleTestAll" />
+                            </el-button-group></el-col>
+                        <el-col :span="6" style="text-align: right; color: #e9e9eb;">
+                            高级搜索
+                            <el-switch v-model="showAdvSearchFrom"  />
+                        </el-col>
+                    </el-row>
+                    <div v-show="showAdvSearchFrom">
+                        <div style="clear: both;  display: block; width: 100%;margin: 10px 0 0px 0;height: 1px;">
+                        </div>
+                        <div class="mt-4">
+                            <el-input v-model="searchForm.model" placeholder="Please input model" class="input-with-select">
+                                <template #prepend>
+                                    <el-select v-model="searchForm.type" placeholder="Select" style="width: 115px">
+                                        <el-option label="不限类型" :value="-1" />
+                                        <el-option v-for="item in types" v-bind:key="item.value" :label="item.label"
+                                            :value="item.value" />
+                                    </el-select>
+                                </template>
+                            </el-input>
+                        </div>
+                    </div>
+
+                    <div style="clear: both;  display: block; width: 100%;margin: 10px 0 0px 0;height: 1px;">
+                    </div>
+                    <div class="mt-4">
+                        <el-input v-model="searchForm.keyword" placeholder="Please input keyword" class="input-with-select">
                             <template #prepend>
-                                <el-select v-model="select" placeholder="Select" style="width: 115px">
-                                    <el-option label="Restaurant" value="1" />
-                                    <el-option label="Order No." value="2" />
-                                    <el-option label="Tel" value="3" />
+                                <el-select v-model="searchForm.group" placeholder="Select" style="width: 115px">
+                                    <el-option label="不限分组" value="all" />
+                                    <el-option label="default" value="default" />
+                                    <el-option label="vip" value="vip" />
+                                    <el-option label="svip" value="svip" />
                                 </el-select>
                             </template>
                             <template #append>
-                                <el-button :icon="Search" />
+                                <el-button :icon="Search" @click="loadList" />
                             </template>
                         </el-input>
                     </div>
-                    <div style="border-top: 1px solid #e9e9eb; display: block; width: 100%;margin: 10px 0 0 0;height: 1px;">
+                    <div
+                        style="border-top: 1px solid #e9e9eb; display: block; width: 100%;margin: 10px 0 4px 0;height: 1px;">
                     </div>
-
                     <el-table :data="tableData" style="width: 100%" v-loading="loading">
                         <el-table-column type="expand">
                             <template #default="props">
@@ -153,7 +179,7 @@
 import { useRouter } from 'vue-router';
 import { getChannels, getChannelResponseTime, getChannelBalance, deleteChannel, updateChannel, getChannel } from '@/api/channel'
 import { CheckLogin } from '@/api/user'
-import { getChannelStatus, getChannelType } from '@/utils/enums'
+import { getAllModels, getActivatedChannelTypes, getChannelStatus, getChannelType } from '@/utils/enums'
 import {
     Check,
     Delete,
@@ -174,7 +200,16 @@ export default {
         const pageSize2 = ref(20)
         const totalCount = ref(0)
         const input3 = ref('')
+        const models = ref([])
+        const types = ref([])
         const background = ref(true)
+        const showAdvSearchFrom = ref(false)
+        const searchForm = ref({
+            "type": -1,
+            "model": "",
+            "keyword": '',
+            "group": "all"
+        })
 
         const getDate = (timestamp) => {
             const date = new Date(timestamp);
@@ -384,6 +419,10 @@ export default {
         const loadList = () => {
             loading.value = true
             getChannels({
+                type: searchForm.value.type == -1 ? null : searchForm.value.type,
+                model: searchForm.value.model == 'all' ? '' : searchForm.value.model,
+                keyword: searchForm.value.keyword,
+                group: searchForm.value.group == 'all' ? '' : searchForm.value.group,
                 limit: pageSize2.value,
                 offset: (currentPage2.value - 1) * pageSize2.value,
             }).then(data => {
@@ -397,8 +436,13 @@ export default {
 
 
         const onLoad = () => {
+            models.value = getAllModels(1)
+            types.value = getActivatedChannelTypes().filter(function (item) {
+                return item.value != 0
+            })
             CheckLogin()
             loadList()
+
         };
         onLoad();
 
@@ -410,6 +454,10 @@ export default {
             pageSize2,
             background,
             totalCount,
+            searchForm,
+            showAdvSearchFrom,
+            models,
+            types,
             onLoad,
             handleTestAll,
             handleRefreshBalanceAll,

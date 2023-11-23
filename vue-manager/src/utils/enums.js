@@ -362,10 +362,10 @@ export function getAllModels(channelType = -1) {
             "gpt-4-1106-vision-preview",
         ];
     }
-}
+} 
 
-export function getChannelType(status) {
-    switch (status) {
+export function getChannelType(type) {
+    switch (type) {
         case 1:
             return "OpenAI"
         case 2:
