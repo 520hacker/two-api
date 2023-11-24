@@ -71,6 +71,18 @@
                                         </a>
                                     </div>
                                 </el-form-item>
+                                <el-form-item label="特殊计费">
+                                    <div class="form-limits">
+                                        <JsonEditorVue class="editor" v-model="form.settleMethod"
+                                            style="height: 220px; width: 100%;" />
+                                    </div>
+                                    <div class="form-limits-default">
+                                        <a class="set-to-default" @click="setDefaultSettleMethod">默认计费
+                                        </a><br />
+                                        <a class="set-to-default" @click="setDefaultSettleMethod2">按次计费
+                                        </a>
+                                    </div>
+                                </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="onSubmit">更新渠道</el-button>
                                     &nbsp;
@@ -138,6 +150,7 @@ export default {
             key: '',
             baseUrl: '',
             limits: {},
+            settleMethod: {},
             weight: 100
         })
         const defaultValues = ref({
@@ -145,6 +158,12 @@ export default {
                 "minute": 3,
                 "hour": 60,
                 "day": 200
+            },
+            settleMethod: {
+                "type": 0,
+                "defaultPerTimeToken": 0,
+                "perTimeToken": { 
+                }
             }
         })
         const setDefaultLimit = () => {
@@ -164,12 +183,19 @@ export default {
                 form.weight = data.item.weight
                 form.key = data.item.key
                 form.baseUrl = data.item.baseUrl
-
+ 
                 try {
                     form.modelMapping = JSON.parse(data.item.modelMapping)
                 } catch {
                     form.modelMapping = data.item.modelMapping
                 }
+
+                try {
+                    form.settleMethod = JSON.parse(data.item.settleMethod)
+                } catch {
+                    form.settleMethod = data.item.settleMethod
+                }
+
                 try {
                     form.limits = JSON.parse(data.item.limits)
                 } catch {
@@ -178,6 +204,20 @@ export default {
             });
         };
         onLoad();
+
+        const setDefaultSettleMethod = () => {
+            form.settleMethod = defaultValues.value.settleMethod
+        }
+
+        const setDefaultSettleMethod2 = () =>{
+            form.settleMethod = {
+                "type": 1,
+                "defaultPerTimeToken": 500,
+                "perTimeToken": {
+                    "gpt-4": 2000
+                }
+            }
+        }
 
         const handleTypeChange = () => {
             models.value = getAllModels(form.type);
@@ -194,6 +234,7 @@ export default {
                 baseUrl: form.baseUrl,
                 modelMapping: JSON.stringify(form.modelMapping),
                 limits: JSON.stringify(form.limits),
+                settleMethod: JSON.stringify(form.settleMethod),
                 weight: form.weight
             }).then(data => {
                 if (data.success) {
@@ -223,6 +264,8 @@ export default {
             onSubmit,
             handleTypeChange,
             setDefaultLimit,
+            setDefaultSettleMethod,
+            setDefaultSettleMethod2,
             form,
             groups,
             types,
@@ -242,5 +285,5 @@ export default {
     position: absolute;
     left: -90px;
     top: 30px
-}
+} 
 </style>

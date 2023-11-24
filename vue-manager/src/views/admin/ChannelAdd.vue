@@ -79,6 +79,18 @@
                                         </a>
                                     </div>
                                 </el-form-item>
+                                <el-form-item label="特殊计费">
+                                    <div class="form-limits">
+                                        <JsonEditorVue class="editor" v-model="form.settleMethod"
+                                            style="height: 220px; width: 100%;" />
+                                    </div>
+                                    <div class="form-limits-default">
+                                        <a class="set-to-default" @click="setDefaultSettleMethod">默认计费
+                                        </a><br />
+                                        <a class="set-to-default" @click="setDefaultSettleMethod2">按次计费
+                                        </a>
+                                    </div>
+                                </el-form-item>
                                 <el-form-item>
                                     <el-button type="primary" @click="onSubmit">添加渠道</el-button>
                                     &nbsp;
@@ -145,6 +157,7 @@ export default {
             keys: '',
             baseUrl: '',
             limits: {},
+            settleMethod: {},
             weight: 100,
             status: 1
         })
@@ -153,10 +166,30 @@ export default {
                 "minute": 3,
                 "hour": 60,
                 "day": 200
+            },
+            settleMethod: {
+                "type": 0,
+                "defaultPerTimeToken": 0,
+                "perTimeToken": { 
+                }
             }
         })
         const setDefaultLimit = () => {
             form.limits = defaultValues.value.limits
+        }
+
+        const setDefaultSettleMethod = () => {
+            form.settleMethod = defaultValues.value.settleMethod
+        }
+
+        const setDefaultSettleMethod2 = () =>{
+            form.settleMethod = {
+                "type": 1,
+                "defaultPerTimeToken": 500,
+                "perTimeToken": {
+                    "gpt-4": 2000
+                }
+            }
         }
 
         const onLoad = () => {
@@ -180,6 +213,7 @@ export default {
                 weight: form.weight,
                 modelMapping: JSON.stringify(form.modelMapping),
                 limits: JSON.stringify(form.limits),
+                settleMethod: JSON.stringify(form.settleMethod),
                 baseUrl: form.baseUrl,
                 status: form.status
             }).then(data => {
@@ -210,6 +244,8 @@ export default {
             onSubmit,
             handleTypeChange,
             setDefaultLimit,
+            setDefaultSettleMethod,
+            setDefaultSettleMethod2,
             form,
             groups,
             types,
@@ -229,5 +265,5 @@ export default {
     position: absolute;
     left: -90px;
     top: 30px
-}
+} 
 </style>
