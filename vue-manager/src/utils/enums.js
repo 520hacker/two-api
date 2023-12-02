@@ -52,11 +52,21 @@ export function getDefaultOptions() {
                 "gpt-4": 15,
                 "gpt-4-0314": 15,
                 "gpt-4-0613": 15,
+                "gpt-4-dalle": 32,
+                "gpt-4-v": 32,
+                "gpt-4-all": 32,
+                "gpt-4-bing": 32,
+                "gpt-4-1106-preview": 32,
+                "gpt-4-1106-vision-preview": 32,
+                "gpt-4-gizmo-g": 32,
+                "gpt-4-vision-preview": 32,
                 "gpt-4-32k": 30,
                 "gpt-4-32k-0314": 30,
                 "gpt-4-32k-0613": 30,
                 "qwen-plus-v1": 0.5715,
                 "qwen-v1": 0.8572,
+                "qwen-max-v1": 0.8572,
+                "qwen-max": 0.8572,
                 "semantic_similarity_s1_v1": 0.0715,
                 "text-ada-001": 0.2,
                 "text-babbage-001": 0.25,
@@ -128,6 +138,27 @@ export function getDefaultOptions() {
             default: []
         },
         {
+            value: 'OssConfig',
+            label: 'Aliyun Oss 配置',
+            default: {
+                "enabled": false,
+                "endpoint": "",
+                "accessKeyId": "",
+                "accessKeySecret": "",
+                "bucketName": "",
+                "path": "",
+                "domainName": ""
+            }
+        },
+        {
+            value: 'LogSaveConfig',
+            label: '日志存储配置',
+            default: {
+                "type": 0,
+                "disabledMethods": [],
+            }
+        },
+        {
             value: 'IPWhiteList',
             label: 'IP白名单（通配符*）',
             default: []
@@ -189,6 +220,9 @@ export function getActivatedChannelTypes() {
         "value": 3,
         "label": "百度文心",
     }, {
+        "value": 4,
+        "label": "阿里通义千问",
+    }, {
         "value": 11,
         "label": "360智脑",
     }, {
@@ -241,6 +275,7 @@ export function getAllModels(channelType = -1) {
             "baichuan2-7b-chat-v1",
             "baichuan-7b-v1"]
     }
+
     if (channelType == 5) {
         return [
             "chatglm_turbo",
@@ -248,6 +283,17 @@ export function getAllModels(channelType = -1) {
             "chatglm_std",
             "chatglm_lite",
             "characterglm"
+        ]
+    }
+
+    if (channelType == 4) {
+        return [
+            "qwen-turbo",
+            "qwen-max",
+            "qwen-max-v1",
+            "qwen-v1",
+            "qwen-plus",
+            "qwen-plus-v1",
         ]
     }
 
@@ -275,8 +321,10 @@ export function getAllModels(channelType = -1) {
             "gpt-4-v",
             "gpt-4-all",
             "gpt-4-bing",
+            "gpt-4-vision-preview",
             "gpt-4-1106-preview",
             "gpt-4-1106-vision-preview",
+            "gpt-4-gizmo-g",
             "google-palm",
             "llama-2-70b",
             "llama-2-13b",
@@ -305,8 +353,10 @@ export function getAllModels(channelType = -1) {
             "chatglm-6b-v2",
             "qwen-v1",
             "qwen-plus-v1",
+            "qwen-max-v1",
             "qwen-turbo",
             "qwen-plus",
+            "qwen-max",
             "qwen-14b-chat",
             "qwen-7b-chat",
             "semantic_similarity_s1_v1",
@@ -319,6 +369,7 @@ export function getAllModels(channelType = -1) {
             "DALL·E 3",
             "stable-diffusion",
             "tts-1",
+            "tts-1-hd",
             "text-embedding-ada-002",
             "text-davinci-003",
             "text-davinci-002",
@@ -358,11 +409,14 @@ export function getAllModels(channelType = -1) {
             "gpt-4-dalle",
             "gpt-4-v",
             "gpt-4-all",
+            "gpt-4-vision-preview",
             "gpt-4-1106-preview",
             "gpt-4-1106-vision-preview",
+            "tts-1",
+            "tts-1-hd",
         ];
     }
-} 
+}
 
 export function getChannelType(type) {
     switch (type) {
@@ -372,6 +426,8 @@ export function getChannelType(type) {
             return "讯飞星火"
         case 3:
             return "百度文心"
+        case 4:
+            return "阿里通义千问"
         case 5:
             return "智谱AI"
         case 11:
