@@ -10,4 +10,4 @@ export function createTxtAndDownload(filename, text) {
     element.click();  // 模拟点击新创建的元素
 
     document.body.removeChild(element);  // 删除新创建的元素
-} 
+}

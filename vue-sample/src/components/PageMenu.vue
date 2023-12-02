@@ -32,6 +32,7 @@
                                     <el-dropdown-item command="名人">名人</el-dropdown-item>
                                     <el-dropdown-item command="撰写家">撰写家</el-dropdown-item>
                                     <el-dropdown-item command="程序员">程序员</el-dropdown-item>
+                                    <el-dropdown-item command="GPTs">GPTs</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>

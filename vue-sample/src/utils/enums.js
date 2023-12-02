@@ -7,21 +7,24 @@ export function getMainMenus() {
                     "title": "对话",
                     "links": [
                         { title: "对话", href: "/chat/base/0/7" },
-                        { title: "联网", href: "/chat/base/8/5" },
-                        { title: "智脑", href: "/chat/base/11/45" },
-                        { title: "智谱", href: "/chat/base/12/65" },
-                        { title: "分析", href: "/chat/base/6/7" },
-                        { title: "周报生成", href: "/chat/base/110/8" },
+                        { title: "识图", href: "/chat/base/112/70" },
+                        { title: "读文档", href: "/chat/base/113/69" },
                         { title: "语法优化", href: "/chat/base/1/7" },
                         { title: "中英互译", href: "/chat/base/7/7" },
-                        { title: "词汇老师", href: "/chat/base/103/4" }
+                    ]
+                },
+                {
+                    "title": "联网",
+                    "links": [
+                        { title: "联网", href: "/chat/base/8/5" },
+                        { title: "网页总结", href: "/chat/summary/111/7" }
                     ]
                 },
                 {
                     "title": "绘图",
                     "links": [
                         { title: "Midjourney", href: "/chat/base/9/32" },
-                        { title: "Dalle-3", href: "/chat/base/9/17" },
+                        { title: "Dalle-3", href: "/chat/base/114/17" },
                     ]
                 }
             ]
@@ -51,10 +54,11 @@ export function getMainMenus() {
                         { title: "助手-2", href: "/chat/base/12/65" },
                         { title: "助手-3", href: "/chat/base/11/45" },
                         { title: "助手-4", href: "/chat/base/13/11" },
+                        { title: "助手-5", href: "/chat/base/115/78" },
+                        { title: "分析", href: "/chat/base/6/7" },
                         { title: "DBA", href: "/chat/base/104/7" },
                         { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/7" },
-                        { title: "网页总结", href: "/chat/summary/111/7" }
+                        { title: "中英互译", href: "/chat/base/7/7" }
                     ]
                 }
             ]
@@ -65,18 +69,39 @@ export function getMainMenus() {
                 {
                     "title": "撰写家",
                     "links": [
+                        { title: "周报", href: "/chat/base/110/8" },
                         { title: "助手", href: "/chat/base/3/7" },
                         { title: "小说家", href: "/chat/base/2/7" },
                         { title: "小红书创作", href: "/chat/base/107/7" },
                         { title: "爆款作家", href: "/chat/base/108/11" },
                         { title: "好评生成器", href: "/chat/base/109/7" },
                         { title: "项目起名大师", href: "/chat/base/100/7" },
-                        { title: "Slogan生成大师", href: "/chat/base/105/7" }
+                        { title: "Slogan生成大师", href: "/chat/base/105/7" },
+                        { title: "词汇老师", href: "/chat/base/103/4" },
+                    ]
+                }
+            ]
+        },
+        {
+            "job": "GPTs",
+            "items": [
+                {
+                    "title": "GPTs",
+                    "links": [
+                        { title: "图文故事", href: "/chat/base/8/77/56aUtyaYF" },
+                        { title: "谐音梗🤪", href: "/chat/base/8/77/7nunLIRz8" },
+                        { title: "清晰指南", href: "/chat/base/8/77/yIE7C91N3" },
+                        { title: "Logo创造", href: "/chat/base/8/77/y2ep4oU9e" },
+                        { title: "设计师", href: "/chat/base/8/77/bZfrNSWQ0" },
+                        { title: "探索动物", href: "/chat/base/8/77/eNRHCLVnl" },
+                        { title: "文档AI", href: "/chat/base/8/77/zk5H2G11H" },
+                        { title: "郭德纲分身", href: "/chat/base/8/77/qdhTcI4hP" },
                     ]
                 }
             ]
         }
     ]
+
     var job = localStorage.getItem('job') ?? '默认';
     var matchedMenu = menus.find(function (menu) {
         return menu.job === job;

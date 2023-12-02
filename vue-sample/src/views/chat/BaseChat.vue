@@ -50,15 +50,42 @@
                                 <el-button type="info" :icon="DocumentCopy" :disabled="generating"
                                     @click="handleCopyChat(item)" />
                             </el-tooltip>
+                            <el-tooltip class="box-item" effect="dark" content="朗读" placement="top">
+                                <el-button type="info" :icon="Microphone" :disabled="generating"
+                                    @click="handleSpeakOut(item)" />
+                            </el-tooltip>
                         </div>
                         <div v-if="item.item_type === 'intent'">
-                            <v-md-preview :text="item.content" ref="preview" />
+                            <v-md-preview :text="getRequestContent(item.content)" ref="preview" />
                         </div>
                         <el-card v-if="item.item_type === 'reply' && item.content">
                             <v-md-preview :text="item.content" ref="preview" />
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>
+                <div class="uploader" v-show="showImageUploader">
+                    <el-upload v-model:file-list="fileList" class="upload-demo"
+                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1"
+                        list-type="picture">
+                        <el-button type="primary">点击上传</el-button>
+                        <template #tip>
+                            <div class="el-upload__tip">
+                                如果文件过大，可能会导致上传失败且仍然扣除积分。
+                            </div>
+                        </template>
+                    </el-upload>
+                </div>
+                <div class="uploader" v-show="showDocUploader">
+                    <el-upload v-model:file-list="fileList" class="upload-demo"
+                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1">
+                        <el-button type="primary">点击上传</el-button>
+                        <template #tip>
+                            <div class="el-upload__tip">
+                                如果文件过大，可能会导致上传失败且仍然扣除积分。
+                            </div>
+                        </template>
+                    </el-upload>
+                </div>
                 <div class="chat-button">
                     <div class="buttons">
                         <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
@@ -124,12 +151,12 @@
     </div>
 </template>
 <script>
-import { initMessages, initBaseMessage, initBaseChatLogSection, initMessagesWithoutSys } from '@/utils/chat_transfer'
+import { initMessages, initBaseMessage, initBaseChatLogSection, initMessagesWithoutSys, getRequestContent, getDefaultVersionParam } from '@/utils/chat_transfer'
 import { useRoute, useRouter } from 'vue-router';
 import { watch, ref, onMounted } from 'vue';
 import DateInfo from '@/components/DateInfo.vue';
-import { makeTextFileLineIterator, makeSingleChat } from '@/api/sse'
-import { Promotion, Delete, CloseBold, Operation, Finished, Memo, ArrowDown, Checked, Refresh, DocumentCopy } from '@element-plus/icons-vue'
+import { makeTextFileLineIterator, makeTextToSpeech, makeSingleChat } from '@/api/sse'
+import { Promotion, Delete, CloseBold, Operation, Finished, Memo, ArrowDown, Checked, Refresh, Microphone, DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { timestampToDate } from '@/utils/date'
 import { loadChat, saveChat } from '@/utils/browser_db'
@@ -143,13 +170,16 @@ export default {
     },
 
     setup() {
+        const showImageUploader = ref(false)
+        const showDocUploader = ref(false)
+        const fileList = ref([])
         const route = useRoute();
         const router = useRouter();
         const generating = ref(false)
         const showLoading = ref(false)
         const showPrompt = ref(false)
         const showDialogTable = ref(false)
-        // const markdown = ref('')
+        const skey = ref('')
         const cur_prompt = ref({
             name: '助理',
             suggestions: [],
@@ -167,7 +197,9 @@ export default {
             short_cut_id: 0,
             model_id: 7
         })
-
+        const uploadHeader = ref({
+            'Authorization': `Bearer ${localStorage.getItem('CSK')}`
+        })
         const handleSetTextArea = (txt) => {
             textareaContent.value = txt
         }
@@ -177,6 +209,16 @@ export default {
             () => route.params.id,
             (newId) => {
                 curChat.value.short_cut_id = newId;
+                load();
+            },
+            () => route.params.mid,
+            (newmId) => {
+                curChat.value.model_id = newmId;
+                load();
+            },
+            () => route.params.skey,
+            (new_skey) => {
+                skey.value = new_skey;
                 load();
             }
         );
@@ -222,7 +264,23 @@ export default {
                 curChat.value.model_id = route.params.mid
             }
 
+            if (route.params.skey) {
+                skey.value = route.params.skey
+            }
+
             model.value = getModel(route.params.mid)
+            if (model.value == 'gpt-4-v' || model.value == 'gpt-4-vision-preview') {
+                showImageUploader.value = true;
+            } else {
+                showImageUploader.value = false;
+            }
+
+            if (model.value == 'gpt-4-all') {
+                showDocUploader.value = true;
+            } else {
+                showDocUploader.value = false;
+            }
+
             mainModels.value = getMainModels()
             chatKey.value = getChatKey()
             chatContentList.value = loadChat(chatKey.value)
@@ -341,10 +399,32 @@ export default {
             save()
         }
 
-        var updateMessage = (text, finish_reason) => {
+        const handleSpeakOut = (item) => {
+            var params = {
+                "model": "tts-1-hd",
+                "input": item.content,
+                "voice": "alloy",
+                "speed": 1.2
+            }
+            showLoading.value = true
+            generating.value = true
+            makeTextToSpeech(params).then(data => {
+                const audio = new Audio(data.item);
+                audio.addEventListener('ended', () => {
+                    showLoading.value = false
+                    generating.value = false
+                    console.log(data.item);
+                    console.log('音频播放完成');
+                    audio.removeEventListener('ended', () => { });
+                });
+                audio.play();
+                console.log('音频播放开始');
+            })
+        };
+
+        const updateMessage = (text, finish_reason) => {
             if (text) {
                 chatContentList.value[chatContentList.value.length - 1].content += text;
-                // markdown.value += text
             }
 
             if (finish_reason === "stop") {
@@ -357,7 +437,7 @@ export default {
         };
 
         const handleEnter = async () => {
-            const content = textareaContent.value;
+            var content = textareaContent.value;
 
             if (!content) {
                 ElMessage({
@@ -375,6 +455,33 @@ export default {
                 return;
             }
 
+            try {
+                var uploadFile = '';
+                if (fileList.value && fileList.value.length > 0) {
+                    uploadFile = fileList.value[0].response.item
+                }
+
+                if ((model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value == 'gpt-4-vision-preview') &&
+                    (!uploadFile || uploadFile == '')) {
+                    ElMessage({
+                        type: 'error',
+                        message: '请上传文件',
+                    })
+                    return;
+                }
+
+                if (model.value == 'gpt-4-v' || model.value == 'gpt-4-all') {
+                    content = uploadFile + " " + content
+                }
+
+                if (model.value == 'gpt-4-vision-preview') {
+                    content = getDefaultVersionParam(content, uploadFile)
+                }
+            }
+            catch (err) {
+                console.log(err)
+            }
+
             chatContentList.value.push(initBaseChatLogSection("intent", content, curChat.value._id, curChat.value.userid));
 
             save()
@@ -390,23 +497,40 @@ export default {
 
         const sendSingleAsync = async (chat_id, chat_list) => {
             var messages = initMessagesWithoutSys(chat_list, "用三到五个字总结以上发言，如果无法总结请回复'闲聊'")
+
+            for (var index in messages) {
+                if (typeof messages[index].content !== 'string') {
+                    messages[index].content = JSON.stringify(messages[index].content)
+                }
+            }
+
             var cur_mode = getCheepModel(model.value)
-
-
             var params = initBaseMessage(messages, cur_mode, false)
             makeSingleChat(params).then(data => {
                 try {
                     updateArchive(chat_id, data.choices[0].message.content)
                 } catch (err) {
                     console.log(err)
+                    console.log(data)
                 }
             })
         }
 
+        const getModelBySkey = () => {
+            var smodel = model.value
+            if (route.params.mid == '77' && skey.value && skey.value != '') {
+                smodel = model.value + "-" + skey.value
+            }
+
+            return smodel
+        }
+
         const sendAsync = async () => {
             var url = '/v1/chat/completions'
+
             var messages = initMessages(chatContentList.value, cur_prompt.value.prompt)
-            var params = initBaseMessage(messages, model.value, true)
+            var model = getModelBySkey()
+            var params = initBaseMessage(messages, model, true)
 
             textareaContent.value = "";
 
@@ -500,6 +624,7 @@ export default {
             DateInfo,
             Refresh,
             DocumentCopy,
+            Microphone,
             handleEnter,
             handleShowPrompt,
             handleSetTextArea,
@@ -513,11 +638,16 @@ export default {
             handleRetryChat,
             handleDeleteChat,
             handleCopyChat,
+            handleSpeakOut,
             loadArchives,
+            getRequestContent,
+            uploadHeader,
             showPrompt,
             showDialogTable,
+            showImageUploader,
+            showDocUploader,
             chatContentList,
-            // markdown,
+            fileList,
             cur_prompt,
             model,
             mainModels,
@@ -531,6 +661,10 @@ export default {
 </script>
 
 <style>
+.uploader {
+    padding-bottom: 10px;
+}
+
 .guide {
     text-align: left;
     font-size: 14px;

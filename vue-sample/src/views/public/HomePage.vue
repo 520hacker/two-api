@@ -18,7 +18,7 @@
                     <p>本站点是为了回答企业以下问题而创建的DEMO合集，用于测试和展示通过TWOAPI调用来进行的衍生应用。</p>
                     <ul>
                         <li>企业在AI时代如何使用AI来降本增效。</li>
-                        <li>职业者如何使用AI来提升竞争力。</li> 
+                        <li>职业者如何使用AI来提升竞争力。</li>
                     </ul>
                     <p class="custom-block-title">配置令牌</p>
                     <ul>

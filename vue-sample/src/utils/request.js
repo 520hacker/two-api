@@ -7,7 +7,7 @@ import baseURL from '@/utils/base';
 const service = axios.create({
   baseURL,
   withCredentials: false,
-  timeout: 30000,
+  timeout: 180000,
 });
 
 service.interceptors.request.use(config => {

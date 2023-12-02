@@ -86,14 +86,14 @@ const prompts = [
     },
     {
         suggestions: [
-            "你有爱好吗？",
-            "你能做什么？",
-            "帮我写一个关于早恋的检讨"
+            "请为我创造一个美丽的魔法王国故事",
+            "请为民国风咖啡馆‘晨曦咖啡’写一个感人的背景故事",
+            "晨曦咖啡里，一个客人在分享他的故事，请描绘这个故事"
         ],
         category: "Assistant",
         name: "助手",
         id: "8",
-        prompt: "You are an online assistant, please help me analyze and solve problems step by step."
+        prompt: "please reply me in Chinese."
     },
     {
         suggestions: [
@@ -294,6 +294,50 @@ const prompts = [
         name: "网页总结",
         id: "111",
         prompt: "我会提供给你一些内容，请整理一下，然后按照我的要求总结或者回复我"
+    },
+    {
+        suggestions: [
+            "图片都描画了什么？",
+            "基于图片，创建一个新的图片",
+            "基于图片做一个分析",
+        ],
+        category: "Tool",
+        name: "识图",
+        id: "112",
+        prompt: "我会提供给你一张图片，请查看图片，然后按照我的要求总结或者回复我"
+    },
+    {
+        suggestions: [
+            "请总结文档的内容",
+            "请基于文档提出3个问题，并给出问题的答案",
+            "请基于文档提供3个建议",
+        ],
+        category: "Tool",
+        name: "读文档",
+        id: "113",
+        prompt: "我会提供给你一个文档，请查看文档，然后按照我的要求总结或者回复我"
+    },
+    {
+        suggestions: [
+            "一个美丽的中国女子，穿墨绿色旗袍，端着一杯咖啡，在一个咖啡馆里，暖色的灯光，画报风格",
+            "晨曦咖啡的logo,墨绿色的简约风格",
+            "一家民国风的咖啡馆,暖色的灯光下,美丽的女服务员正在吧台微笑",
+        ],
+        category: "Drawing",
+        name: "Dalle-3",
+        id: "114",
+        prompt: "[Dalle-3] 根据要求绘图"
+    },
+    {
+        suggestions: [
+            "你是谁",
+            "你有什么特点",
+            "你比gpt强大吗",
+        ],
+        category: "Tool",
+        name: "千问",
+        id: "115",
+        prompt: "你是强大的千问"
     },
 ];
 

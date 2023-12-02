@@ -8,7 +8,31 @@ export function initBaseMessage(messages, model = "gpt-3.5-turbo-16k", stream = 
         frequency_penalty: 0,
         top_p: 1
     };
-} 
+}
+
+export function getDefaultVersionParam(content, uploadFile) {
+    return [
+        {
+            "type": "text",
+            "text": content,
+        },
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": uploadFile,
+            },
+        }]
+}
+
+export function getRequestContent(content) {
+    if (typeof content === 'string') {
+        return content;
+    } else if (Array.isArray(content)) {
+        return content[1].image_url.url + " " + content[0].text;
+    } else {
+        return '';
+    }
+}
 
 export function initSummaryMessage(messages, urls, model = "gpt-3.5-turbo-16k", stream = true) {
     return {
@@ -21,9 +45,9 @@ export function initSummaryMessage(messages, urls, model = "gpt-3.5-turbo-16k", 
         frequency_penalty: 0,
         top_p: 1
     };
-} 
+}
 
-export function initBaseChatLogSection(type = "reply", content = "", chatId = 0, userId = 0) {
+export function initBaseChatLogSection(type, content, chatId, userId) {
     return {
         chat_id: chatId,
         content: content,
@@ -51,15 +75,15 @@ export function initMessages(list, prompt) {
     }
 
     messages = fixMessages(messages)
- 
+
     messages.unshift({
         'role': 'system',
         'content': prompt
-    }) 
+    })
     return messages;
 }
 
-export function initMessagesWithoutSys(list,new_content) {
+export function initMessagesWithoutSys(list, new_content) {
     var messages = [];
     for (var item in list) {
         var role = "assistant"
@@ -77,17 +101,16 @@ export function initMessagesWithoutSys(list,new_content) {
         'role': 'user',
         'content': new_content
     })
-    
-    messages = fixMessages(messages) 
- 
+
+    messages = fixMessages(messages)
+
     return messages;
 }
 
 function fixMessages(list) {
-    if(!list || list.length <= 1)
-    {
+    if (!list || list.length <= 1) {
         return list;
-    } 
+    }
 
     console.log(list)
     var messages = [];
@@ -95,7 +118,7 @@ function fixMessages(list) {
     for (var index in list) {
         var item = list[index]
         console.log(item)
-        if (item.role == 'system' && type == 'user') { 
+        if (item.role == 'system' && type == 'user') {
             type = 'user'
             continue;
         }
@@ -133,8 +156,7 @@ function fixMessages(list) {
         }
     }
 
-    if (messages.length > 1 && messages[messages.length - 1].role == "assistant" && messages[messages.length - 1].content == '') 
-    {
+    if (messages.length > 1 && messages[messages.length - 1].role == "assistant" && messages[messages.length - 1].content == '') {
         messages.splice(messages.length - 1, 1)
     }
 

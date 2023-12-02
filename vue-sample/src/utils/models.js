@@ -9,6 +9,9 @@ export function getMainModels() {
         "id": "45",
         "label": "360智脑 360GPT_S2_V9"
     }, {
+        "id": "78",
+        "label": "阿里通义千问 qwen-max"
+    }, {
         "id": "65",
         "label": "智谱 chatglm-turbo"
     }, {
@@ -24,7 +27,13 @@ export function getMainModels() {
 }
 
 export function getCheepModel(cur_model) {
-    const validModels = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo-0613', 'gpt-4', 'gpt-4-0613', 'gpt-4-0314', 'gpt-4-32k', 'gpt-4-32k-0613', 'gpt-4-32k-0314', 'gpt-4-dalle', 'mj', 'midjourney', 'characterglm'];
+    const validModels = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo-0613',
+        "net-gpt-3.5-turbo-16k", "net-gpt-4",
+        'gpt-4', 'gpt-4-0613', 'gpt-4-0314', 'gpt-4-32k', 'gpt-4-32k-0613',
+        'gpt-4-32k-0314', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all',
+        "gpt-4-1106-preview", "gpt-4-1106-vision-preview",
+        "gpt-4-gizmo-g", "gpt-4-vision-preview",
+        'mj', 'midjourney', 'characterglm'];
 
     if (validModels.includes(cur_model)) {
         cur_model = 'gpt-3.5-turbo-16k';
@@ -189,6 +198,18 @@ export function getModel(id) {
             return "tts-1-hd";
         case "76":
             return "gpt-3.5-turbo-1106";
+        case "77":
+            return "gpt-4-gizmo-g";
+        case "78":
+            return "qwen-max";
+        case "79":
+            return "qwen-turbo";
+        case "80":
+            return "qwen-plus";
+        case "81":
+            return "qwen-max-v1";
+        case "82":
+            return "gpt-4-vision-preview";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -219,6 +240,8 @@ export function getAllModels() {
         "gpt-4-all",
         "gpt-4-1106-preview",
         "gpt-4-1106-vision-preview",
+        "gpt-4-vision-preview",
+        "gpt-4-gizmo-g",
         "google-palm",
         "llama-2-70b",
         "llama-2-13b",
@@ -245,6 +268,7 @@ export function getAllModels() {
         "characterglm",
         "qwen-v1",
         "qwen-plus-v1",
+        "qwen-max-v1",
         "semantic_similarity_s1_v1",
         "SparkDesk",
         "SparkDesk2",
@@ -253,6 +277,7 @@ export function getAllModels() {
         "360GPT_S2_V9.4",
         "dall-e",
         "tts-1",
+        "tts-1-hd",
         "text-embedding-ada-002",
         "text-davinci-003",
         "text-davinci-002",

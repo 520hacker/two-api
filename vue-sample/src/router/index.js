@@ -7,6 +7,7 @@ import GoPage from '../views/public/GoPage.vue';
 
 const routes = [
   { path: '/', component: Home },
+  { path: '/chat/base/:id/:mid/:skey', component: BaseChat },
   { path: '/chat/base/:id/:mid', component: BaseChat },
   { path: '/chat/base/:id', component: BaseChat },
   { path: '/chat/base', component: BaseChat }, 
