@@ -18,6 +18,9 @@ export function getMainModels() {
         "id": "67",
         "label": "百川 Baichuan2-53B"
     }, {
+        "id": "83",
+        "label": "月之暗面 moonshot-v1-8k"
+    }, {
         "id": "5",
         "label": "联网搜索"
     }, {
@@ -210,6 +213,12 @@ export function getModel(id) {
             return "qwen-max-v1";
         case "82":
             return "gpt-4-vision-preview";
+        case "83":
+            return "moonshot-v1-8k";
+        case "84":
+            return "moonshot-v1-32k";
+        case "85":
+            return "moonshot-v1-128k";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -296,6 +305,9 @@ export function getAllModels() {
         "embedding_s1_v1",
         "gpt-4-bing",
         "Baichuan2-53B",
-        "stable-diffusion"
+        "stable-diffusion",
+        "moonshot-v1-8k",
+        "moonshot-v1-32k",
+        "moonshot-v1-128k",
     ];
 }

@@ -56,10 +56,11 @@
                             </el-tooltip>
                         </div>
                         <div v-if="item.item_type === 'intent'">
-                            <v-md-preview :text="getRequestContent(item.content)" ref="preview" />
+                            <v-md-editor v-model="item.content_" mode="preview"></v-md-editor>
                         </div>
                         <el-card v-if="item.item_type === 'reply' && item.content">
-                            <v-md-preview :text="item.content" ref="preview" />
+                            <v-md-editor v-model="item.content" mode="preview"
+                                @image-click="handlePreviewImageClick"></v-md-editor>
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>
@@ -105,12 +106,36 @@
                     </div>
                     <div class="buttons-sender">
                         <el-text class="mx-1" type="info">ctrl+Enter</el-text>
+                        <el-button type="success" :icon="Microphone" @click="showAudioRecorder = true"
+                            :disabled="generating" />
                         <el-button type="primary" :icon="Promotion" @click="handleEnter"
                             :disabled="generating">发送</el-button>
                     </div>
                 </div>
                 <el-input v-model="textareaContent" maxlength="4000" :autosize="{ minRows: 2, maxRows: 6 }"
                     placeholder="点我开始对话" show-word-limit type="textarea" v-loading="showLoading" />
+            </div>
+            <div class="audio-recorder-frame" v-show="showAudioRecorder">
+                <div class="audio-recorder-close">
+                    <el-button :icon="CloseBold" @click="showAudioRecorder = false" />
+                </div>
+                <div class="audio-recorder-main">
+                    <div class="audio-recorder-app">
+                        <textarea class="audio-logs" id="audioLogs" ref="textarea" v-model="audioLogs"></textarea>
+                        <div class="audio-main-controls">
+                            <div class="audio-main-button">
+                                <el-button :icon="Microphone" @click="startAudioRecording" :disabled="generating"
+                                    v-show="!audioRecording" />
+                                <el-button :icon="Mute" @click="stopAudioRecording" v-show="audioRecording" />
+                            </div>
+                            <div class="audio-timer" style="clear: both;" v-if="audioRecording">{{ audioElapsedTime }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="vhidden">
+                <el-image id="previewImage" :src="preivewImageUrl" :zoom-rate="1.2" :max-scale="7"
+                    :preview-src-list="preivewImageList" lazy />
             </div>
             <el-dialog v-model="showDialogTable" title="历史对话" width="80%">
                 <el-table :data="archiveContentList">
@@ -151,18 +176,22 @@
     </div>
 </template>
 <script>
-import { initMessages, initBaseMessage, initBaseChatLogSection, initMessagesWithoutSys, getRequestContent, getDefaultVersionParam } from '@/utils/chat_transfer'
+import {
+    initMessages, initBaseMessage, initBaseChatLogSection, initMessagesWithoutSys,
+    getRequestContent, getDefaultVersionParam
+} from '@/utils/chat_transfer'
 import { useRoute, useRouter } from 'vue-router';
-import { watch, ref, onMounted } from 'vue';
+import { watch, ref, onMounted, nextTick } from 'vue';
 import DateInfo from '@/components/DateInfo.vue';
-import { makeTextFileLineIterator, makeTextToSpeech, makeSingleChat } from '@/api/sse'
-import { Promotion, Delete, CloseBold, Operation, Finished, Memo, ArrowDown, Checked, Refresh, Microphone, DocumentCopy } from '@element-plus/icons-vue'
+import { makeTextFileLineIterator, makeTextToSpeech, makeSingleChat, makeSpeechToText } from '@/api/sse'
+import { Promotion, Delete, CloseBold, Operation, Mute, Finished, Memo, ArrowDown, Checked, Refresh, Microphone, DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { timestampToDate } from '@/utils/date'
 import { loadChat, saveChat } from '@/utils/browser_db'
 import { getPrompts } from '@/utils/prompts'
 import { getModel, getCheepModel, getMainModels } from '@/utils/models'
 import { scrollToBottom, copyToClipboard } from '@/utils/page'
+
 export default {
     name: 'BaseChat',
     components: {
@@ -170,6 +199,23 @@ export default {
     },
 
     setup() {
+        // const showPreivewImage = ref(false)
+        const preivewImageUrl = ref('https://memosfile.qiangtu.com/memos2504/assets/2023/09/17/1694919163_done.png')
+        const preivewImageList = ref([])
+
+        const audioLogs = ref('点击麦克风，即刻开始语音对话')
+        const stream = ref(false)
+        const audioDevice = ref(null);
+        const audioRecorder = ref(null);
+        const items = ref([]);
+        const audioUrl = ref(null);
+        const audioFileName = ref(null);
+        const audioRecording = ref(false);
+        const audioElapsedTime = ref("00:00");
+        const audioTimerInterval = ref(null);
+        const showAudioRecorder = ref(false)
+
+
         const showImageUploader = ref(false)
         const showDocUploader = ref(false)
         const fileList = ref([])
@@ -222,6 +268,97 @@ export default {
                 load();
             }
         );
+        const newAudioLog = (msg) => {
+            audioLogs.value += '\n ' + msg
+            nextTick(() => {
+                try {
+                    var audioLogsBox = document.getElementById("audioLogs");
+                    audioLogsBox.scrollTop = audioLogsBox.scrollHeight;
+                } catch (err) {
+                    console.log(err)
+                }
+            });
+        }
+
+        const startAudioRecording = () => {
+            newAudioLog("您开始了一段新的语音")
+            audioDevice.value = navigator.mediaDevices.getUserMedia({ audio: true });
+            audioDevice.value.then((stream) => {
+                audioRecorder.value = new MediaRecorder(stream);
+                audioRecorder.value.ondataavailable = (e) => {
+                    items.value.push(e.data);
+                };
+                audioRecorder.value.start(100);
+                audioRecorder.value.onstart = () => {
+                    audioRecording.value = true;
+                    let startTime = Date.now();
+
+                    audioTimerInterval.value = setInterval(() => {
+                        let elapsedMilliseconds = Date.now() - startTime;
+                        let elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                        let minutes = Math.floor(elapsedSeconds / 60).toString().padStart(2, "0");
+                        let seconds = (elapsedSeconds % 60).toString().padStart(2, "0");
+                        audioElapsedTime.value = `${minutes}:${seconds}`;
+                    }, 1000);
+                };
+            });
+        };
+
+        const stopAudioRecording = () => {
+            newAudioLog("您终止了语音录制；正在发送您的语音消息；请稍等...")
+            if (audioRecorder.value && audioRecorder.value.state === "recording") {
+                audioRecorder.value.stop();
+                audioRecorder.value.onstop = () => {
+                    var blob = new Blob(items.value, { type: "audio/wav" });
+                    prepareGetText(blob);
+                    // Clear the items array for the next recording
+                    items.value = [];
+                    audioRecording.value = false;
+                    clearInterval(audioTimerInterval.value);
+
+                    // Stop the audio stream
+                    if (stream.value) {
+                        stream.value.getTracks().forEach((track) => track.stop());
+                        stream.value = null;
+                    }
+                };
+            } else {
+                console.warn("audioRecorder is not currently recording or is inactive.");
+            }
+        };
+
+        const prepareGetText = (blob) => {
+            audioUrl.value = URL.createObjectURL(blob);
+            audioFileName.value = `recorded_audio_${Date.now()}.wav`;
+
+            // Save the file to the server
+            saveAudioFile(blob);
+        };
+
+        const saveAudioFile = async (blob) => {
+            const formData = new FormData();
+            formData.append("file", blob, audioFileName.value);
+            formData.append("response_format", "json")
+            formData.append("language", "zh")
+            formData.append("filename", audioFileName.value)
+            formData.append("model", "whisper-1")
+
+            generating.value = true
+            showLoading.value = true
+
+            try {
+                makeSpeechToText(formData).then(data => {
+                    newAudioLog("您说：" + data.text)
+                    textareaContent.value = data.text
+                    showAudioRecorder.value = false
+                    generating.value = false
+                    showLoading.value = false
+                    handleEnter()
+                })
+            } catch (error) {
+                console.error('Error saving audio file', error);
+            }
+        };
 
         onMounted(() => {
             document.addEventListener('keydown', handleKeyDown);
@@ -250,6 +387,13 @@ export default {
         const loadArchives = () => {
             const archiveList = loadChat("u_archvie");
             const list = archiveList.filter(archive => archive.key === getChatKey());
+
+            for (const item in list) {
+                if (list[item].item_type === "intent") {
+                    list[item].content_ = getRequestContent(list[item].content);
+                }
+            }
+
             return list;
         };
 
@@ -409,6 +553,7 @@ export default {
             showLoading.value = true
             generating.value = true
             makeTextToSpeech(params).then(data => {
+                console.log(data);
                 const audio = new Audio(data.item);
                 audio.addEventListener('ended', () => {
                     showLoading.value = false
@@ -612,7 +757,41 @@ export default {
             copyToClipboard(item.content)
         };
 
+        const handleCopyCodeSuccess = (item) => {
+            copyToClipboard(item.content)
+        }
+
+        const setShowLoading = (val) => {
+            generating.value = val
+            showLoading.value = val
+        }
+
+        const handlePreviewImageClick = (val) => {
+            val = val.filter(function (item) {
+                return item != 'https://memosfile.qiangtu.com/memos2504/assets/2023/09/17/1694919163_done.png'
+            })
+            preivewImageUrl.value = val[0]
+            preivewImageList.value = val
+
+            setTimeout(function () {
+                var previewImage = document.getElementById("previewImage");
+                previewImage.dispatchEvent(new Event("click"));
+            }, 200)
+        }
+
         return {
+            audioDevice,
+            audioRecorder,
+            audioUrl,
+            audioFileName,
+            audioRecording,
+            audioElapsedTime,
+            audioTimerInterval,
+            audioLogs,
+            startAudioRecording,
+            stopAudioRecording,
+
+
             Delete,
             Promotion,
             Operation,
@@ -625,6 +804,9 @@ export default {
             Refresh,
             DocumentCopy,
             Microphone,
+            Mute,
+
+            handlePreviewImageClick,
             handleEnter,
             handleShowPrompt,
             handleSetTextArea,
@@ -638,10 +820,17 @@ export default {
             handleRetryChat,
             handleDeleteChat,
             handleCopyChat,
+            handleCopyCodeSuccess,
             handleSpeakOut,
             loadArchives,
             getRequestContent,
+            setShowLoading,
+
             uploadHeader,
+            preivewImageList,
+            preivewImageUrl,
+            // showPreivewImage,
+            showAudioRecorder,
             showPrompt,
             showDialogTable,
             showImageUploader,
@@ -661,6 +850,13 @@ export default {
 </script>
 
 <style>
+#previewImage {
+    opacity: 0;
+    z-index: -1;
+    width: 1px;
+    height: 1px;
+}
+
 .uploader {
     padding-bottom: 10px;
 }
@@ -688,6 +884,10 @@ export default {
 .guide-left {
     float: left;
     text-align: left;
+}
+
+.el-button+.el-button {
+    margin-left: 3px;
 }
 
 .guide .el-button {
@@ -766,5 +966,115 @@ export default {
 
 #app .el-timeline {
     padding-left: 10px;
+}
+
+.audio-recorder-frame {
+    display: block;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    background: #f2f2f2;
+    z-index: 998;
+    left: 0px;
+    height: 100%;
+    padding-top: 30px;
+}
+
+.audio-recorder-close {
+    position: absolute;
+    right: 20px;
+    top: 20px
+}
+
+.v-md-editor--preview {
+    background: none;
+}
+
+.audio-logs {
+    margin-top: 40px;
+    color: #666;
+    padding: 5%;
+    line-height: 20px;
+    font-size: 12px;
+    height: 300px;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 30px;
+    border: 1px dotted #333;
+    background-color: #fff;
+}
+
+.audio audio {
+    outline: none;
+}
+
+.audio-timer {
+    display: block;
+    clear: both;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.audio-main-controls {
+    display: block;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.record-btn,
+.stop-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.record-btn:hover,
+.stop-btn:hover {
+    background-color: #0056b3;
+}
+
+.download-link {
+    text-align: center;
+}
+
+.audio-main-button {
+    text-align: center;
+    height: 170px;
+    width: 100%;
+    display: block;
+}
+
+.audio-main-button button {
+    width: 150px;
+    height: 150px;
+    font-size: 75px;
+    border-radius: 50%;
+    box-shadow: 3px 3px 3px #ccc;
+}
+
+.el-timeline-item {
+    padding: 0px;
+}
+
+.github-markdown-body p {
+    margin-bottom: 5px;
+}
+
+.el-timeline .el-timeline-item__center .el-timeline-item__wrapper {
+    margin-bottom: 20px;
 }
 </style>

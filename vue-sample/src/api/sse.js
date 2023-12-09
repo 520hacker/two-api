@@ -25,6 +25,29 @@ export function makeSingleChat(param) {
     });
 }
 
+export function makeSpeechToText(param) {
+    const token = localStorage.getItem('CSK');
+    if (!token) {
+        return Promise.resolve({
+            "success": false,
+            "errorMessage": "SK value miss",
+            "errorCode": 401,
+            "executionTime": 0
+        });
+    }
+
+    return request({
+        url: '/v1/audio/transcriptions',
+        method: 'post',
+        data: param,
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(data => { 
+        return data;
+    });
+} 
+
 export function makeTextToSpeech(param) {
     const token = localStorage.getItem('CSK');
     if (!token) {

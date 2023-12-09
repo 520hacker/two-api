@@ -55,6 +55,7 @@ export function getMainMenus() {
                         { title: "助手-3", href: "/chat/base/11/45" },
                         { title: "助手-4", href: "/chat/base/13/11" },
                         { title: "助手-5", href: "/chat/base/115/78" },
+                        { title: "助手-6", href: "/chat/base/116/83" },
                         { title: "分析", href: "/chat/base/6/7" },
                         { title: "DBA", href: "/chat/base/104/7" },
                         { title: "语法优化", href: "/chat/base/1/7" },

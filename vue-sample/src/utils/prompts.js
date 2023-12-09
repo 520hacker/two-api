@@ -339,6 +339,17 @@ const prompts = [
         id: "115",
         prompt: "你是强大的千问"
     },
+    {
+        suggestions: [
+            "月之暗面是谁",
+            "月之暗面有什么特点",
+            "月之暗面比gpt强大吗",
+        ],
+        category: "Tool",
+        name: "KIMI",
+        id: "116",
+        prompt: "你是强大的月之暗面KIMI"
+    },
 ];
 
 export function getPrompts(id) {
