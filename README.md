@@ -246,4 +246,4 @@ sudo docker rm  {您的容器名称 或者tag }
 
 ## 联系我们
 
-![qrcode](https://memos2504.oss-accelerate.aliyuncs.com/audio/assets/2023/12/133458675615412178.jpg)
+http://qr61.cn/oRUvxf/qyT8mJT
