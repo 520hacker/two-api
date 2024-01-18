@@ -12,8 +12,8 @@ export function getMainModels() {
         "id": "78",
         "label": "阿里通义千问 qwen-max"
     }, {
-        "id": "65",
-        "label": "智谱 chatglm-turbo"
+        "id": "99",
+        "label": "智谱 glm-4"
     }, {
         "id": "67",
         "label": "百川 Baichuan2-53B"
@@ -30,12 +30,13 @@ export function getMainModels() {
 }
 
 export function getCheepModel(cur_model) {
-    const validModels = ['gpt-3.5-turbo-0301', 'gpt-3.5-turbo-0613',
+    const validModels = [
         "net-gpt-3.5-turbo-16k", "net-gpt-4",
         'gpt-4', 'gpt-4-0613', 'gpt-4-0314', 'gpt-4-32k', 'gpt-4-32k-0613',
-        'gpt-4-32k-0314', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all',
+        'gpt-4-32k-0314', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', "gpt-4-turbo",
         "gpt-4-1106-preview", "gpt-4-1106-vision-preview",
-        "gpt-4-gizmo-g", "gpt-4-vision-preview",
+        "gpt-4-gizmo-g", "gpt-4-vision-preview", "dall-e-3", "dall-e-2",
+        "gemini-pro-vision",
         'mj', 'midjourney', 'characterglm'];
 
     if (validModels.includes(cur_model)) {
@@ -178,7 +179,7 @@ export function getModel(id) {
         case "64":
             return "gpt-4-bing";
         case "65":
-            return "chatglm_turbo";
+            return "ChatGLM_Turbo";
         case "66":
             return "characterglm";
         case "67":
@@ -219,6 +220,34 @@ export function getModel(id) {
             return "moonshot-v1-32k";
         case "85":
             return "moonshot-v1-128k";
+        case "86":
+            return "dall-e-3";
+        case "87":
+            return "hunyuan";
+        case "88":
+            return "dall-e-2";
+        case "89":
+            return "gpt-4-turbo";
+        case "90":
+            return "chat-bison-00";
+        case "91":
+            return "embedding-001";
+        case "92":
+            return "embedding-gecko-001";
+        case "93":
+            return "embedding-gecko-002";
+        case "94":
+            return "text-bison-001";
+        case "95":
+            return "gemini-pro";
+        case "96":
+            return "gemini-pro-vision";
+        case "97":
+            return "gemini-ultra";
+        case "98":
+            return "aqa";
+        case "99":
+            return "glm-4";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -251,6 +280,7 @@ export function getAllModels() {
         "gpt-4-1106-vision-preview",
         "gpt-4-vision-preview",
         "gpt-4-gizmo-g",
+        "gpt-4-turbo",
         "google-palm",
         "llama-2-70b",
         "llama-2-13b",
@@ -273,10 +303,13 @@ export function getAllModels() {
         "chatglm_pro",
         "chatglm_std",
         "chatglm_lite",
-        "chatglm_turbo",
-        "characterglm",
+        "ChatGLM_Turbo",
+        "characterglm", 
+        "glm-4",
         "qwen-v1",
+        "qwen-turbo",
         "qwen-plus-v1",
+        "qwen-plus",
         "qwen-max-v1",
         "semantic_similarity_s1_v1",
         "SparkDesk",
@@ -285,6 +318,8 @@ export function getAllModels() {
         "360GPT_S2_V9",
         "360GPT_S2_V9.4",
         "dall-e",
+        "dall-e-2",
+        "dall-e-3",
         "tts-1",
         "tts-1-hd",
         "text-embedding-ada-002",
@@ -309,5 +344,16 @@ export function getAllModels() {
         "moonshot-v1-8k",
         "moonshot-v1-32k",
         "moonshot-v1-128k",
+        "hunyuan",
+
+        "chat-bison-00",
+        "embedding-001",
+        "embedding-gecko-001",
+        "embedding-gecko-002",
+        "text-bison-001",
+        "gemini-pro",
+        "gemini-pro-vision",
+        "gemini-ultra",
+        "aqa",
     ];
 }

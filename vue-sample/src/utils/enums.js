@@ -6,18 +6,18 @@ export function getMainMenus() {
                 {
                     "title": "对话",
                     "links": [
-                        { title: "对话", href: "/chat/base/0/7" },
+                        { title: "对话", href: "/chat/base/0/72" },
                         { title: "识图", href: "/chat/base/112/70" },
                         { title: "读文档", href: "/chat/base/113/69" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/7" },
+                        { title: "语法优化", href: "/chat/base/1/72" },
+                        { title: "中英互译", href: "/chat/base/7/72" },
                     ]
                 },
                 {
                     "title": "联网",
                     "links": [
                         { title: "联网", href: "/chat/base/8/5" },
-                        { title: "网页总结", href: "/chat/summary/111/7" }
+                        { title: "网页总结", href: "/chat/summary/111/72" }
                     ]
                 },
                 {
@@ -36,10 +36,10 @@ export function getMainMenus() {
                     "title": "名人",
                     "links": [
                         { title: "助手", href: "/chat/base/3/4" },
-                        { title: "祖母", href: "/chat/base/5/7" },
-                        { title: "半仙", href: "/chat/base/4/7" },
+                        { title: "祖母", href: "/chat/base/5/72" },
+                        { title: "半仙", href: "/chat/base/4/72" },
                         { title: "佛祖", href: "/chat/base/106/8" },
-                        { title: "牛破天", href: "/chat/base/102/7" },
+                        { title: "牛破天", href: "/chat/base/102/72" },
                     ]
                 }
             ]
@@ -50,16 +50,17 @@ export function getMainMenus() {
                 {
                     "title": "程序员",
                     "links": [
-                        { title: "助手-1", href: "/chat/base/3/7" },
-                        { title: "助手-2", href: "/chat/base/12/65" },
-                        { title: "助手-3", href: "/chat/base/11/45" },
-                        { title: "助手-4", href: "/chat/base/13/11" },
-                        { title: "助手-5", href: "/chat/base/115/78" },
-                        { title: "助手-6", href: "/chat/base/116/83" },
-                        { title: "分析", href: "/chat/base/6/7" },
-                        { title: "DBA", href: "/chat/base/104/7" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/7" }
+                        { title: "助手", href: "/chat/base/3/72" },
+                        { title: "智谱", href: "/chat/base/12/65" },
+                        { title: "智脑", href: "/chat/base/11/45" },
+                        { title: "GPT", href: "/chat/base/13/11" },
+                        { title: "千问", href: "/chat/base/115/78" },
+                        { title: "KIMI", href: "/chat/base/116/83" },
+                        { title: "Gemini", href: "/chat/base/117/95" },
+                        { title: "分析", href: "/chat/base/6/72" },
+                        { title: "DBA", href: "/chat/base/104/72" },
+                        { title: "语法优化", href: "/chat/base/1/72" },
+                        { title: "中英互译", href: "/chat/base/7/72" }
                     ]
                 }
             ]
@@ -71,13 +72,13 @@ export function getMainMenus() {
                     "title": "撰写家",
                     "links": [
                         { title: "周报", href: "/chat/base/110/8" },
-                        { title: "助手", href: "/chat/base/3/7" },
-                        { title: "小说家", href: "/chat/base/2/7" },
-                        { title: "小红书创作", href: "/chat/base/107/7" },
+                        { title: "助手", href: "/chat/base/3/72" },
+                        { title: "小说家", href: "/chat/base/2/72" },
+                        { title: "小红书创作", href: "/chat/base/107/72" },
                         { title: "爆款作家", href: "/chat/base/108/11" },
-                        { title: "好评生成器", href: "/chat/base/109/7" },
-                        { title: "项目起名大师", href: "/chat/base/100/7" },
-                        { title: "Slogan生成大师", href: "/chat/base/105/7" },
+                        { title: "好评生成器", href: "/chat/base/109/72" },
+                        { title: "项目起名大师", href: "/chat/base/100/72" },
+                        { title: "Slogan生成大师", href: "/chat/base/105/72" },
                         { title: "词汇老师", href: "/chat/base/103/4" },
                     ]
                 }

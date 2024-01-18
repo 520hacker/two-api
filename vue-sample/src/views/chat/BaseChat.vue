@@ -413,7 +413,7 @@ export default {
             }
 
             model.value = getModel(route.params.mid)
-            if (model.value == 'gpt-4-v' || model.value == 'gpt-4-vision-preview') {
+            if (model.value == 'gpt-4-v' || model.value == 'gpt-4-vision-preview' || model.value.indexOf('vision') > 0) {
                 showImageUploader.value = true;
             } else {
                 showImageUploader.value = false;
@@ -606,7 +606,7 @@ export default {
                     uploadFile = fileList.value[0].response.item
                 }
 
-                if ((model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value == 'gpt-4-vision-preview') &&
+                if ((model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value.indexOf('vision') > 0) &&
                     (!uploadFile || uploadFile == '')) {
                     ElMessage({
                         type: 'error',
@@ -615,7 +615,7 @@ export default {
                     return;
                 }
 
-                if (model.value == 'gpt-4-v' || model.value == 'gpt-4-all') {
+                if (model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value.indexOf('vision') > 0) {
                     content = uploadFile + " " + content
                 }
 
@@ -641,7 +641,7 @@ export default {
         }
 
         const sendSingleAsync = async (chat_id, chat_list) => {
-            var messages = initMessagesWithoutSys(chat_list, "用三到五个字总结以上发言，如果无法总结请回复'闲聊'")
+            var messages = initMessagesWithoutSys(chat_list, "为对话取一个标题")
 
             for (var index in messages) {
                 if (typeof messages[index].content !== 'string') {

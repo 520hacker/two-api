@@ -30,7 +30,7 @@
                             </div>
                         </button>
                     </div>
-                    <div class="social-links" v-if="false">
+                    <div class="social-links">
                         <a href="https://github.com/520hacker" title="GitHub" target="_blank" rel="noreferrer noopener"
                             class="social-link">
                             <i class="el-icon" style="font-size:24px;">
@@ -59,21 +59,35 @@ export default {
     props: {
         msg: String
     },
-    methods: {
-        toggleDarkMode() {
-            this.isDarkMode = !this.isDarkMode;
-            if (this.isDarkMode) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        },
-
+    methods: { 
     },
     setup() {
         const pathname = ref('/');
         const logged = ref(false);
         const router = useRouter();
+        const isDarkMode = ref(true)
+        const onload = () => { 
+            isDarkMode.value = !localStorage.getItem('isDarkMode') || (localStorage.getItem('isDarkMode') && localStorage.getItem('isDarkMode') == "true") ? true : false;
+            if (isDarkMode.value) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        };
+        onload();
+        
+
+        const toggleDarkMode = () => {
+            isDarkMode.value = !isDarkMode.value;
+            if (isDarkMode.value) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('isDarkMode', 'true');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('isDarkMode', 'false');
+            }
+        };
+
         const logout = () => {
             localStorage.removeItem('SK');
             localStorage.removeItem('Role');
@@ -114,6 +128,8 @@ export default {
         }, 1000)
 
         return {
+            isDarkMode,
+            toggleDarkMode,
             goHomePage,
             pathname,
             logged,

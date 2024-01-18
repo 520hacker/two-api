@@ -185,7 +185,7 @@ body {
   margin: 0;
   width: 100%;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
   line-height: 1.4;
   font-size: 16px;
   font-weight: 400;
@@ -446,5 +446,84 @@ textarea {
     font-size: 12px;
     padding-bottom: 10px; 
     padding-right: 10px;
+}
+
+
+/* BG Animation */
+.dark body {
+      background-size: 400% 400%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-evenly;
+	position: relative; 
+	overflow-x: hidden;
+}
+
+.dark body::before, 
+.dark body::after {
+	content: "";
+	width: 60vmax;
+	height: 53vmax;
+	position: absolute;
+	background: rgba(255, 255, 255, 0.07);
+	left: -20vmin;
+	top: -20vmin;
+	animation: morph 15s linear infinite alternate, spin 20s linear infinite;
+	z-index: 41;
+	will-change: border-radius, transform;
+	pointer-events: none;
+}
+	
+.dark body::after {
+    width: 70vmin;
+    height: 70vmin;
+    left: auto;
+    right: -13vmin;
+    top: auto;
+    bottom: 10;
+    animation: morph 10s linear infinite alternate, spin 26s linear infinite reverse;
+    transform-origin: 20% 20%; 
+}
+
+@-moz-keyframes Gradient {
+	0% {
+		background-position: 0 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0 50%
+	}
+}
+
+@keyframes Gradient {
+	0% {
+		background-position: 0 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0 50%
+	}
+}
+
+@keyframes morph {
+  0% {
+    border-radius: 100% 60% 60% 40% / 70% 30% 70% 30%; }
+  100% {
+    border-radius: 40% 60%; } 
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn); 
+  } 
+}
+.dark #app .github-markdown-body {
+    background: rgba(0,0,0,.8);
+    padding: 12px 22px 0px;
 }
 </style>

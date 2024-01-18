@@ -50,12 +50,12 @@
                                 <el-button type="info" :icon="DocumentCopy" :disabled="generating"
                                     @click="handleCopyChat(item)" />
                             </el-tooltip>
-                        </div>
+                        </div> 
                         <div v-if="item.item_type === 'intent'">
-                            <v-md-preview :text="item.content" ref="preview" />
+                            <v-md-editor v-model="item.content_" mode="preview"></v-md-editor>
                         </div>
                         <el-card v-if="item.item_type === 'reply' && item.content">
-                            <v-md-preview :text="item.content" ref="preview" />
+                            <v-md-editor v-model="item.content" mode="preview"></v-md-editor>
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>

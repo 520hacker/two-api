@@ -48,9 +48,19 @@ export function initSummaryMessage(messages, urls, model = "gpt-3.5-turbo-16k", 
 }
 
 export function initBaseChatLogSection(type, content, chatId, userId) {
+    var content_ = "";
+    if (typeof content === 'string') {
+        content_ = content;
+    } else if (Array.isArray(content)) {
+        content_ = content[1].image_url.url + " " + content[0].text;
+    } else {
+        content_ = '';
+    }
+
     return {
         chat_id: chatId,
         content: content,
+        content_: content_,
         gmt_create: Date.now(),
         gmt_update: Date.now(),
         item_type: type,

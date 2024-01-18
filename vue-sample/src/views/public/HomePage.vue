@@ -11,6 +11,10 @@
                         <li>测试站点不保证稳定性，迭代的过程会导致停机和数据丢失。</li>
                         <li>测试站点并非法外之地，数据和内容依然处于被监管的范围。</li>
                         <li>请勿放飞自我，使用合理的数据进行测试。</li>
+                        <li>没有Token或者测试碰到问题可以微信群求助
+                            <br />
+                            <h2><a href="http://qr61.cn/oRUvxf/qyT8mJT" target="_blank">加微信群点我</a></h2>
+                        </li>
                     </ul>
                 </div>
                 <div class="example">

@@ -350,6 +350,17 @@ const prompts = [
         id: "116",
         prompt: "你是强大的月之暗面KIMI"
     },
+    {
+        suggestions: [
+            "Google Gemini AI是谁",
+            "Google Gemini AI有什么特点",
+            "Google Gemini AI比gpt强大吗",
+        ],
+        category: "Tool",
+        name: "KIMI",
+        id: "117",
+        prompt: "你是强大的Google Gemini AI"
+    },
 ];
 
 export function getPrompts(id) {

@@ -72,9 +72,9 @@ export default {
                 }
             }, 1000)
         }
-        
+
         const onLoad = () => {
-            let oldJob = menu_name.value 
+            let oldJob = menu_name.value
             if (localStorage.getItem('job')) {
                 oldJob = menu_name.value
             }
@@ -355,8 +355,9 @@ export default {
 
 @media screen and (min-width: 1680px) {
     .sidebar {
-        padding: 48px 48px 96px calc((100vw - var(--vp-screen-max-width)) / 2);
-        width: calc((100vw - var(--vp-screen-max-width)) / 2 + var(--vp-sidebar-width-small))
+        padding: 0px 48px 96px calc((100vw - var(--vp-screen-max-width)) / 2);
+        width: calc((100vw - var(--vp-screen-max-width)) / 2 + var(--vp-sidebar-width-small));
+        margin-top: 48px;
     }
 }
 
