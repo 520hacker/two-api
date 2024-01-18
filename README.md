@@ -11,7 +11,7 @@
 #### 应用案例
 - 程序员需求 一键给文件夹中所有的代码添加注释的应用 https://github.com/520hacker/CodeCommenter
 
-- 网页植入：在任意网页上插入以下js, 就能在当前页面支持AI对话功能,  [例子](https://odin.mblog.club)
+- 网页植入：在任意网页上插入以下js, 就能在当前页面支持AI对话功能,  [例子1](https://odin.mblog.club) [例子2](https://github.com/520hacker/markdown-AI-editor)
   支持选择文字对话和右下角点击弹出对话窗体。
 
         var script = document.createElement('script');
