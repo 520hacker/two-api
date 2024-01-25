@@ -7,6 +7,7 @@ export function getMainMenus() {
                     "title": "对话",
                     "links": [
                         { title: "对话", href: "/chat/base/0/72" },
+                        { title: "bing", href: "/chat/base/119/64" },
                         { title: "识图", href: "/chat/base/112/70" },
                         { title: "读文档", href: "/chat/base/113/69" },
                         { title: "语法优化", href: "/chat/base/1/72" },
@@ -90,6 +91,7 @@ export function getMainMenus() {
                 {
                     "title": "GPTs",
                     "links": [
+                        { title: "董宇辉说", href: "/chat/base/118/77/dse9iXvor" },
                         { title: "图文故事", href: "/chat/base/8/77/56aUtyaYF" },
                         { title: "谐音梗🤪", href: "/chat/base/8/77/7nunLIRz8" },
                         { title: "清晰指南", href: "/chat/base/8/77/yIE7C91N3" },

@@ -248,6 +248,10 @@ export function getModel(id) {
             return "aqa";
         case "99":
             return "glm-4";
+        case "100":
+            return "mixtral-8x7b";
+        case "101":
+            return "mj-chat";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -296,6 +300,7 @@ export function getAllModels() {
         "net-gpt-4",
         "midjourney",
         "mj",
+        "mj-chat",
         "ERNIE-Bot",
         "ERNIE-Bot-turbo",
         "ERNIE-Bot-Pro",
@@ -304,7 +309,7 @@ export function getAllModels() {
         "chatglm_std",
         "chatglm_lite",
         "ChatGLM_Turbo",
-        "characterglm", 
+        "characterglm",
         "glm-4",
         "qwen-v1",
         "qwen-turbo",
@@ -355,5 +360,7 @@ export function getAllModels() {
         "gemini-pro-vision",
         "gemini-ultra",
         "aqa",
+
+        "mixtral-8x7b"
     ];
 }

@@ -2,10 +2,23 @@
     <div class="setting-card ">
         <div class="doc-content-wrapper">
             <div class="doc-content-container">
-                <h1 id="form-表单" tabindex="-1">Two API - DEMO
+                <h1 id="form-表单" tabindex="-1">Two API - 应用演示
                 </h1>
                 <div class="tip custom-block">
-                    <p class="custom-block-title">TIP</p>
+                    <h2 style="padding-top: 10px;">个人站长参与接入测试: 一步接入AI</h2>
+                    <p>只需一步，您就可以在自己的网站中免费接入TWOAPI, 复制以下脚本添加到您页面的body中
+                        <br />
+                        <textarea
+                            style="width: 90%;height: 30px;"><script src="https://twoapi-ui.qiangtu.com/scripts/content.js"></script></textarea>
+                        <br />您就能获得一个和 <a href="http://suishouji.qiangtu.com/"
+                            target="_blank">http://suishouji.qiangtu.com/</a>
+                        功能一模一样的AI，其功能为：
+                    </p>
+                    <ul>
+                        <li> 页面内任意地方选取文字，都可以弹出对话框基于选择的内容进行AI互动。</li>
+                        <li> 在右下角新增一个AI的对话按钮，点击之后唤起AI互动界面，支持基于AI来进行当前页面总结和任意的AI对话功能。</li>
+                    </ul>
+                    <h2>测试参与说明</h2>
                     <p>本站点仅用于测试和展示通过TWOAPI调用来进行的衍生应用。</p>
                     <ul>
                         <li>测试站点不保证稳定性，迭代的过程会导致停机和数据丢失。</li>
@@ -17,6 +30,7 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="example">
                     <p class="custom-block-title">说明</p>
                     <p>本站点是为了回答企业以下问题而创建的DEMO合集，用于测试和展示通过TWOAPI调用来进行的衍生应用。</p>
