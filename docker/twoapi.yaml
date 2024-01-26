@@ -1,0 +1,16 @@
+version: '3'
+services:
+  twoapi:
+    image: odinluo/twoapi:latest
+    ports:
+      - 7001:8080
+    environment:
+      - MYSQL_HOST=172.17.0.1
+      - MYSQL_USER=twoapi
+      - MYSQL_PWD=
+      - MYSQL_DB=twoapi
+      - UPGRADE_TOKEN=12345678
+    deploy:
+      resources:
+        limits:
+          memory: 1500m
