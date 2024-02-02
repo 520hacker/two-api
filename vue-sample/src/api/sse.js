@@ -3,7 +3,11 @@ import request from '@/utils/request';
 import { getSharedToken } from '@/utils/token'
 
 export function makeSingleChat(param) {
-    const token = localStorage.getItem('CSK');
+    let token = localStorage.getItem('CSK'); 
+    if (!token) {
+        token = getSharedToken();
+    }
+    
     if (!token) {
         return Promise.resolve({
             "success": false,
@@ -26,7 +30,11 @@ export function makeSingleChat(param) {
 }
 
 export function makeSpeechToText(param) {
-    const token = localStorage.getItem('CSK');
+    let token = localStorage.getItem('CSK'); 
+    if (!token) {
+        token = getSharedToken();
+    }
+
     if (!token) {
         return Promise.resolve({
             "success": false,
@@ -49,7 +57,11 @@ export function makeSpeechToText(param) {
 } 
 
 export function makeTextToSpeech(param) {
-    const token = localStorage.getItem('CSK');
+    let token = localStorage.getItem('CSK'); 
+    if (!token) {
+        token = getSharedToken();
+    }
+    
     if (!token) {
         return Promise.resolve({
             "success": false,

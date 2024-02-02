@@ -4,26 +4,63 @@ export function getMainMenus() {
             "job": "默认",
             "items": [
                 {
-                    "title": "对话",
+                    "title": "切换 👉️",
                     "links": [
-                        { title: "对话", href: "/chat/base/0/72" },
+                        { title: "普通对话", href: "/chat/base/0/99" },
+                        { title: "哄哄模拟", href: "/chat/base/120/7" },
+                        { title: "长文写作", href: "/article/generator" },
+                        { title: "宇辉作文", href: "/chat/base/118/77/dse9iXvor" },
+                        { title: "理解图片", href: "/chat/base/112/70" },
+                        { title: "文档阅读", href: "/chat/base/113/69" },
+                        { title: "语法优化", href: "/chat/base/1/7" },
+                        { title: "中英互译", href: "/chat/base/7/99" },
+                        { title: "联网搜索", href: "/chat/base/8/5" },
+                        { title: "网页总结", href: "/chat/summary/111/72" }, 
+                        { title: "Midjourney", href: "/chat/base/9/101" },
+                        { title: "Dalle-3", href: "/chat/base/114/17" },
+                        { title: "相册", href: "/log/draw/gpt-4-dalle" }
+                    ]
+                }
+                // ,
+                // {
+                //     "title": "相册",
+                //     "links": [
+                //         { title: "相册", href: "/log/draw/gpt-4-dalle" }
+                //     ]
+                // }
+            ]
+        },
+        {
+            "job": "人设",
+            "items": [
+                {
+                    "title": "人设",
+                    "links": [
+                        { title: "助手", href: "/chat/base/3/4" },
+                        { title: "祖母", href: "/chat/base/5/72" },
+                        { title: "半仙", href: "/chat/base/4/72" },
+                        { title: "佛祖", href: "/chat/base/106/8" },
+                        { title: "牛破天", href: "/chat/base/102/72" },
+                        { title: "分析师", href: "/chat/base/6/72" },
+                    ]
+                }
+            ]
+        },
+        {
+            "job": "AI家族",
+            "items": [
+                {
+                    "title": "AI家族",
+                    "links": [
                         { title: "bing", href: "/chat/base/119/64" },
-                        { title: "识图", href: "/chat/base/112/70" },
-                        { title: "读文档", href: "/chat/base/113/69" },
-                        { title: "语法优化", href: "/chat/base/1/72" },
-                        { title: "中英互译", href: "/chat/base/7/72" },
-                    ]
-                },
-                {
-                    "title": "联网",
-                    "links": [
-                        { title: "联网", href: "/chat/base/8/5" },
-                        { title: "网页总结", href: "/chat/summary/111/72" }
-                    ]
-                },
-                {
-                    "title": "绘图",
-                    "links": [
+                        { title: "助手", href: "/chat/base/3/72" },
+                        { title: "智谱", href: "/chat/base/12/65" },
+                        { title: "智脑", href: "/chat/base/11/45" },
+                        { title: "GPT4", href: "/chat/base/13/11" },
+                        { title: "千问", href: "/chat/base/115/78" },
+                        { title: "KIMI", href: "/chat/base/116/83" },
+                        { title: "Gemini", href: "/chat/base/117/95" },
+                        { title: "DBA", href: "/chat/base/104/72" },
                         { title: "Midjourney", href: "/chat/base/9/32" },
                         { title: "Dalle-3", href: "/chat/base/114/17" },
                     ]
@@ -31,46 +68,10 @@ export function getMainMenus() {
             ]
         },
         {
-            "job": "名人",
+            "job": "撰稿人",
             "items": [
                 {
-                    "title": "名人",
-                    "links": [
-                        { title: "助手", href: "/chat/base/3/4" },
-                        { title: "祖母", href: "/chat/base/5/72" },
-                        { title: "半仙", href: "/chat/base/4/72" },
-                        { title: "佛祖", href: "/chat/base/106/8" },
-                        { title: "牛破天", href: "/chat/base/102/72" },
-                    ]
-                }
-            ]
-        },
-        {
-            "job": "程序员",
-            "items": [
-                {
-                    "title": "程序员",
-                    "links": [
-                        { title: "助手", href: "/chat/base/3/72" },
-                        { title: "智谱", href: "/chat/base/12/65" },
-                        { title: "智脑", href: "/chat/base/11/45" },
-                        { title: "GPT", href: "/chat/base/13/11" },
-                        { title: "千问", href: "/chat/base/115/78" },
-                        { title: "KIMI", href: "/chat/base/116/83" },
-                        { title: "Gemini", href: "/chat/base/117/95" },
-                        { title: "分析", href: "/chat/base/6/72" },
-                        { title: "DBA", href: "/chat/base/104/72" },
-                        { title: "语法优化", href: "/chat/base/1/72" },
-                        { title: "中英互译", href: "/chat/base/7/72" }
-                    ]
-                }
-            ]
-        },
-        {
-            "job": "撰写家",
-            "items": [
-                {
-                    "title": "撰写家",
+                    "title": "撰稿人",
                     "links": [
                         { title: "周报", href: "/chat/base/110/8" },
                         { title: "助手", href: "/chat/base/3/72" },

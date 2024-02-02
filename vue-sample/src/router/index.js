@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import Home from '../views/public/HomePage.vue';
 import BaseChat from '../views/chat/BaseChat.vue'; 
+import DrawLog from '../views/log/DrawLog.vue'; 
+import ArticleGenerator from '../views/chat/ArticleGenerator.vue'
 import WebSummary from '../views/chat/WebSummary.vue'; 
 import GoPage from '../views/public/GoPage.vue'; 
 
@@ -14,6 +16,9 @@ const routes = [
   { path: '/chat/summary/:id/:mid', component: WebSummary },
   { path: '/chat/summary/:id', component: WebSummary },
   { path: '/chat/summary', component: WebSummary }, 
+  { path: '/article/generator', component: ArticleGenerator }, 
+  { path: '/log/draw', component: DrawLog }, 
+  { path: '/log/draw/:id', component: DrawLog }, 
   { path: '/go/:gid', component: GoPage }, 
 ];
 

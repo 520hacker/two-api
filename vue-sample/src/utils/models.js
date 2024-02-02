@@ -3,8 +3,8 @@ export function getMainModels() {
         "id": "34",
         "label": "百度 ERNIE-Bot-turbo"
     }, {
-        "id": "44",
-        "label": "讯飞 SparkDesk3"
+        "id": "108",
+        "label": "讯飞 SparkDesk3.5"
     }, {
         "id": "45",
         "label": "360智脑 360GPT_S2_V9"
@@ -32,12 +32,28 @@ export function getMainModels() {
 export function getCheepModel(cur_model) {
     const validModels = [
         "net-gpt-3.5-turbo-16k", "net-gpt-4",
-        'gpt-4', 'gpt-4-0613', 'gpt-4-0314', 'gpt-4-32k', 'gpt-4-32k-0613',
-        'gpt-4-32k-0314', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', "gpt-4-turbo",
-        "gpt-4-1106-preview", "gpt-4-1106-vision-preview",
-        "gpt-4-gizmo-g", "gpt-4-vision-preview", "dall-e-3", "dall-e-2",
+        'gpt-4',
+        'gpt-4-0613',
+        'gpt-4-0314',
+        'gpt-4-32k',
+        'gpt-4-32k-0613',
+        'gpt-4-preview-0125',
+        'gpt-4-32k-0314',
+        'gpt-4-dalle',
+        'gpt-4-v',
+        'gpt-4-all',
+        "gpt-4-turbo",
+        "gpt-4-1106-preview",
+        "gpt-4-1106-vision-preview",
+        "gpt-4-gizmo-g",
+        "gpt-4-vision-preview",
+        "dall-e-3",
+        "dall-e-2",
         "gemini-pro-vision",
-        'mj', 'midjourney', 'characterglm'];
+        'mj',
+        'mj-chat',
+        'midjourney',
+        'characterglm'];
 
     if (validModels.includes(cur_model)) {
         cur_model = 'gpt-3.5-turbo-16k';
@@ -252,6 +268,32 @@ export function getModel(id) {
             return "mixtral-8x7b";
         case "101":
             return "mj-chat";
+        case "102":
+            return "gpt-3.5-turbo-0125";
+        case "103":
+            return "text-embedding-3-small";
+        case "104":
+            return "text-embedding-3-large";
+        case "105":
+            return "gpt-4-turbo-preview";
+        case "106":
+            return "gpt-4-0125-preview";
+        case "107":
+            return "text-moderation-007";
+        case "108":
+            return "SparkDesk3.5";
+        case "109":
+            return "search-gpts-chat";
+        case "110":
+            return "search-gpts";
+        case "111":
+            return "gpts-search";
+        case "112":
+            return "gpts-get";
+        case "113":
+            return "mistral-medium";
+        case "114":
+            return "qwen-72b";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -271,6 +313,7 @@ export function getAllModels() {
         "gpt-3.5-turbo-1106",
         "gpt-3.5-turbo-instruct",
         "gpt-3.5-turbo-instruct-0914",
+        "gpt-3.5-turbo-0125",
         "gpt-4",
         "gpt-4-0314",
         "gpt-4-0613",
@@ -285,6 +328,8 @@ export function getAllModels() {
         "gpt-4-vision-preview",
         "gpt-4-gizmo-g",
         "gpt-4-turbo",
+        "gpt-4-turbo-preview",
+        "gpt-4-0125-preview",
         "google-palm",
         "llama-2-70b",
         "llama-2-13b",
@@ -320,6 +365,7 @@ export function getAllModels() {
         "SparkDesk",
         "SparkDesk2",
         "SparkDesk3",
+        "SparkDesk3.5",
         "360GPT_S2_V9",
         "360GPT_S2_V9.4",
         "dall-e",
@@ -338,6 +384,9 @@ export function getAllModels() {
         "text-moderation-stable",
         "code-davinci-edit-001",
         "text-search-ada-doc-001",
+        "text-embedding-3-small",
+        "text-embedding-3-large",
+        "text-moderation-007",
         "whisper-1",
         "Embedding-V1",
         "PaLM-2",
@@ -361,6 +410,12 @@ export function getAllModels() {
         "gemini-ultra",
         "aqa",
 
-        "mixtral-8x7b"
+        "mixtral-8x7b",
+        "search-gpts-chat",
+        "search-gpts",
+        "gpts-search",
+        "gpts-get",
+        "mistral-medium",
+        "qwen-72b"
     ];
 }

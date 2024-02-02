@@ -16,17 +16,17 @@ export default {
             }
 
             if (id == "2") {
-                localStorage.setItem('job', "名人")
+                localStorage.setItem('job', "人设")
                 router.push(`/chat/base/3/76`);
             }
 
             if (id == "3") {
-                localStorage.setItem('job', "程序员")
+                localStorage.setItem('job', "AI家族")
                 router.push(`/chat/base/12/76`);
             }
 
             if (id == "4") {
-                localStorage.setItem('job', "撰写家")
+                localStorage.setItem('job', "撰稿人")
                 router.push(`/chat/base/2/76`);
             }
         }
