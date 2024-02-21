@@ -110,7 +110,7 @@
                 </div>
                 <div class="article-generator-settings-form-row">
                     <div class="article-generator-settings-form-title">
-                        标题
+                        标题（长文提示词）
                     </div>
                     <div class="article-generator-settings-form-content">
                         <el-input v-model="form.title" placeholder="请输入标题" :autosize="{ minRows: 2, maxRows: 4 }"
@@ -225,11 +225,11 @@ export default {
     },
 
     setup() {
-        const models = ref(["gpt-3.5-turbo-16k", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5"])
+        const models = ref(["gpt-3.5-turbo-16k", "gpt-3.5-turbo-0125", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5", "gpt-4-gizmo-g-dse9iXvor"])
         const loading = ref(false)
         const step = ref(1)
-        const types = ref(["学术论文", "新闻报道", "叙述性文章", "描述性文章", "评论性文章", "议论文", "说明文", "报告文", "研究报告", "访谈文章", "人物特写", "记叙文", "故事型文章", "列表型文章", "观点型文章", "专栏文章", "书评", "电影评论", "产品评测", "短篇小说", "诗歌", "剧本", "幽默文章", "随笔", "日记", "旅游指南", "美食评论", "科普文章", "商业计划书", "个人陈述或个人声明"])
-        const styles = ref(["严肃严谨", "轻松诙谐", "文笔优美", "猎奇搞怪", "提纲挈领", "引经据典", "细节描述", "抛砖引玉", "反面论证", "正面论证", "举例说明", "设问", "答疑解惑", "引用名言", "引用数据", "引用权威观点", "逻辑推理", "情感表达", "讲故事", "讲笑话", "讲道理", "讲历史", "讲新闻", "讲科学", "讲经济", "讲文化", "讲生活", "讲艺术", "讲体育", "讲娱乐", "讲教育", "讲政策", "讲环保", "讲健康", "讲旅游", "讲美食", "讲科技", "讲商业", "讲心理", "讲哲学", "讲法律"])
+        const types = ref(["学术论文", "新闻报道", "叙述性文章", "描述性文章", "评论性文章", "议论文", "说明文", "报告文", "汇报材料", "研究报告", "访谈文章", "人物特写", "记叙文", "故事型文章", "列表型文章", "观点型文章", "专栏文章", "书评", "电影评论", "产品评测", "短篇小说", "诗歌", "剧本", "散文诗", "幽默文章", "随笔", "日记", "信件", "旅游指南", "美食评论", "科普文章", "商业计划书", "个人陈述或声明"])
+        const styles = ref(["篇首有‘楔子’", "严肃严谨", "轻松诙谐", "文笔优美", "善用古文", "多用成语", "猎奇搞怪", "提纲挈领", "引经据典", "细节描述", "抛砖引玉", "反面论证", "正面论证", "举例说明", "设问", "答疑解惑", "引用名言", "引用数据", "引用权威观点", "逻辑推理", "情感表达", "讲故事", "讲笑话", "讲道理", "讲历史", "讲新闻", "讲科学", "讲经济", "讲文化", "讲生活", "讲艺术", "讲体育", "讲娱乐", "讲教育", "讲政策", "讲环保", "讲健康", "讲旅游", "讲美食", "讲科技", "讲商业", "讲心理", "讲哲学", "讲法律"])
         const content = ref('')
         const form = ref({
             "id": "",
@@ -239,7 +239,7 @@ export default {
             "title": '未来30年的AI与人类',
             "node_size": 3,
             "item_size": 2,
-            "list": [{ "index": "1", "level": "1", "title": "引言" }, { "index": "1.1", "level": "2", "title": "小标题一" }, { "index": "1.2", "level": "2", "title": "小标题二" }, { "index": "2", "level": "1", "title": "标题一" }, { "index": "2.1", "level": "2", "title": "小标题一" }, { "index": "2.2", "level": "2", "title": "小标题二" }]
+            "list": [{ "index": "1", "level": "1", "title": "请点击页面上方‘生成提纲’按钮创建提纲" }]
         })
 
         const showDialogTable = ref(false)
@@ -315,17 +315,23 @@ export default {
         }
 
         const getSysPrompt = () => {
+            let firstNode = "";
+            let contentStyle = form.value.style.join(',')
+            if (contentStyle.indexOf('楔子') > 0) {
+                firstNode = "第一章为‘楔子’或者‘引言’，没有子章节；"
+            }
+
             const prompt = `
-你的目标是依据需求给出提纲,提纲分2个层次，至少分${form.value.node_size}个主章节，每个主章节包含1-${form.value.item_size}个子章节，最后一章为总结或者点题，没有子章节。
+你的目标是依据需求给出提纲,提纲分2个层次,至少分${form.value.node_size}个主章节，每个主章节包含1-${form.value.item_size}个子章节，${firstNode}最后一章为总结或者点题，没有子章节。
 请一步一步思考后，在每个章节点尽可能详细的描述当前节点的概要。
-目标内容的题材是： ${form.value.type}
-目标内容的写作风格是： ${form.value.style}
+目标内容的题材是： ‘${form.value.type}’
+目标内容的写作风格是： ‘${form.value.style}’
 要求返回的格式为json，请不要返回json内容之外的其他信息，包含介绍、说明、格式、markdown信息。
 要求返回的内容为一个数组json, 数组的内容参考
 [{"index":"1","level":"1","title":"大标题一"},{"index":"1.1","level":"2","title":"子标题一"},{"index":"1.2","level":"2","title":"子标题二"},{"index":"1.3","level":"2","title":"子标题三"},{"index":"2","level":"1","title":"大标题二"},{"index":"2.1","level":"2","title":"子标题一"},{"index":"2.2","level":"2","title":"子标题二"},{"index":"2.3","level":"2","title":"子标题三"}]
 
 请返回json内容，而不是其它格式
-目标内容的标题是：
+目标内容的标题/内容要求是：
   `;
             return prompt;
         }

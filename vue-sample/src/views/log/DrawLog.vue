@@ -38,6 +38,10 @@
     margin-top: 30px;
     margin-bottom: 20px;
 }
+span.ip {
+    color: #ccc;
+    font-size: 10px;
+}
 </style>
 <template>
     <div class="draw-logs">
@@ -56,12 +60,13 @@
         <el-row>
             <el-col v-for="(o, index) in list" :key="o" :span="8" :offset="index > 0 ? 2 : 0" v-show="o.images.length > 0">
                 <el-card :body-style="{ padding: '0px' }">
-                    <el-image :key="o.images[0]" :src="o.images[0]" lazy :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+                    <el-image :key="o.images[o.images.length-1]" :src="o.images[o.images.length-1]" lazy :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
                         :preview-src-list="o.images" :initial-index="4" fit="cover" />
                     <div style="padding: 14px">
                         <span>{{ o.content }}</span>
                         <div class="bottom">
                             <time class="time">{{ timestampToDate(o.createAt) }}</time>
+                            <span class="ip">{{ o.ip }}</span>
                         </div>
                     </div>
                 </el-card>
