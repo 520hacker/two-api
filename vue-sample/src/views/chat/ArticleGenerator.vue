@@ -113,7 +113,7 @@
                         标题（长文提示词）
                     </div>
                     <div class="article-generator-settings-form-content">
-                        <el-input v-model="form.title" placeholder="请输入标题" :autosize="{ minRows: 2, maxRows: 4 }"
+                        <el-input v-model="form.title" placeholder="请输入标题" :autosize="{ minRows: 2, maxRows: 8 }"
                             type="textarea" />
                     </div>
                 </div>
@@ -225,7 +225,7 @@ export default {
     },
 
     setup() {
-        const models = ref(["gpt-3.5-turbo-16k", "gpt-3.5-turbo-0125", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5", "gpt-4-gizmo-g-dse9iXvor"])
+        const models = ref(["gpt-3.5-turbo-16k", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5"])
         const loading = ref(false)
         const step = ref(1)
         const types = ref(["学术论文", "新闻报道", "叙述性文章", "描述性文章", "评论性文章", "议论文", "说明文", "报告文", "汇报材料", "研究报告", "访谈文章", "人物特写", "记叙文", "故事型文章", "列表型文章", "观点型文章", "专栏文章", "书评", "电影评论", "产品评测", "短篇小说", "诗歌", "剧本", "散文诗", "幽默文章", "随笔", "日记", "信件", "旅游指南", "美食评论", "科普文章", "商业计划书", "个人陈述或声明"])

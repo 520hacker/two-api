@@ -9,9 +9,16 @@
                     <p>您可以创建不同的令牌用于不同的用途。</p>
                 </div>
                 <div class="example">
-                    <el-button-group class="ml-4">
-                        <el-button type="primary" :icon="Edit"  @click="handleNew"/>  
-                    </el-button-group>
+                    <el-row>
+                        <el-col :span="18">
+                            <el-button-group class="ml-4">
+                                <el-button type="primary" :icon="Edit" @click="handleNew" />
+                            </el-button-group></el-col>
+                        <el-col :span="6" style="text-align: right; color: #e9e9eb;">
+                            管理
+                            <el-switch v-model="showAdvSearchFrom" />
+                        </el-col>
+                    </el-row>
                     <div style="border-top: 1px solid #e9e9eb; display: block; width: 100%;margin: 10px 0 0 0;height: 1px;">
                     </div>
                     <el-table :data="tableData" style="width: 100%" v-loading="loading">
@@ -33,7 +40,13 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="名称"  sortable  />
+                        <el-table-column label="名称" sortable prop="name">
+                            <template #default="props">
+                                <router-link :to="'/tokens/' + props.row.id" class="toc-link">
+                                    {{ props.row.name }}
+                                </router-link>
+                            </template>
+                        </el-table-column> 
                         <el-table-column label="状态" width="100" sortable prop="status">
                             <template #default="props">
                                 <el-tooltip class="box-item" effect="dark" content="点击切换渠道禁用启用状态" placement="top">
@@ -65,10 +78,13 @@
                                 <DateInfo :pubDate="props.row.expiredTime" v-if="props.row.expiredTime != -1" />
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="150">
+                        <el-table-column fixed="right" :label="showAdvSearchFrom ? '操作' : 'key'"
+                            :width="showAdvSearchFrom ? 150 : 60">
                             <template #default="props">
-                                <el-button type="danger" :icon="Delete" circle @click="handleDelete(props.row.id)" />
-                                <el-button type="primary" :icon="Edit" circle @click="handleEdit(props.row.id)" />
+                                <el-button type="danger" :icon="Delete" circle @click="handleDelete(props.row.id)"
+                                    v-if="showAdvSearchFrom" />
+                                <el-button type="primary" :icon="Edit" circle @click="handleEdit(props.row.id)"
+                                    v-if="showAdvSearchFrom" />
                                 <el-tooltip class="box-item" effect="dark" content="点击复制" placement="top">
                                     <el-button :icon="CopyDocument" circle @click="copyToClipboardPopup(props.row.key)" />
                                 </el-tooltip>
@@ -78,7 +94,8 @@
                     <div>
                         <el-pagination v-model:current-page="currentPage2" v-model:page-size="pageSize2" :small="false"
                             :disabled="false" :hide-on-single-page="true" :background="background"
-                            layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                            layout="sizes, prev,  jumper, next,  ->, total" :total="totalCount" @size-change="loadList"
+                            @current-change="loadList" />
                     </div>
                 </div>
             </div>
@@ -102,9 +119,9 @@
                 <div style="height: 10px; width: 100%;"></div>
                 <el-button-group>
                     <el-button type="primary" :icon="ArrowLeft" @click="copyToClipboard(copyKey)">Key</el-button>
-                    <el-button type="primary"  @click="copyForNextWeb()">Chat Next Web</el-button>
-                    <el-button type="primary"  @click="copyForAMA()">AMA</el-button>
-                    <el-button type="primary"  @click="copyForOpenCat()">
+                    <el-button type="primary" @click="copyForNextWeb()">Chat Next Web</el-button>
+                    <el-button type="primary" @click="copyForAMA()">AMA</el-button>
+                    <el-button type="primary" @click="copyForOpenCat()">
                         Open Cat<el-icon class="el-icon--right">
                             <ArrowRight />
                         </el-icon>
@@ -115,10 +132,10 @@
             <div style="pading-top:10px">
                 您也可以选择直接点击进行聊天
                 <div style="height: 10px; width: 100%;"></div>
-                <el-button-group> 
-                    <el-button type="primary" :icon="ArrowLeft"  @click="openNextWeb()">Chat Next Web</el-button>
-                    <el-button type="primary"  @click="openAMA()">AMA</el-button>
-                    <el-button type="primary"  @click="openOpenCat()">
+                <el-button-group>
+                    <el-button type="primary" :icon="ArrowLeft" @click="openNextWeb()">Chat Next Web</el-button>
+                    <el-button type="primary" @click="openAMA()">AMA</el-button>
+                    <el-button type="primary" @click="openOpenCat()">
                         Open Cat<el-icon class="el-icon--right">
                             <ArrowRight />
                         </el-icon>
@@ -154,19 +171,20 @@ export default {
         const router = useRouter();
         const loading = ref(true)
         const currentPage2 = ref(1)
-        const pageSize2 = ref(20)
+        const pageSize2 = ref(50)
         const totalCount = ref(0)
         const input3 = ref('')
         const background = ref(true)
         const dialogTableVisible = ref(false)
+        const showAdvSearchFrom = ref(false)
         const copyKey = ref('')
         const getStatus = (status) => {
             return getTokenStatus(status)
         }
 
 
-        const handleNew = () =>{
-            router.push(`/tokens/new`) 
+        const handleNew = () => {
+            router.push(`/tokens/new`)
         }
 
         const handleEdit = (id) => {
@@ -178,28 +196,28 @@ export default {
             copyKey.value = 'sk-' + key;
         }
 
-        const copyForNextWeb =() => {
-            var str = 'https://freetalk.8ai.link/#/?settings={"key":"' + copyKey.value + '","url":"https://' + window.location.host+'"}'
+        const copyForNextWeb = () => {
+            var str = 'https://freetalk.8ai.link/#/?settings={"key":"' + copyKey.value + '","url":"https://' + window.location.host + '"}'
             copyToClipboard(str)
         }
-        const copyForAMA =() => {  
-            var str = 'ama://set-api-key?server=https%3A%2F%2F' + window.location.host+'&key=' + copyKey.value
+        const copyForAMA = () => {
+            var str = 'ama://set-api-key?server=https%3A%2F%2F' + window.location.host + '&key=' + copyKey.value
             copyToClipboard(str)
         }
-        const copyForOpenCat =() => {
-            var str = 'opencat://team/join?domain=https%3A%2F%2F' + window.location.host+'&token=' + copyKey.value
+        const copyForOpenCat = () => {
+            var str = 'opencat://team/join?domain=https%3A%2F%2F' + window.location.host + '&token=' + copyKey.value
             copyToClipboard(str)
         }
-        const openNextWeb =() => {
-            var str = 'https://freetalk.8ai.link/#/?settings={"key":"' + copyKey.value + '","url":"https://' + window.location.host+'"}'
+        const openNextWeb = () => {
+            var str = 'https://freetalk.8ai.link/#/?settings={"key":"' + copyKey.value + '","url":"https://' + window.location.host + '"}'
             window.open(str)
         }
-        const openAMA =() => {  
-            var str = 'ama://set-api-key?server=https%3A%2F%2F' + window.location.host+'&key=' + copyKey.value
+        const openAMA = () => {
+            var str = 'ama://set-api-key?server=https%3A%2F%2F' + window.location.host + '&key=' + copyKey.value
             window.open(str)
         }
-        const openOpenCat =() => {
-            var str = 'opencat://team/join?domain=https%3A%2F%2F' + window.location.host+'&token=' + copyKey.value
+        const openOpenCat = () => {
+            var str = 'opencat://team/join?domain=https%3A%2F%2F' + window.location.host + '&token=' + copyKey.value
             window.open(str)
         }
 
@@ -307,7 +325,11 @@ export default {
                 offset: (currentPage2.value - 1) * pageSize2.value,
             }).then(data => {
                 loading.value = false
-                console.log(data.items)
+                if (!data.success && data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 tableData.value = data.items
                 totalCount.value = data.total
             });
@@ -346,6 +368,7 @@ export default {
             handleEdit,
             enableToken,
             disableToken,
+            showAdvSearchFrom,
             Check,
             Edit,
             Delete,
@@ -360,5 +383,4 @@ export default {
 <style>
 .el-pagination.is-background {
     margin: 20px 0 0;
-}
-</style>
+}</style>

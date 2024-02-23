@@ -49,6 +49,7 @@
 </template>
   
 <script>
+import { useRouter } from 'vue-router';
 import { h, ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus'
 import { CheckLogin } from '@/api/user'
@@ -57,6 +58,7 @@ import { getErrorMessage } from '@/utils/enums'
 export default {
     name: 'UserEdit',
     setup() {
+        const router = useRouter();
         const quota_label = ref("额度")
         const form = reactive({
             password: '',
@@ -67,8 +69,12 @@ export default {
         const onLoad = () => {
             CheckLogin()
             getProfile({
-            }).then(data => {
-                console.log(data.item)
+            }).then(data => {  
+                if (!data.success && data.errorCode == 401) { 
+                    router.push('/login');
+                    return;
+                }
+
                 form.password = ''
                 form.displayName = data.displayName
             });

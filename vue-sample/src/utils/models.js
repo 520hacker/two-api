@@ -294,6 +294,8 @@ export function getModel(id) {
             return "mistral-medium";
         case "114":
             return "qwen-72b";
+        case "115":
+            return "sora-1.0-turbo";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -416,6 +418,7 @@ export function getAllModels() {
         "gpts-search",
         "gpts-get",
         "mistral-medium",
-        "qwen-72b"
+        "qwen-72b",
+        "sora-1.0-turbo"
     ];
 }

@@ -9,6 +9,13 @@
                     <p>查看用户的列表并进行管理</p>
                 </div>
                 <div class="example">
+                    <el-row>
+                        <el-col :span="18"> </el-col>
+                        <el-col :span="6" style="text-align: right; color: #e9e9eb;">
+                            管理
+                            <el-switch v-model="showAdvSearchFrom" />
+                        </el-col>
+                    </el-row>
                     <el-table :data="tableData" style="width: 100%" v-loading="loading">
                         <el-table-column type="expand">
                             <template #default="props">
@@ -39,7 +46,7 @@
                         </el-table-column>
                         <el-table-column label="分组" width="160" sortable prop="group">
                             <template #default="props">
-                                <el-button :type="getGroupColor(props.row.group)" plain>{{ props.row.group }}</el-button>
+                                <el-tag :type="getGroupColor(props.row.group)" plain>{{ props.row.group }}</el-tag>
                             </template>
                         </el-table-column>
                         <el-table-column prop="requestCount" label="统计" width="100" sortable />
@@ -53,7 +60,7 @@
                                 ${{ (props.row.quota / 500000).toFixed(2) }}
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="100">
+                        <el-table-column fixed="right" label="操作" width="100" v-if="showAdvSearchFrom">
                             <template #default="props">
                                 <el-button type="danger" :icon="Delete" circle @click="handleDelete(props.row.id)" />
                                 <el-button type="primary" :icon="Edit" circle @click="handleEdit(props.row.id)" />
@@ -63,7 +70,8 @@
                     <div>
                         <el-pagination v-model:current-page="currentPage2" v-model:page-size="pageSize2" :small="false"
                             :disabled="false" :hide-on-single-page="true" :background="background"
-                            layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                            layout="sizes, prev,  jumper, next,  ->, total" :total="totalCount" @size-change="loadList"
+                            @current-change="loadList" />
                     </div>
                 </div>
             </div>
@@ -105,11 +113,11 @@ export default {
         const router = useRouter();
         const loading = ref(true)
         const currentPage2 = ref(1)
-        const pageSize2 = ref(20)
+        const pageSize2 = ref(50)
         const totalCount = ref(0)
         const input3 = ref('')
         const background = ref(true)
-
+        const showAdvSearchFrom = ref(false)
         const handleClick = () => {
             console.log('click')
         }
@@ -135,7 +143,11 @@ export default {
                 offset: (currentPage2.value - 1) * pageSize2.value,
             }).then(data => {
                 loading.value = false
-                console.log(data.items)
+                if (!data.success && data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 tableData.value = data.items
                 totalCount.value = data.total
             });
@@ -265,6 +277,7 @@ export default {
             handleEdit,
             disableUser,
             enableUser,
+            showAdvSearchFrom,
             Check,
             Edit,
             Delete,

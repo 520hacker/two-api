@@ -10,23 +10,50 @@
                 </div>
                 <div class="example">
                     <el-row>
-                        <el-col :span="18">
+                        <el-col :span="20">
                             <el-button-group class="ml-4">
-                                <el-button type="primary" :icon="Edit" @click="handleNew" />
-                                <el-button type="primary" :icon="Grid" @click="goModels" />
-                                <el-button type="primary" :icon="Money" @click="handleRefreshBalanceAll" />
-                                <el-button type="primary" :icon="Refresh" @click="handleTestAll" />
-                            </el-button-group></el-col>
-                        <el-col :span="6" style="text-align: right; color: #e9e9eb;">
-                            高级搜索
-                            <el-switch v-model="showAdvSearchFrom"  />
+                                <el-tooltip class="box-item" effect="dark" content="新建频道" placement="top">
+                                    <el-button type="primary" :icon="Edit" @click="handleNew" />
+                                </el-tooltip>
+                                <el-tooltip class="box-item" effect="dark" content="查看模型清单" placement="top">
+                                    <el-button type="primary" :icon="Grid" @click="goModels" />
+                                </el-tooltip>
+                                <el-tooltip class="box-item" effect="dark" content="刷新本页频道余额" placement="top">
+                                    <el-button type="primary" :icon="Money" @click="handleRefreshBalanceAll" />
+                                </el-tooltip>
+                                <el-tooltip class="box-item" effect="dark" content="测试本页频道速率" placement="top">
+                                    <el-button type="primary" :icon="Refresh" @click="handleTestAll" />
+                                </el-tooltip>
+                                <el-tooltip class="box-item" effect="dark" content="删除本页已禁用频道" placement="top">
+                                    <el-button type="primary" :icon="FolderDelete" @click="handleDeleteDisabled" />
+                                </el-tooltip>
+                            </el-button-group>
+                        </el-col>
+                        <el-col :span="4" style="text-align: right; color: #e9e9eb;">
+                            管理
+                            <el-switch v-model="showAdvSearchFrom" />
                         </el-col>
                     </el-row>
                     <div v-show="showAdvSearchFrom">
                         <div style="clear: both;  display: block; width: 100%;margin: 10px 0 0px 0;height: 1px;">
                         </div>
                         <div class="mt-4">
-                            <el-input v-model="searchForm.model" placeholder="Please input model" class="input-with-select">
+                            <el-input v-model="searchForm.baseUrl" placeholder="请输入代理地址" class="input-with-select"
+                                @keydown.enter="loadList">
+                                <template #prepend>
+                                    <el-select v-model="searchForm.status" placeholder="Select" style="width: 115px">
+                                        <el-option label="不限状态" :value="-2" />
+                                        <el-option label="回收站" value="-1" />
+                                        <el-option label="启用" value="1" />
+                                        <el-option label="禁用" value="2" />
+                                    </el-select>
+                                </template>
+                            </el-input>
+                        </div>
+                        <el-divider border-style="dotted" style="margin: 10px 0 0 0;" />
+                        <div class="mt-4">
+                            <el-input v-model="searchForm.model" placeholder="请输入模型名 model" class="input-with-select"
+                                @keydown.enter="loadList">
                                 <template #prepend>
                                     <el-select v-model="searchForm.type" placeholder="Select" style="width: 115px">
                                         <el-option label="不限类型" :value="-1" />
@@ -36,28 +63,30 @@
                                 </template>
                             </el-input>
                         </div>
+                        <el-divider border-style="dotted" style="margin: 10px 0 0 0;" />
+                        <div class="mt-4">
+                            <el-input v-model="searchForm.keyword" placeholder="请输入名称关键词 keyword" class="input-with-select"
+                                @keydown.enter="loadList">
+                                <template #prepend>
+                                    <el-select v-model="searchForm.group" placeholder="Select" style="width: 115px">
+                                        <el-option label="不限分组" value="all" />
+                                        <el-option label="default" value="default" />
+                                        <el-option label="vip" value="vip" />
+                                        <el-option label="svip" value="svip" />
+                                    </el-select>
+                                </template>
+                                <template #append>
+                                    <el-button :icon="Search" @click="loadList" />
+                                </template>
+                            </el-input>
+                        </div>
+                        <div class="mt-4">
+                            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :small="false"
+                                :disabled="false" :hide-on-single-page="true" :background="background"
+                                layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                        </div>
                     </div>
-
-                    <div style="clear: both;  display: block; width: 100%;margin: 10px 0 0px 0;height: 1px;">
-                    </div>
-                    <div class="mt-4">
-                        <el-input v-model="searchForm.keyword" placeholder="Please input keyword" class="input-with-select">
-                            <template #prepend>
-                                <el-select v-model="searchForm.group" placeholder="Select" style="width: 115px">
-                                    <el-option label="不限分组" value="all" />
-                                    <el-option label="default" value="default" />
-                                    <el-option label="vip" value="vip" />
-                                    <el-option label="svip" value="svip" />
-                                </el-select>
-                            </template>
-                            <template #append>
-                                <el-button :icon="Search" @click="loadList" />
-                            </template>
-                        </el-input>
-                    </div>
-                    <div
-                        style="border-top: 1px solid #e9e9eb; display: block; width: 100%;margin: 10px 0 4px 0;height: 1px;">
-                    </div>
+                    <el-divider border-style="dotted" style="margin: 10px 0 4px 0;" />
                     <el-table :data="tableData" style="width: 100%" v-loading="loading">
                         <el-table-column type="expand">
                             <template #default="props">
@@ -71,6 +100,7 @@
                                     <p m="t-0 b-2">余额: {{ props.row.balance }}</p>
                                     <p m="t-0 b-2">模型: {{ props.row.models }}</p>
                                     <p m="t-0 b-2">分组: {{ props.row.group }}</p>
+                                    <p m="t-0 b-2">权重: {{ props.row.weight }}</p>
                                     <p m="t-0 b-2">已消耗: {{ props.row.usedQuota }}</p>
                                     <p m="t-0 b-2">创建时间: {{ getDate(props.row.createdTime) }} </p>
                                     <p m="t-0 b-2">测试时间: {{ getDate(props.row.testTime) }}</p>
@@ -88,8 +118,11 @@
                         </el-table-column>
                         <el-table-column label="分组" width="160" sortable prop="group">
                             <template #default="props">
-                                <el-button :type="getGroupColor(group)" plain v-for="group in props.row.group.split(',')"
-                                    :key="group">{{ group }}</el-button>
+                                <div v-for="group in props.row.group.split(',')" :key="group">
+                                    <el-tag class="tag-2" type="info" v-if="group == 'default'">{{ group }}</el-tag>
+                                    <el-tag class="tag-2" type="success" v-if="group == 'vip'">{{ group }}</el-tag>
+                                    <el-tag class="tag-2" type="danger" v-if="group == 'svip'">{{ group }}</el-tag>
+                                </div>
                             </template>
                         </el-table-column>
                         <el-table-column label="状态" width="100" sortable prop="status">
@@ -109,7 +142,12 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column label="响应时间" width="100" sortable prop="responseTime">
+                        <el-table-column label="权重" width="80" sortable prop="weight" v-if="!showAdvSearchFrom">
+                            <template #default="props">
+                                {{ props.row.weight }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="响应" width="100" sortable prop="responseTime">
                             <template #default="props">
                                 <div m="4">
                                     <el-tooltip class="box-item" effect="dark" content="点击进行更新" placement="top">
@@ -124,17 +162,17 @@
                             <template #default="props">
                                 <div m="4">
                                     <el-tooltip class="box-item" effect="dark" content="点击进行更新" placement="top"
-                                        v-if="props.row.baseUrl && props.row.baseUrl != ''">
+                                        v-if="(props.row.baseUrl && props.row.baseUrl != '') || props.row.key.indexOf('sess') == 0">
                                         <p m="t-0 b-2" @click="getNewChannelBalance(props.row.id)"
                                             style="cursor: pointer; text-align: center;">${{ props.row.balance.toFixed(2) }}
                                         </p>
                                     </el-tooltip>
-                                    <el-text class="mx-1" type="primary"
-                                        v-if="!props.row.baseUrl || props.row.baseUrl == ''">官key</el-text>
+                                    <el-text class="mx-1" type="primary" v-if="(!props.row.baseUrl || props.row.baseUrl == '') &&
+                                        (props.row.key.indexOf('sess') != 0)">官key</el-text>
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="100">
+                        <el-table-column fixed="right" label="操作" width="100" v-if="showAdvSearchFrom">
                             <template #default="props">
                                 <el-button type="primary" :icon="Edit" circle @click="handleEdit(props.row.id)" />
                                 <el-button type="danger" :icon="Delete" circle @click="handleDelete(props.row.id)" />
@@ -142,9 +180,10 @@
                         </el-table-column>
                     </el-table>
                     <div>
-                        <el-pagination v-model:current-page="currentPage2" v-model:page-size="pageSize2" :small="false"
+                        <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :small="false"
                             :disabled="false" :hide-on-single-page="true" :background="background"
-                            layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                            layout="sizes, prev,  jumper, next,  ->, total" :total="totalCount" @size-change="loadList"
+                            @current-change="loadList" />
                     </div>
                 </div>
             </div>
@@ -186,8 +225,10 @@ import {
     Edit,
     Search,
     Refresh,
+    FolderDelete,
     Grid,
-    Lock, Money
+    Lock,
+    Money
 } from '@element-plus/icons-vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { ref } from 'vue';
@@ -196,19 +237,22 @@ export default {
     setup() {
         const router = useRouter();
         const loading = ref(true)
-        const currentPage2 = ref(1)
-        const pageSize2 = ref(20)
+        const currentPage = ref(1)
+        const pageSize = ref(50)
         const totalCount = ref(0)
         const input3 = ref('')
         const models = ref([])
         const types = ref([])
         const background = ref(true)
         const showAdvSearchFrom = ref(false)
+        // const showChangeColum = ref(false)
         const searchForm = ref({
             "type": -1,
             "model": "",
-            "keyword": '',
-            "group": "all"
+            "keyword": "",
+            "group": "all",
+            "status": -2,
+            "baseUrl": ""
         })
 
         const getDate = (timestamp) => {
@@ -273,6 +317,21 @@ export default {
                 });
             });
         };
+        const handleDeleteAction = (id) => {
+            loading.value = true
+            deleteChannel({
+                id: id
+            }).then(data => {
+                console.log(data.items)
+                loading.value = false
+                loadList()
+            });
+            ElMessage({
+                type: 'success',
+                message: '删除已完成',
+            })
+        }
+
         const handleDelete = (id) => {
             ElMessageBox.confirm(
                 '直接删除渠道，请确认?',
@@ -284,18 +343,7 @@ export default {
                 }
             )
                 .then(() => {
-
-                    loading.value = true
-                    deleteChannel({
-                        id: id
-                    }).then(data => {
-                        console.log(data.items)
-                        loadList()
-                    });
-                    ElMessage({
-                        type: 'success',
-                        message: '删除已完成',
-                    })
+                    handleDeleteAction(id)
                 })
                 .catch(() => {
                     ElMessage({
@@ -332,10 +380,12 @@ export default {
                 id: id
             }).then(wallet => {
                 // console.log(wallet) 
-                ElMessage({
-                    type: 'success',
-                    message: `${name}余额已更新【${wallet.item.toFixed(2)}】`,
-                })
+                if (wallet && wallet.item) {
+                    ElMessage({
+                        type: 'success',
+                        message: `${name}余额已更新【${wallet.item.toFixed(2)}】`,
+                    })
+                }
             });
         };
 
@@ -347,7 +397,8 @@ export default {
 
             for (var rowIndex in tableData.value) {
                 var row = tableData.value[rowIndex]
-                if (row.status == 1) {
+                if ((row.status == 1 && row.key && row.key.indexOf('sess') > -1) ||
+                    (row.status == 1 && row.baseUrl && row.baseUrl != '')) {
                     getItemResponseTime(row.id, row.name)
                 }
             }
@@ -361,14 +412,58 @@ export default {
             }, 20000)
         };
 
+        const handleDeleteDisabled = () => {
+            var disabledRows = tableData.value.filter(function (item) {
+                return item.status == 2
+            })
+
+            if (!disabledRows || disabledRows.length < 1) {
+                ElMessage({
+                    type: 'info',
+                    message: '本页没有需要删除的内容',
+                })
+                return;
+            }
+
+            ElMessageBox.confirm(
+                '您选择了一次删除本页所有的已禁用频道，请确认?',
+                'Warning',
+                {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                }
+            ).then(() => {
+
+                for (var rowIndex in disabledRows) {
+                    var row = disabledRows[rowIndex]
+                    handleDeleteAction(row.id)
+                }
+
+                setTimeout(function () {
+                    loadList()
+                }, 10000)
+            })
+                .catch(() => {
+                    ElMessage({
+                        type: 'info',
+                        message: '删除已取消',
+                    })
+                })
+        }
+
         const handleRefreshBalanceAll = () => {
             ElMessage({
                 type: 'success',
                 message: '余额刷新会逐一完成，请耐心等待',
             })
 
-            for (var rowIndex in tableData.value) {
-                var row = tableData.value[rowIndex]
+            var aliveRows = tableData.value.filter(function (item) {
+                return item.status == 1
+            })
+
+            for (var rowIndex in aliveRows) {
+                var row = aliveRows[rowIndex]
                 getItemChannelBalance(row.id, row.name)
             }
 
@@ -379,17 +474,16 @@ export default {
             setTimeout(function () {
                 loadList()
             }, 20000)
-
         }
 
         const getItemResponseTime = (id, name) => {
             loading.value = true
             getChannelResponseTime({
                 id: id
-            }).then(time => {
+            }).then(data => {
                 ElMessage({
                     type: 'success',
-                    message: `连接${name}测试已完成【${(time.item / 1000).toFixed(2)}秒】`,
+                    message: `连接${name}测试已完成【${(data.item / 1000).toFixed(2)}秒】`,
                 })
             });
         };
@@ -423,9 +517,16 @@ export default {
                 model: searchForm.value.model == 'all' ? '' : searchForm.value.model,
                 keyword: searchForm.value.keyword,
                 group: searchForm.value.group == 'all' ? '' : searchForm.value.group,
-                limit: pageSize2.value,
-                offset: (currentPage2.value - 1) * pageSize2.value,
+                limit: pageSize.value,
+                offset: (currentPage.value - 1) * pageSize.value,
+                status: searchForm.value.status,
+                baseUrl: searchForm.value.baseUrl
             }).then(data => {
+                if (!data.success && data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 loading.value = false
                 console.log(data)
                 tableData.value = data.items
@@ -442,7 +543,6 @@ export default {
             })
             CheckLogin()
             loadList()
-
         };
         onLoad();
 
@@ -450,8 +550,8 @@ export default {
             tableData,
             loading,
             input3,
-            currentPage2,
-            pageSize2,
+            currentPage,
+            pageSize,
             background,
             totalCount,
             searchForm,
@@ -460,6 +560,7 @@ export default {
             types,
             onLoad,
             handleTestAll,
+            handleDeleteDisabled,
             handleRefreshBalanceAll,
             handleNew,
             handleEdit,
@@ -482,6 +583,7 @@ export default {
             Lock,
             Grid,
             Refresh,
+            FolderDelete,
             Money
         };
     }
@@ -490,5 +592,12 @@ export default {
 <style>
 .el-pagination.is-background {
     margin: 20px 0 0;
+}
+
+.tag-2 {
+    /* display: block; */
+    float: left;
+    margin-right: 3px;
+    margin-bottom: 3px;
 }
 </style>

@@ -50,7 +50,7 @@
 </template>
   
 <script>
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { h, ref, reactive } from 'vue';
 import { ElMessageBox } from 'element-plus'
 import { CheckLogin } from '@/api/user'
@@ -60,6 +60,7 @@ import { createTxtAndDownload } from '@/utils/txt'
 export default {
     name: 'RedemptionAdd',
     setup() {
+        const router = useRouter();
         const quota_label = ref("额度")
         // const router = useRouter();
         const form = reactive({
@@ -79,7 +80,7 @@ export default {
 
 
         const onSubmit = () => {
-            addRedemption({ 
+            addRedemption({
                 name: form.name,
                 quota: form.quota,
                 number: form.number
@@ -91,12 +92,17 @@ export default {
                             h('span', null, '新的兑换券添加成功'),
                         ]),
                         callback: () => {
-                            createTxtAndDownload('output.txt',data.items.join('\n'))
+                            createTxtAndDownload('output.txt', data.items.join('\n'))
                             // router.push('/redemptions');
                         }
                     })
-                } else { 
-                    var errorMessage = getErrorMessage(data.errorMessage) 
+                } else {
+                    if (data.errorCode == 401) {
+                        router.push('/login');
+                        return;
+                    }
+
+                    var errorMessage = getErrorMessage(data.errorMessage)
                     ElMessageBox({
                         title: '未成功',
                         message: h('p', null, [
@@ -110,7 +116,7 @@ export default {
         return {
             onLoad,
             onSubmit,
-            form, 
+            form,
             quota_label
         };
     }

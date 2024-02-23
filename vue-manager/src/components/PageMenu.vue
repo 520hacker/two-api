@@ -23,39 +23,62 @@
                 <aside>
                     <div class="sidebar-groups">
                         <section class="sidebar-group">
-                            <p class="sidebar-group__title">AI</p>
+                            <p class="sidebar-group__title"><el-button :icon="MagicStick" class="menu-icon" /> 功能</p>
                             <router-link to="/channels" class="link" v-if="isAdmin">
-                                <p class="link-text">渠道</p>
+                                <p class="link-text">
+                                    <el-button :icon="Guide" class="menu-icon" />
+                                    渠道
+                                </p>
                             </router-link>
                             <router-link to="/tokens" class="link">
-                                <p class="link-text">令牌</p>
+                                <p class="link-text">
+                                    <el-button :icon="Key" class="menu-icon" /> 令牌
+                                </p>
                             </router-link>
+                            <!-- <router-link to="/vector/projects" class="link" v-if="isAdmin">
+                                <p class="link-text">
+                                    <el-button :icon="Ship" class="menu-icon" />
+                                    知识库
+                                </p>
+                            </router-link> -->
                             <router-link to="/logs" class="link">
-                                <p class="link-text">日志</p>
+                                <p class="link-text">
+                                    <el-button :icon="Memo" class="menu-icon" /> 日志
+                                </p>
                             </router-link>
                             <router-link to="/users" class="link" v-if="isAdmin">
-                                <p class="link-text">用户</p>
+                                <p class="link-text">
+                                    <el-button :icon="User" class="menu-icon" /> 用户
+                                </p>
                             </router-link>
                             <router-link to="/redemptions" class="link" v-if="isAdmin">
-                                <p class="link-text">兑换券</p>
+                                <p class="link-text">
+                                    <el-button :icon="Ticket" class="menu-icon" /> 兑换券
+                                </p>
                             </router-link>
-                        </section> 
+                        </section>
                         <section class="sidebar-group">
-                            <p class="sidebar-group__title">个人</p>
+                            <p class="sidebar-group__title"><el-button :icon="Management" class="menu-icon" /> 个人</p>
                             <router-link to="/user/profile" class="link">
-                                <p class="link-text">账户</p>
+                                <p class="link-text"><el-button :icon="Wallet" class="menu-icon" /> 账户</p>
                             </router-link>
                         </section>
                         <section class="sidebar-group" v-if="isAdmin">
-                            <p class="sidebar-group__title">配置</p>
+                            <p class="sidebar-group__title"><el-button :icon="Setting" class="menu-icon" /> 设定</p>
                             <router-link to="/option/TestPrompt" class="link">
-                                <p class="link-text">配置</p>
+                                <p class="link-text">
+                                    <el-button :icon="Edit" class="menu-icon" /> 系统
+                                </p>
                             </router-link>
                             <router-link to="/magic/SearchPlus" class="link">
-                                <p class="link-text">魔改</p>
+                                <p class="link-text">
+                                    <el-button :icon="Pointer" class="menu-icon" /> 运营
+                                </p>
                             </router-link>
                             <router-link to="/content/edit" class="link">
-                                <p class="link-text">内容</p>
+                                <p class="link-text">
+                                    <el-button :icon="ChatLineSquare" class="menu-icon" /> 内容
+                                </p>
                             </router-link>
                         </section>
                     </div>
@@ -67,6 +90,20 @@
 
 <script>
 import { ref, inject, onMounted, onBeforeUnmount } from 'vue';
+import {
+    Guide,
+    Wallet,
+    Key,
+    Memo,
+    User,
+    Ticket,
+    Setting,
+    Pointer,
+    ChatLineSquare,
+    Edit,
+    Management,Ship,
+    MagicStick
+} from '@element-plus/icons-vue'
 
 export default {
     name: 'PageMenu',
@@ -146,6 +183,18 @@ export default {
         });
 
         return {
+            Guide,
+            Key,
+            Wallet,
+            Memo,
+            User,
+            Ticket,
+            Setting,
+            Pointer,
+            ChatLineSquare,
+            Edit,Ship,
+            Management,
+            MagicStick,
             showSettingCard,
             changeDisplayView,
             showButton,
@@ -160,10 +209,44 @@ export default {
 };
 </script> 
 <style>
+.menu-icon {
+    border: none;
+    padding: 0;
+    width: 1em;
+    height: 1em;
+    margin: -3px 0 0 0;
+    background: none;
+}
+
+.toc-wrapper .toc-content .toc-items .toc-item {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-color-lighter);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    color: inherit;
+}
+
+.toc-item a {
+    display: inline-block;
+    position: relative;
+    color: var(--text-color-lighter);
+    transition: color var(--el-transition-duration);
+}
+
+.router-link-active {
+    background-color: var(--link-active-bg-color);
+}
+
+.toc-item a.router-link-active {
+    background-color: transparent;
+}
+
 .sidebar-groups .link {
     cursor: pointer;
     display: block;
-    padding: 10px 16px;
+    padding: 10px 10px;
     line-height: 1.5;
     font-size: .9rem;
     border-radius: 8px;
@@ -333,10 +416,11 @@ export default {
     }
 }
 
-@media screen and (min-width: 1680px) {
+@media screen and (min-width: 1680px) { 
     .sidebar {
-        padding: 48px 48px 96px calc((100vw - var(--vp-screen-max-width)) / 2);
-        width: calc((100vw - var(--vp-screen-max-width)) / 2 + var(--vp-sidebar-width-small))
+        padding: 0px 48px 96px calc((100vw - var(--vp-screen-max-width)) / 2);
+        width: calc((100vw - var(--vp-screen-max-width)) / 2 + var(--vp-sidebar-width-small));
+        margin-top: 48px;
     }
 }
 
@@ -372,5 +456,4 @@ button.reset-btn {
 .sub-nav .go-back-top.show {
     transform: translateY(0);
     opacity: 1;
-}
-</style>
+}</style>

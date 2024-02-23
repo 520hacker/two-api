@@ -41,22 +41,23 @@
                             <router-link to="/content/edit/HomePage" class="toc-link" @click="onLinkChange('HomePage')">
                                 <p class="link-text">编辑首页</p>
                             </router-link>
-                        </li>  
+                        </li>
                         <li class="toc-item">
                             <router-link to="/content/edit/HowToUse" class="toc-link" @click="onLinkChange('HowToUse')">
                                 <p class="link-text">编辑使用指南</p>
                             </router-link>
-                        </li> 
+                        </li>
                         <li class="toc-item">
-                            <router-link to="/content/edit/ContactPage" class="toc-link" @click="onLinkChange('ContactPage')">
+                            <router-link to="/content/edit/ContactPage" class="toc-link"
+                                @click="onLinkChange('ContactPage')">
                                 <p class="link-text">编辑联系我们</p>
                             </router-link>
-                        </li>  
+                        </li>
                         <li class="toc-item">
                             <router-link to="/content/edit/AboutPage" class="toc-link" @click="onLinkChange('AboutPage')">
                                 <p class="link-text">编辑关于我们</p>
                             </router-link>
-                        </li>   
+                        </li>
                     </ul>
                 </nav>
             </aside>
@@ -65,7 +66,7 @@
 </template>
   
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { CheckLogin } from '@/api/user'
 import { getOption, updateOption } from '@/api/option'
 import { h, reactive } from 'vue';
@@ -73,7 +74,8 @@ import { ElMessageBox, ElLoading } from 'element-plus'
 import { getErrorMessage } from '@/utils/enums'
 export default {
     name: 'SettingCard',
-    setup() {
+    setup() { 
+        const router = useRouter();
         const route = useRoute();
         const form = reactive({
             type: 'HomePage',
@@ -87,7 +89,7 @@ export default {
                 {
                     value: 'HowToUse',
                     label: '使用指南',
-                }, 
+                },
                 {
                     value: 'ContactPage',
                     label: '联系我们',
@@ -98,9 +100,10 @@ export default {
                 }
             ]
         })
+
         const onLoad = () => {
             CheckLogin()
-            
+
             if (route.params.key && route.params.key != '') {
                 form.type = route.params.key
                 const selectedOption = form.options.find(item => item.value === route.params.key);
@@ -113,18 +116,18 @@ export default {
         };
 
         const onLinkChange = (key) => {
-            
-            if ( key &&  key != '') {
+
+            if (key && key != '') {
                 form.type = key
-                const selectedOption = form.options.find(item => item.value ===  key);
+                const selectedOption = form.options.find(item => item.value === key);
                 if (selectedOption) {
                     form.label = selectedOption.label;
                 }
             }
-             
+
             onSelectChange()
         }
-        const onSelectChange = () => { 
+        const onSelectChange = () => {
             const loading = ElLoading.service({
                 lock: true,
                 text: 'Loading',
@@ -132,7 +135,12 @@ export default {
             })
             getOption({
                 key: form.type,
-            }).then(data => {
+            }).then(data => { 
+                if (data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 form.data = data.item
                 loading.close()
             });
@@ -152,7 +160,12 @@ export default {
                         ])
                     })
                 } else {
-                    var errorMessage = getErrorMessage(data.errorMessage) 
+                    if (data.errorCode == 401) {
+                        router.push('/login');
+                        return;
+                    }
+
+                    var errorMessage = getErrorMessage(data.errorMessage)
                     ElMessageBox({
                         title: '未成功',
                         message: h('p', null, [

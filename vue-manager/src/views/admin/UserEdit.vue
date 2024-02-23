@@ -92,8 +92,12 @@ export default {
             CheckLogin()
             getUser({
                 id: route.params.id
-            }).then(data => {
-                console.log(data.item)
+            }).then(data => { 
+                if (!data.success && data.errorCode == 401) { 
+                    router.push('/login');
+                    return;
+                }
+
                 form.username = data.item.username
                 form.password = ''
                 form.displayName = data.item.displayName

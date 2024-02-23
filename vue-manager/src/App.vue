@@ -148,9 +148,6 @@ html.dark {
   --el-fill-color-blank: transparent;
   --el-mask-color: rgba(0, 0, 0, .8);
   --el-mask-color-extra-light: rgba(0, 0, 0, .3);
-}
-
-html.dark {
   --prism-scheme: dark;
   --prism-foreground: #a6accd;
   --prism-background: #181818;
@@ -176,13 +173,14 @@ html.dark {
   --prism-line-highlight-background: #444444;
   --prism-selection-background: #444444;
   --prism-inline-background: #2d2d2d;
+  --el-font-family: Inter, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, \5fae\8f6f\96c5\9ed1, Arial, sans-serif
 }
 
 body {
   margin: 0;
   width: 100%;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100%;
   line-height: 1.4;
   font-size: 16px;
   font-weight: 400;
@@ -194,6 +192,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color var(--el-transition-duration-fast);
+  font-family: var(--el-font-family);
 }
 
 :root {
@@ -384,7 +383,23 @@ textarea {
   outline: none
 }
 
+.el-pagination__sizes.is-first {
+  display: none;
+}
+
+.el-pagination.is-background .btn-prev {
+  margin-left: 0;
+}
+
 @media screen and (min-width: 960px) {
+  .el-pagination__sizes.is-first {
+    display: block;
+  }
+
+  .el-pagination.is-background .btn-prev {
+    margin-left: var(--el-pagination-item-gap);
+  }
+
   .page-content {
     padding-top: var(--nav-height);
   }
@@ -438,10 +453,95 @@ textarea {
   border-radius: var(--el-border-radius-base);
   padding: 24px;
 }
+
 .filingInfo {
-    text-align: center;
-    font-size: 12px;
-    padding-bottom: 10px; 
-    padding-right: 10px;
+  text-align: center;
+  font-size: 12px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+
+
+
+/* BG Animation */
+.dark body {
+  background-size: 400% 400%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.dark body::before,
+.dark body::after {
+  content: "";
+  width: 60vmax;
+  height: 53vmax;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.07);
+  left: -20vmin;
+  top: -20vmin;
+  animation: morph 15s linear infinite alternate, spin 20s linear infinite;
+  z-index: 41;
+  will-change: border-radius, transform;
+  pointer-events: none;
+}
+
+.dark body::after {
+  width: 70vmin;
+  height: 70vmin;
+  left: auto;
+  right: -13vmin;
+  top: auto;
+  bottom: 10;
+  animation: morph 10s linear infinite alternate, spin 26s linear infinite reverse;
+  transform-origin: 20% 20%;
+}
+
+@-moz-keyframes Gradient {
+  0% {
+    background-position: 0 50%
+  }
+
+  50% {
+    background-position: 100% 50%
+  }
+
+  100% {
+    background-position: 0 50%
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0 50%
+  }
+
+  50% {
+    background-position: 100% 50%
+  }
+
+  100% {
+    background-position: 0 50%
+  }
+}
+
+@keyframes morph {
+  0% {
+    border-radius: 100% 60% 60% 40% / 70% 30% 70% 30%;
+  }
+
+  100% {
+    border-radius: 40% 60%;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
 </style>

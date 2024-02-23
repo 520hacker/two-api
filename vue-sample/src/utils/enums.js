@@ -7,7 +7,7 @@ export function getMainMenus() {
                     "title": "切换 👉️",
                     "links": [
                         { title: "普通对话", href: "/chat/base/0/99" },
-                        { title: "哄哄模拟", href: "/chat/base/120/7" },
+                        { title: "Sora体验", href: "/chat/base/121/115" },
                         { title: "长文写作", href: "/article/generator" },
                         { title: "宇辉作文", href: "/chat/base/118/77/dse9iXvor" },
                         { title: "理解图片", href: "/chat/base/112/70" },
@@ -21,13 +21,6 @@ export function getMainMenus() {
                         { title: "相册", href: "/log/draw/gpt-4-dalle" }
                     ]
                 }
-                // ,
-                // {
-                //     "title": "相册",
-                //     "links": [
-                //         { title: "相册", href: "/log/draw/gpt-4-dalle" }
-                //     ]
-                // }
             ]
         },
         {
@@ -36,6 +29,7 @@ export function getMainMenus() {
                 {
                     "title": "人设",
                     "links": [
+                        { title: "哄哄模拟", href: "/chat/base/120/7" },
                         { title: "助手", href: "/chat/base/3/4" },
                         { title: "祖母", href: "/chat/base/5/72" },
                         { title: "半仙", href: "/chat/base/4/72" },

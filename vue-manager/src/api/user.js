@@ -88,6 +88,12 @@ export function Login(param) {
     });
 }
 
+export function goLogin()
+{ 
+    const router = useRouter();  
+    router.push('/login');
+}
+
 export function Logout(param) {
     return request({
         url: '/twoapi/user/logout',

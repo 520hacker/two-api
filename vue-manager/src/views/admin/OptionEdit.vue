@@ -47,6 +47,7 @@
 </template>
   
 <script>
+import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { CheckLogin } from '@/api/user'
 import { getOption, updateOption } from '@/api/option'
@@ -56,10 +57,11 @@ import { getErrorMessage } from '@/utils/enums'
 export default {
     name: 'SettingCard',
     setup() {
+        const router = useRouter();  
         const route = useRoute();
         const form = reactive({
-            type: 'GroupRatio',
-            label: '分组倍率',
+            type: 'TestPrompt',
+            label: '测试提示词',
             data: '',
             options: [
                 {
@@ -114,6 +116,11 @@ export default {
             getOption({
                 key: form.type,
             }).then(data => {
+                if (!data.success && data.errorCode == 401) { 
+                    router.push('/login');
+                    return;
+                }
+
                 form.data = data.item
                 loading.close()
             });

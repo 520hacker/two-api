@@ -167,6 +167,11 @@ export default {
                 limit: pageSize2.value,
                 offset: (currentPage2.value - 1) * pageSize2.value,
             }).then(data => {
+                if (!data.success && data.errorCode == 401) { 
+                    router.push('/login');
+                    return;
+                }
+                
                 loading.value = false
                 console.log(data)
                 tableData.value = data.items

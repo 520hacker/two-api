@@ -32,6 +32,14 @@ import UserProfile from '../views/admin/UserProfile.vue';
 import UserRedeem from '../views/admin/UserRedeem.vue';
 import MagicEdit from '../views/admin/MagicEdit.vue';
 
+import VectorProjectList from '../views/admin/VectorProjectList.vue';
+import VectorProjectNew from '../views/admin/VectorProjectNew.vue';
+import VectorProjectEdit from '../views/admin/VectorProjectEdit.vue';
+
+import VectorFileList from '../views/admin/VectorFileList.vue';
+import VectorFileNew from '../views/admin/VectorFileNew.vue';
+import VectorFileEdit from '../views/admin/VectorFileEdit.vue';
+
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
@@ -61,7 +69,13 @@ const routes = [
   { path: '/login', component: LoginView },
   { path: '/register', component: RegisterView },
   { path: '/user/profile', component: UserProfile },
-  { path: '/user/redeem', component: UserRedeem }
+  { path: '/user/redeem', component: UserRedeem },
+  { path: '/vector/projects', component: VectorProjectList },
+  { path: '/vector/project/new', component: VectorProjectNew },
+  { path: '/vector/projects/:id', component: VectorProjectEdit },
+  { path: '/vector/files', component: VectorFileList },
+  { path: '/vector/file/new', component: VectorFileNew },
+  { path: '/vector/files/:id', component: VectorFileEdit }
 ];
 
 const router = createRouter({

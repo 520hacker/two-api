@@ -67,17 +67,17 @@ export default {
         const router = useRouter();
         const route = useRoute();
         const form = reactive({
-            name: '', 
-            quota: 500000, 
+            name: '',
+            quota: 500000,
         })
 
         const onLoad = () => {
             CheckLogin()
             getRedemption({
                 id: route.params.id
-            }).then(data => { 
+            }).then(data => {
                 form.name = data.item.name
-                form.quota = data.item.quota 
+                form.quota = data.item.quota
             });
 
             setInterval(function () {
@@ -86,12 +86,12 @@ export default {
                 }
             }, 500)
         };
-        onLoad(); 
+        onLoad();
 
         const onSubmit = () => {
             updateRedemption({
                 id: route.params.id,
-                name: form.name, 
+                name: form.name,
                 quota: form.quota
             }).then(data => {
                 if (data.success) {
@@ -104,8 +104,13 @@ export default {
                             router.push('/redemptions');
                         }
                     })
-                } else {  
-                    var errorMessage = getErrorMessage(data.errorMessage) 
+                } else {
+                    if (data.errorCode == 401) {
+                        router.push('/login');
+                        return;
+                    }
+                    
+                    var errorMessage = getErrorMessage(data.errorMessage)
                     ElMessageBox({
                         title: '未成功',
                         message: h('p', null, [

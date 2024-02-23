@@ -9,6 +9,9 @@
                     <p>
                         <DateInfo :pubDate="chatData.createAt" />
                     </p>
+                    <p>
+                       {{  chatData.ip }}
+                    </p>
                 </div>
                 <div class="example">
                     <span>{{ chatData.reply }}</span>
@@ -33,7 +36,7 @@
   
 <script>
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { getLogDetail } from '@/api/log'
 import { CheckLogin } from '@/api/user'
 import {
@@ -50,7 +53,8 @@ export default {
     components: {
         DateInfo, // 注册 DateInfo 组件
     },
-    setup() {
+    setup() { 
+        const router = useRouter();
         const route = useRoute();
         const loading = ref(true)
         const background = ref(true)
@@ -62,10 +66,15 @@ export default {
                 id: route.params.id
             }).then(data => {
                 loading.value = false
-                console.log(data.item)
+                if (data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 chatData.value = data.item
             });
         };
+        
         const onLoad = () => {
             CheckLogin()
             loadList()

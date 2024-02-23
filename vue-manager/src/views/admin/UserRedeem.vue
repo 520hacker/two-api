@@ -42,6 +42,7 @@
 </template>
   
 <script>
+import { useRouter } from 'vue-router';
 import { h,  reactive } from 'vue';
 import { ElMessageBox } from 'element-plus' 
 import { redeem, CheckLogin, getProfile } from '@/api/user'
@@ -49,6 +50,7 @@ import { getErrorMessage } from '@/utils/enums'
 export default {
     name: 'RedeemView',
     setup() { 
+        const router = useRouter();
         const form = reactive({
             key: '' ,
             quota: 0
@@ -57,8 +59,12 @@ export default {
         const onLoad = () => {
             CheckLogin()
             getProfile({
-            }).then(data => {
-                console.log(data.item)
+            }).then(data => {  
+                if (!data.success && data.errorCode == 401) { 
+                    router.push('/login');
+                    return;
+                }
+
                 form.key = ''
                 form.quota = data.quota
             }); 

@@ -94,20 +94,13 @@ export default {
         msg: String
     },
     methods: {
-        toggleDarkMode() {
-            this.isDarkMode = !this.isDarkMode;
-            if (this.isDarkMode) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        },
     },
     setup() {
         const pathname = ref('/');
         const logged = ref(false);
         const router = useRouter();
         const customHeader = ref({});
+        const isDarkMode = ref(true)
         const onLoad = () => {
             var options = getDefaultOptions()
             const selectedOption = options.find(item => item.value === 'SiteInfo');
@@ -123,8 +116,27 @@ export default {
                     document.title = customHeader.value.siteName;
                 }
             });
+
+            isDarkMode.value = !localStorage.getItem('isDarkMode') || (localStorage.getItem('isDarkMode') && localStorage.getItem('isDarkMode') == "true") ? true : false;
+            if (isDarkMode.value) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         };
         onLoad();
+
+        const toggleDarkMode = () => {
+            isDarkMode.value = !isDarkMode.value;
+            if (isDarkMode.value) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('isDarkMode', 'true');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('isDarkMode', 'false');
+            }
+        };
+
         const logout = () => {
             localStorage.removeItem('SK');
             localStorage.removeItem('Role');
@@ -170,7 +182,9 @@ export default {
             logged,
             triggerSearch,
             logout,
-            customHeader
+            customHeader,
+            isDarkMode,
+            toggleDarkMode
         };
     }
 }

@@ -38,6 +38,7 @@
     margin-top: 30px;
     margin-bottom: 20px;
 }
+
 span.ip {
     color: #ccc;
     font-size: 10px;
@@ -60,8 +61,9 @@ span.ip {
         <el-row>
             <el-col v-for="(o, index) in list" :key="o" :span="8" :offset="index > 0 ? 2 : 0" v-show="o.images.length > 0">
                 <el-card :body-style="{ padding: '0px' }">
-                    <el-image :key="o.images[o.images.length-1]" :src="o.images[o.images.length-1]" lazy :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
-                        :preview-src-list="o.images" :initial-index="4" fit="cover" />
+                    <el-image :key="o.images[o.images.length - 1]" :src="o.images[o.images.length - 1]" lazy
+                        :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" :preview-src-list="o.images" :initial-index="4"
+                        fit="cover" />
                     <div style="padding: 14px">
                         <span>{{ o.content }}</span>
                         <div class="bottom">
@@ -95,7 +97,7 @@ export default {
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(['mj', 'gpt-4-dalle'])
+        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4-gizmo-g'])
 
         watch(
             // 路由参数发生变化时重新加载数据

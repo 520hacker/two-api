@@ -14,7 +14,9 @@ import '@kangc/v-md-editor/lib/theme/style/github.css';
 import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index'; 
 import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
 
- 
+// import createVideoPlugin from '@kangc/v-md-editor/lib/plugins/video/index';
+// import '@kangc/v-md-editor/lib/plugins/video/style.css';
+
 // highlightjs 核心代码
 import hljs from 'highlight.js/lib/core';
 // 按需引入语言包
@@ -22,11 +24,31 @@ import json from 'highlight.js/lib/languages/json';
 
 hljs.registerLanguage('json', json);
  
-
+ 
+// VueMarkdownEditor
+//   .use(githubTheme, {
+//     Hljs: hljs,
+//   })
+//   .use(createCopyCodePlugin());
 
 VueMarkdownEditor
-  .use(githubTheme, {
+.use(githubTheme, {
     Hljs: hljs,
+    extend(md) {
+      md.renderer.rules.image = function(tokens, idx, options, env, self) {
+        var token = tokens[idx];
+        var srcIndex = token.attrIndex('src');
+        if (srcIndex >= 0) {
+          var src = token.attrs[srcIndex][1];
+          if (src.endsWith('.mp4')) {
+            var alt = token.content;
+            return `<video src="${src}" controls width="90%">${alt}</video>`;
+          }
+        }
+        // 如果不是.mp4链接，使用默认的image渲染。
+        return self.renderToken(tokens, idx, options);
+      };
+    },
   })
   .use(createCopyCodePlugin());
 

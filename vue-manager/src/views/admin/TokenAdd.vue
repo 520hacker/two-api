@@ -150,6 +150,11 @@ export default {
                         }
                     })
                 } else {
+                    if (data.errorCode == 401) {
+                        router.push('/login');
+                        return;
+                    }
+                    
                     var errorMessage = getErrorMessage(data.errorMessage)
                     ElMessageBox({
                         title: '未成功',

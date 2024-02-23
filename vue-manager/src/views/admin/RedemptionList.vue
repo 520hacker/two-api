@@ -9,9 +9,16 @@
                     <p>您可以创建不同的兑换券用于不同的用途。</p>
                 </div>
                 <div class="example">
-                    <el-button-group class="ml-4">
-                        <el-button type="primary" :icon="Edit"  @click="handleNew"/>  
-                    </el-button-group>
+                    <el-row>
+                        <el-col :span="18">
+                            <el-button-group class="ml-4">
+                                <el-button type="primary" :icon="Edit" @click="handleNew" />
+                            </el-button-group></el-col>
+                        <el-col :span="6" style="text-align: right; color: #e9e9eb;">
+                            管理
+                            <el-switch v-model="showAdvSearchFrom" />
+                        </el-col>
+                    </el-row>
                     <div style="border-top: 1px solid #e9e9eb; display: block; width: 100%;margin: 10px 0 0 0;height: 1px;">
                     </div>
                     <el-table :data="tableData" style="width: 100%" v-loading="loading">
@@ -57,7 +64,7 @@
                                     v-if="props.row.redeemedTime && props.row.redeemedTime > 0" />
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="150">
+                        <el-table-column fixed="right" label="操作" width="150" v-if="showAdvSearchFrom">
                             <template #default="props">
                                 <el-button type="danger" :icon="Delete" circle @click="handleDelete(props.row.id)" />
                                 <el-button type="primary" :icon="Edit" circle @click="handleEdit(props.row.id)" />
@@ -70,7 +77,8 @@
                     <div>
                         <el-pagination v-model:current-page="currentPage2" v-model:page-size="pageSize2" :small="false"
                             :disabled="false" :hide-on-single-page="true" :background="background"
-                            layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                            layout="sizes, prev,  jumper, next,  ->, total" :total="totalCount" @size-change="loadList"
+                            @current-change="loadList" />
                     </div>
                 </div>
             </div>
@@ -117,16 +125,16 @@ export default {
         const router = useRouter();
         const loading = ref(true)
         const currentPage2 = ref(1)
-        const pageSize2 = ref(20)
+        const pageSize2 = ref(50)
         const totalCount = ref(0)
         const input3 = ref('')
         const background = ref(true)
-
+        const showAdvSearchFrom = ref(false)
         const getStatus = (status) => {
             return getRedemptionStatus(status)
         }
-        const handleNew = () =>{
-            router.push(`/redemptions/new`) 
+        const handleNew = () => {
+            router.push(`/redemptions/new`)
         }
         const handleEdit = (id) => {
             router.push(`/redemptions/${id}`)
@@ -234,6 +242,11 @@ export default {
                 limit: pageSize2.value,
                 offset: (currentPage2.value - 1) * pageSize2.value,
             }).then(data => {
+                if (!data.success && data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 loading.value = false
                 console.log(data.items)
                 tableData.value = data.items
@@ -265,6 +278,7 @@ export default {
             handleEdit,
             enableRedemption,
             disableRedemption,
+            showAdvSearchFrom,
             Check,
             Edit,
             Delete,

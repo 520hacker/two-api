@@ -52,7 +52,7 @@
 </template>
   
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { CheckLogin } from '@/api/user'
 import { getOption, updateOption } from '@/api/option'
 import { h, reactive } from 'vue';
@@ -63,6 +63,7 @@ export default {
     components: { JsonEditorVue },
     name: 'SettingCard',
     setup() {
+        const router = useRouter();
         const route = useRoute();
         const form = reactive({
             type: 'GPT4Hack',
@@ -119,6 +120,11 @@ export default {
             getOption({
                 key: form.type,
             }).then(data => {
+                if (data.errorCode == 401) {
+                    router.push('/login');
+                    return;
+                }
+
                 try {
 
                     form.data = JSON.parse(data.item)
