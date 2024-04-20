@@ -11,14 +11,22 @@
                     <nav class="navbar-menu menu">
                         <router-link to="/"
                             :class="'link-item link is-menu-link ' + (pathname == '/' ? 'active' : '')">首页</router-link>
-                        <a href="https://twoapi.qiangtu.com" class="link-item link is-menu-link">管理</a>
+                        <router-link to="/article/generator" :class="'link-item link is-menu-link ' +
+                            (pathname == '/article/generator' ? 'active' : '')">长篇</router-link>
+                        <router-link to="/log/video/suno-v3" :class="'link-item link is-menu-link ' +
+                            (pathname == '/log/video/suno-v3' ? 'active' : '')">影片</router-link>
+                        <router-link to="/log/draw/mj" :class="'link-item link is-menu-link ' +
+                            (pathname == '/log/draw/mj' ? 'active' : '')">图册</router-link>
+                        <a href="https://yibu.qiangtu.com" target="_blank" class="link-item link is-menu-link">插件</a>
+                        <a href="https://twoapi.qiangtu.com" target="_blank" class="link-item link is-menu-link">API</a>
                     </nav>
                     <div class="theme-toggler-content theme-toggler">
                         <button class="switch" role="switch" aria-label="切换暗色主题" aria-checked="false"
                             v-on:click="toggleDarkMode">
                             <div class="switch__action">
-                                <div class="switch__icon"><i class="el-icon" style="font-size:13px;" data-v-3de418c2=""><svg
-                                            viewBox="0 0 24 24" class="dark-icon" data-v-3de418c2="">
+                                <div class="switch__icon"><i class="el-icon" style="font-size:13px;"
+                                        data-v-3de418c2=""><svg viewBox="0 0 24 24" class="dark-icon"
+                                            data-v-3de418c2="">
                                             <path
                                                 d="M11.01 3.05C6.51 3.54 3 7.36 3 12a9 9 0 0 0 9 9c4.63 0 8.45-3.5 8.95-8c.09-.79-.78-1.42-1.54-.95A5.403 5.403 0 0 1 11.1 7.5c0-1.06.31-2.06.84-2.89c.45-.67-.04-1.63-.93-1.56z"
                                                 fill="currentColor"></path>
@@ -34,21 +42,22 @@
                         <a href="https://github.com/520hacker" title="GitHub" target="_blank" rel="noreferrer noopener"
                             class="social-link">
                             <i class="el-icon" style="font-size:24px;">
-                                <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" width="1.2em" height="1.2em">
+                                <svg preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24" width="1.2em"
+                                    height="1.2em">
                                     <path fill="currentColor"
                                         d="M12 2C6.475 2 2 6.475 2 12a9.994 9.994 0 0 0 6.838 9.488c.5.087.687-.213.687-.476c0-.237-.013-1.024-.013-1.862c-2.512.463-3.162-.612-3.362-1.175c-.113-.288-.6-1.175-1.025-1.413c-.35-.187-.85-.65-.013-.662c.788-.013 1.35.725 1.538 1.025c.9 1.512 2.338 1.087 2.912.825c.088-.65.35-1.087.638-1.337c-2.225-.25-4.55-1.113-4.55-4.938c0-1.088.387-1.987 1.025-2.688c-.1-.25-.45-1.275.1-2.65c0 0 .837-.262 2.75 1.026a9.28 9.28 0 0 1 2.5-.338c.85 0 1.7.112 2.5.337c1.912-1.3 2.75-1.024 2.75-1.024c.55 1.375.2 2.4.1 2.65c.637.7 1.025 1.587 1.025 2.687c0 3.838-2.337 4.688-4.562 4.938c.362.312.675.912.675 1.85c0 1.337-.013 2.412-.013 2.75c0 .262.188.574.688.474A10.016 10.016 0 0 0 22 12c0-5.525-4.475-10-10-10z">
                                     </path>
                                 </svg></i></a>
                     </div>
-                    <button class="reset-btn menu-hamburger hamburger" aria-label="移动端导航" aria-expanded="false" v-if="false"
-                        aria-controls="full-screen"><span class="hamburger-1"></span><span class="hamburger-2"></span><span
-                            class="hamburger-3"></span></button>
+                    <button class="reset-btn menu-hamburger hamburger" aria-label="移动端导航" aria-expanded="false"
+                        v-if="false" aria-controls="full-screen"><span class="hamburger-1"></span><span
+                            class="hamburger-2"></span><span class="hamburger-3"></span></button>
                 </div>
             </div>
         </div>
     </header>
 </template>
-  
+
 <script>
 import { useRouter } from 'vue-router';
 import { inject, ref, h } from 'vue';
@@ -59,14 +68,14 @@ export default {
     props: {
         msg: String
     },
-    methods: { 
+    methods: {
     },
     setup() {
         const pathname = ref('/');
         const logged = ref(false);
         const router = useRouter();
         const isDarkMode = ref(true)
-        const onload = () => { 
+        const onload = () => {
             isDarkMode.value = !localStorage.getItem('isDarkMode') || (localStorage.getItem('isDarkMode') && localStorage.getItem('isDarkMode') == "true") ? true : false;
             if (isDarkMode.value) {
                 document.documentElement.classList.add('dark');
@@ -75,7 +84,7 @@ export default {
             }
         };
         onload();
-        
+
 
         const toggleDarkMode = () => {
             isDarkMode.value = !isDarkMode.value;

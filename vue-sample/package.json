@@ -14,6 +14,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@cloudgeek/vue3-video-player": "^0.3.10",
     "@element-plus/icons-vue": "^2.1.0",
     "@kangc/v-md-editor": "^2.3.17",
     "axios": "^1.4.0",

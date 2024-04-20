@@ -4,7 +4,7 @@
     color: #999;
 }
 
-.el-card{
+.el-card {
     word-break: break-all;
 }
 
@@ -121,10 +121,10 @@ span.el-pagination__jump {
                 v-show="o.images.length > 0">
                 <el-card :body-style="{ padding: '0px' }">
                     <div class="el-main-image">
-                        <el-image :key="o.images[o.images.length - 1]"
-                            :src="'https://static2oss.qiangtu.com/o?plus=w_500&url=' + o.images[o.images.length - 1]"
-                            lazy :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
-                            :preview-src-list="addPrefixToItems(o.images, 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
+                        <el-image key="0"
+                            :src="'https://static2oss.qiangtu.com/o?plus=w_500&url=' + filterLast(o.images)" lazy
+                            :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
+                            :preview-src-list="addPrefix(filterLinks(o.images, 'png'), 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
                             :initial-index="o.images.length - 1" fit="cover">
                             <template #error>
                                 <div class="image-slot">
@@ -135,15 +135,36 @@ span.el-pagination__jump {
                             </template></el-image>
                     </div>
                     <div class="el-thumbnail" v-if="o.images.length > 1">
-                        <el-image v-for="item, index in uniqueStrings(o.images)" :key="item"
+                        <!-- <el-image v-for="item, index in uniqueStrings(filterLinks(o.images, 'png'))" :key="item"
                             :src="'https://static2oss.qiangtu.com/o?plus=w_50&url=' + item" lazy :zoom-rate="1.2"
                             :max-scale="7" :min-scale="0.2"
-                            :preview-src-list="addPrefixToItems(o.images, 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
+                            :preview-src-list="addPrefix(filterLinks(o.images, 'png'), 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
                             :initial-index="index" fit="cover">
                             <template #error>
                                 <span></span>
                             </template>
-                        </el-image>
+                        </el-image> -->
+
+                        <div class="video-list">
+                            <ul>
+                                <li v-for="(video, index) in uniqueStrings(filterLinks(o.images, 'mp4'))" :key="index"
+                                    @click="playVideo(video)">
+                                    <a target="_blank" style="cursor: pointer;">
+                                        视频 [mp4播放 {{ index + 1 }}]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="video-list">
+                            <ul>
+                                <li v-for="(video, index) in uniqueStrings(filterLinks(o.images, 'mp3'))" :key="index">
+                                    <a :href="'https://static2oss.qiangtu.com/o?plus=w_5000&url=' + video"
+                                        target="_blank">
+                                        音乐 [mp3下载 {{ index + 1 }}]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div style="padding: 14px">
                         <span>{{ o.content }}</span>
@@ -161,6 +182,10 @@ span.el-pagination__jump {
                     :total="totalCount" @size-change="load" @current-change="load" />
             </div>
         </el-row>
+        <el-dialog v-model="showVideoBox" title="Video Player" width="80%">
+            <vue3-video-player @play="videoPlay" :src="videoSrc"
+                style="border: 1px solid #ccc; max-width: 80%; max-height:  90%;"></vue3-video-player>
+        </el-dialog>
     </div>
 </template>
 
@@ -170,7 +195,7 @@ import { timestampToDate } from '@/utils/date'
 import { getDrawLog } from '../../api/logs'
 import { watch, ref } from 'vue';
 export default {
-    name: 'DrawLog',
+    name: 'VideoLog',
     setup() {
         const route = useRoute();
         const list = ref([])
@@ -179,7 +204,7 @@ export default {
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4-gizmo-g'])
+        const models = ref(["pika-text-to-video", "domo-img-to-video", "suno-v3"])
 
         watch(
             // 路由参数发生变化时重新加载数据
@@ -193,9 +218,32 @@ export default {
         if (route.params.id && route.params.id.length > 0) {
             model.value = route.params.id
         }
-        const addPrefixToItems = (arr, prefix) => {
+
+        const addPrefix = (arr, prefix) => {
             return arr.map(item => prefix + item);
         }
+
+
+        const filterLast = (links) => {
+            console.log(links)
+            return filterLinks(links, 'png')[filterLinks(links, 'png').length - 1]
+        }
+
+        const filterLinks = (links, extension) => {
+            if (extension === "png") {
+                const imageExtensions = ["png", "gif", "jpg", "jpeg", "webp"];
+                const filteredLinks = links.filter(link => {
+                    const linkExtension = link.split('.').pop();
+                    return imageExtensions.includes(linkExtension);
+                });
+                return filteredLinks;
+            } else {
+                const filteredLinks = links.filter(link => link.endsWith("." + extension));
+                return filteredLinks;
+            }
+        }
+
+
         const uniqueStrings = (arr) => {
             var unique = {};
             arr.forEach(function (i) {
@@ -235,15 +283,40 @@ export default {
             }
         }
         load()
+
+        const showVideoBox = ref(false);
+        const videoSrc = ref('');
+        const videoPlay = () => {
+
+        }
+
+        const playVideo = (video) => {
+            showVideoBox.value = true;
+            videoSrc.value = 'https://static2oss.qiangtu.com/o?plus=w_5000&url=' + video;
+        };
+
+
+
         return {
+            videoSrc,
+            filterLast,
+            showVideoBox,
+            videoPlay,
+
+            // videoPlayer,
+            // videoList,
+            // videoOptions,
+            playVideo,
+            // playPause,
             loading,
             totalCount,
             currentPage,
             pageSize,
             model,
             models,
+            filterLinks,
             load,
-            addPrefixToItems,
+            addPrefix,
             uniqueStrings,
             timestampToDate,
             list

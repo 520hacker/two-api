@@ -6,19 +6,12 @@ export function getMainMenus() {
                 {
                     "title": "切换 👉️",
                     "links": [
-                        { title: "普通对话", href: "/chat/base/0/99" },
-                        { title: "Sora体验", href: "/chat/base/121/115" },
-                        { title: "长文写作", href: "/article/generator" },
-                        { title: "宇辉作文", href: "/chat/base/118/77/dse9iXvor" },
-                        { title: "理解图片", href: "/chat/base/112/70" },
-                        { title: "文档阅读", href: "/chat/base/113/69" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/99" },
-                        { title: "联网搜索", href: "/chat/base/8/5" },
-                        { title: "网页总结", href: "/chat/summary/111/72" }, 
-                        { title: "Midjourney", href: "/chat/base/9/101" },
-                        { title: "Dalle-3", href: "/chat/base/114/17" },
-                        { title: "相册", href: "/log/draw/gpt-4-dalle" }
+                        { title: "+ 对话", href: "/go/3" },
+                        { title: "+ 人设", href: "/go/2" },
+                        { title: "+ 撰稿", href: "/go/4" },
+                        { title: "+ 视频", href: "/go/5" },
+                        { title: "+ 绘图", href: "/go/6" },
+                        { title: "+ 功能", href: "/go/7" }, 
                     ]
                 }
             ]
@@ -29,6 +22,7 @@ export function getMainMenus() {
                 {
                     "title": "人设",
                     "links": [
+                        { title: "<=默认", href: "/go/1" },
                         { title: "哄哄模拟", href: "/chat/base/120/7" },
                         { title: "助手", href: "/chat/base/3/4" },
                         { title: "祖母", href: "/chat/base/5/72" },
@@ -36,27 +30,83 @@ export function getMainMenus() {
                         { title: "佛祖", href: "/chat/base/106/8" },
                         { title: "牛破天", href: "/chat/base/102/72" },
                         { title: "分析师", href: "/chat/base/6/72" },
+                        { title: "DBA", href: "/chat/base/104/72" },
                     ]
                 }
             ]
         },
         {
-            "job": "AI家族",
+            "job": "超级功能",
             "items": [
                 {
-                    "title": "AI家族",
+                    "title": "超级功能",
                     "links": [
-                        { title: "bing", href: "/chat/base/119/64" },
-                        { title: "助手", href: "/chat/base/3/72" },
-                        { title: "智谱", href: "/chat/base/12/65" },
-                        { title: "智脑", href: "/chat/base/11/45" },
-                        { title: "GPT4", href: "/chat/base/13/11" },
-                        { title: "千问", href: "/chat/base/115/78" },
-                        { title: "KIMI", href: "/chat/base/116/83" },
-                        { title: "Gemini", href: "/chat/base/117/95" },
-                        { title: "DBA", href: "/chat/base/104/72" },
-                        { title: "Midjourney", href: "/chat/base/9/32" },
+                        { title: "<=默认", href: "/go/1" },
+                        { title: "长文编撰", href: "/article/generator" },
+                        { title: "优秀文笔", href: "/chat/base/118/77/dse9iXvor" },
+                        { title: "理解图片", href: "/chat/base/112/70" },
+                        { title: "文档阅读", href: "/chat/base/113/69" },
+                        { title: "语法优化", href: "/chat/base/1/7" },
+                        { title: "中英互译", href: "/chat/base/7/99" },
+                        { title: "联网搜索", href: "/chat/base/8/5" },
+                        { title: "网页总结", href: "/chat/summary/111/72" }
+                    ]
+                }
+            ]
+        },
+        {
+            "job": "视频AI",
+            "items": [
+                {
+                    "title": "视频AI",
+                    "links": [
+                        { title: "<=默认", href: "/go/1" },
+                        { title: "SORA", href: "/chat/base/121/115" },
+                        { title: "PIKA", href: "/chat/base/125/123" },
+                        { title: "PIKA集", href: "/log/video/pika-text-to-video" },
+                        { title: "DOMO", href: "/chat/base/126/124" },
+                        { title: "SUNO", href: "/chat/base/127/125" },
+                        { title: "SUNO集", href: "/log/video/suno-v3" }
+                    ]
+                }
+            ]
+        },
+        {
+            "job": "绘图AI",
+            "items": [
+                {
+                    "title": "绘图AI",
+                    "links": [
+                        { title: "<=默认", href: "/go/1" },
+                        { title: "Midjourney", href: "/chat/base/9/101" },
+                        { title: "MJ相册", href: "/log/draw/mj" },
                         { title: "Dalle-3", href: "/chat/base/114/17" },
+                        { title: "DL相册", href: "/log/draw/gpt-4-dalle" }
+                    ]
+                }
+            ]
+        },
+        {
+            "job": "对话AI",
+            "items": [
+                {
+                    "title": "对话AI",
+                    "links": [
+                        { title: "<=默认", href: "/go/1" },
+                        { title: "KIMI", href: "/chat/base/116/83" },
+                        { title: "智谱", href: "/chat/base/12/99" },
+                        { title: "一言", href: "/chat/base/3/34" },
+                        { title: "星火", href: "/chat/base/123/108" },
+                        { title: "智脑", href: "/chat/base/11/45" },
+                        { title: "千问", href: "/chat/base/115/78" },
+                        { title: "Yi", href: "/chat/base/124/121" },
+                        { title: "STEP", href: "/chat/base/128/128" },
+                        { title: "WBot", href: "/chat/base/129/126" },
+                        { title: "Claude", href: "/chat/base/122/116" },
+                        { title: "OpenAI", href: "/chat/base/13/11" },
+                        { title: "Gemini", href: "/chat/base/117/95" },
+                        { title: "DeepSeek", href: "/chat/base/130/131" },
+                        // { title: "Bing", href: "/chat/base/119/64" },
                     ]
                 }
             ]
@@ -67,14 +117,15 @@ export function getMainMenus() {
                 {
                     "title": "撰稿人",
                     "links": [
+                        { title: "<=默认", href: "/go/1" },
                         { title: "周报", href: "/chat/base/110/8" },
                         { title: "助手", href: "/chat/base/3/72" },
                         { title: "小说家", href: "/chat/base/2/72" },
-                        { title: "小红书创作", href: "/chat/base/107/72" },
+                        { title: "小红书", href: "/chat/base/107/72" },
                         { title: "爆款作家", href: "/chat/base/108/11" },
-                        { title: "好评生成器", href: "/chat/base/109/72" },
-                        { title: "项目起名大师", href: "/chat/base/100/72" },
-                        { title: "Slogan生成大师", href: "/chat/base/105/72" },
+                        { title: "好评生成", href: "/chat/base/109/72" },
+                        { title: "项目起名", href: "/chat/base/100/72" },
+                        { title: "Slogan生成", href: "/chat/base/105/72" },
                         { title: "词汇老师", href: "/chat/base/103/4" },
                     ]
                 }
@@ -86,6 +137,7 @@ export function getMainMenus() {
                 {
                     "title": "GPTs",
                     "links": [
+                        { title: "<=默认", href: "/go/1" },
                         { title: "董宇辉说", href: "/chat/base/118/77/dse9iXvor" },
                         { title: "图文故事", href: "/chat/base/8/77/56aUtyaYF" },
                         { title: "谐音梗🤪", href: "/chat/base/8/77/7nunLIRz8" },
@@ -94,7 +146,7 @@ export function getMainMenus() {
                         { title: "设计师", href: "/chat/base/8/77/bZfrNSWQ0" },
                         { title: "探索动物", href: "/chat/base/8/77/eNRHCLVnl" },
                         { title: "文档AI", href: "/chat/base/8/77/zk5H2G11H" },
-                        { title: "郭德纲分身", href: "/chat/base/8/77/qdhTcI4hP" },
+                        { title: "郭德纲", href: "/chat/base/8/77/qdhTcI4hP" },
                     ]
                 }
             ]

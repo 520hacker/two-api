@@ -31,8 +31,11 @@
                                     <el-dropdown-item command="默认">默认</el-dropdown-item>
                                     <el-dropdown-item command="人设">人设</el-dropdown-item>
                                     <el-dropdown-item command="撰稿人">撰稿人</el-dropdown-item>
-                                    <el-dropdown-item command="AI家族">AI家族</el-dropdown-item>
+                                    <el-dropdown-item command="对话AI">对话AI</el-dropdown-item>
+                                    <el-dropdown-item command="视频AI">视频AI</el-dropdown-item>
+                                    <el-dropdown-item command="绘图AI">绘图AI</el-dropdown-item> 
                                     <el-dropdown-item command="GPTs">GPTs</el-dropdown-item>
+                                    <el-dropdown-item command="超级功能">超级功能</el-dropdown-item>
                                 </el-dropdown-menu>
                             </template>
                         </el-dropdown>
@@ -62,7 +65,7 @@ export default {
         const showButton = ref(false);
         const isOverlayShow = ref(false);
         const menus = ref([])
-        const menu_name = ref('默认')
+        const menu_name = ref('')
 
         const reLoad = (oldJob) => {
             setInterval(() => {
@@ -348,7 +351,7 @@ export default {
 
 @media screen and (min-width: 1440px) {
     .sidebar {
-        padding: 48px 32px 96px calc((100vw - var(--vp-screen-max-width)) / 2);
+        padding: 48px 32px 0px calc((100vw - var(--vp-screen-max-width)) / 2);
         width: calc((100vw - var(--vp-screen-max-width)) / 2 + var(--vp-sidebar-width-small))
     }
 }

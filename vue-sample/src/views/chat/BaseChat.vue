@@ -61,6 +61,12 @@
                         <el-card v-if="item.item_type === 'reply' && item.content">
                             <v-md-editor v-model="item.content" mode="preview"
                                 @image-click="handlePreviewImageClick"></v-md-editor>
+                            <div v-if="item.content != null && item.content != '' && IsVideo(item.content)">
+                                <video controls style="width: 99%;">
+                                    <source :src="GetVideo(item.content)" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>
@@ -69,6 +75,7 @@
                         action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1"
                         list-type="picture">
                         <el-button type="primary">点击上传</el-button>
+
                         <template #tip>
                             <div class="el-upload__tip">
                                 如果文件过大，可能会导致上传失败且仍然扣除积分。
@@ -80,6 +87,7 @@
                     <el-upload v-model:file-list="fileList" class="upload-demo"
                         action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1">
                         <el-button type="primary">点击上传</el-button>
+
                         <template #tip>
                             <div class="el-upload__tip">
                                 如果文件过大，可能会导致上传失败且仍然扣除积分。
@@ -91,6 +99,7 @@
                     <div class="buttons">
                         <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
                             @confirm="handleRemoveHistories">
+
                             <template #reference>
                                 <el-button type="danger" :icon="Delete" circle :disabled="generating" />
                             </template>
@@ -128,7 +137,8 @@
                                     v-show="!audioRecording" />
                                 <el-button :icon="Mute" @click="stopAudioRecording" v-show="audioRecording" />
                             </div>
-                            <div class="audio-timer" style="clear: both;" v-if="audioRecording">{{ audioElapsedTime }}</div>
+                            <div class="audio-timer" style="clear: both;" v-if="audioRecording">{{ audioElapsedTime }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,14 +151,17 @@
                 <el-table :data="archiveContentList">
                     <el-table-column property="topic" label="话题" />
                     <el-table-column label="日期" width="100" sortable prop="_id">
+
                         <template #default="props">
                             <DateInfo :pubDate="props.row.ins" />
                         </template>
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" width="100">
+
                         <template #default="props">
                             <el-tooltip class="box-item" effect="dark" content="设为当前会话" placement="top">
-                                <el-button type="primary" :icon="Checked" circle @click="handleSetNewArchive(props.row)" />
+                                <el-button type="primary" :icon="Checked" circle
+                                    @click="handleSetNewArchive(props.row)" />
                             </el-tooltip>
                             <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
                                 @confirm="handleDeleteArchive(props.row)">
@@ -175,6 +188,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import {
     initMessages, initBaseMessage, initBaseChatLogSection, initMessagesWithoutSys,
@@ -413,7 +427,11 @@ export default {
             }
 
             model.value = getModel(route.params.mid)
-            if (model.value == 'gpt-4-v' || model.value == 'gpt-4-vision-preview' || model.value.indexOf('vision') > 0) {
+            if (model.value == 'gpt-4-v' ||
+                model.value == 'domo-img-to-video' ||
+                model.value == 'gpt-4-vision-preview' ||
+                model.value.indexOf('vision') > 0 ||
+                model.value.indexOf('claude-3') > -1) {
                 showImageUploader.value = true;
             } else {
                 showImageUploader.value = false;
@@ -555,14 +573,19 @@ export default {
             makeTextToSpeech(params).then(data => {
                 console.log(data);
                 const audio = new Audio(data.item);
-                audio.addEventListener('ended', () => {
+                try {
+                    audio.addEventListener('ended', () => {
+                        showLoading.value = false
+                        generating.value = false
+                        console.log(data.item);
+                        console.log('音频播放完成');
+                        audio.removeEventListener('ended', () => { });
+                    });
+                    audio.play();
+                } catch (e) {
                     showLoading.value = false
                     generating.value = false
-                    console.log(data.item);
-                    console.log('音频播放完成');
-                    audio.removeEventListener('ended', () => { });
-                });
-                audio.play();
+                }
                 console.log('音频播放开始');
             })
         };
@@ -606,7 +629,11 @@ export default {
                     uploadFile = fileList.value[0].response.item
                 }
 
-                if ((model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value.indexOf('vision') > 0) &&
+                if ((
+                    model.value == 'domo-img-to-video' ||
+                    model.value == 'gpt-4-v' ||
+                    model.value == 'gpt-4-all' ||
+                    model.value.indexOf('vision') > 0) &&
                     (!uploadFile || uploadFile == '')) {
                     ElMessage({
                         type: 'error',
@@ -615,7 +642,12 @@ export default {
                     return;
                 }
 
-                if (model.value == 'gpt-4-v' || model.value == 'gpt-4-all' || model.value.indexOf('vision') > 0) {
+                if (
+                    model.value == 'domo-img-to-video' ||
+                    model.value == 'gpt-4-v' ||
+                    model.value == 'gpt-4-all' ||
+                    model.value.indexOf('vision') > 0 ||
+                    model.value.indexOf('claude-3') > -1) {
                     content = uploadFile + " " + content
                 }
 
@@ -779,7 +811,21 @@ export default {
             }, 200)
         }
 
+        // Function to check if the markdown string contains a video link that starts with 'http' and ends with '.mp4'
+        const IsVideo = (markdownStr) => {
+            return /http(s)?:\/\/[^"\s]*\.mp4/.test(markdownStr);
+        }
+
+        // Function to extract the video link that starts with 'http' and ends with '.mp4' from the markdown string
+        const GetVideo = (markdownStr) => {
+            const matches = markdownStr.match(/https?:\/\/[^"\s]*\.mp4/g);
+            let src = matches ? matches[matches.length - 1] : ''; // Returns the last match or null if no match is found
+            return "https://static2oss.qiangtu.com/o?plus=w_500&url=" + src;
+        }
+
         return {
+            IsVideo,
+            GetVideo,
             audioDevice,
             audioRecorder,
             audioUrl,

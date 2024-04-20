@@ -1,4 +1,17 @@
 <style>
+.article-generator-list-images {
+    padding-top: 10px;
+}
+.article-generator-list-images .el-image {
+    display: inline-block;
+}
+
+.article-generator-list-images .el-image {
+    margin-right: 10px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, .3);
+    border-radius: 3px;
+}
+
 .article-generator {
     margin-left: 5%;
     width: 90%;
@@ -6,6 +19,17 @@
     background: rgba(255, 255, 255, 0.1);
     margin-bottom: 20px;
 }
+
+h3.sub-title {
+    text-align: center;
+    display: block;
+    width: 100%;
+    background: rgba(200, 200, 200, 0.3);
+    padding: 30px;
+    border-radius: 5px;
+}
+
+h3.sub-title a {}
 
 .article-generator .steps {
     width: 80%;
@@ -54,6 +78,7 @@
     clear: both;
 }
 </style>
+
 <template>
     <div class="article-generator">
         <div class="steps">
@@ -67,6 +92,10 @@
             <el-alert title="指南" type="warning" description="本页面用于使用AI创建长文，流程为 生成提纲 -> 编写内容 （批量或者点击提纲标题边上的编写按钮） -> 预览结果"
                 show-icon />
             <h2>写作设定</h2>
+            <h3 class="sub-title">
+                <span><a href="https://odin.mblog.club/AI%E9%95%BF%E6%96%87%E7%94%9F%E6%88%90%E5%99%A8"
+                        target="_blank">第一次使用请务必查看使用教学，点我，点我，点我!</a></span>
+            </h3>
             <div class="article-generator-settings-form">
                 <div class="article-generator-settings-form-row" v-show="articles && articles.length > 0">
                     <div class="article-generator-settings-form-title">
@@ -83,7 +112,7 @@
                     <div class="article-generator-settings-form-content">
                         <el-radio-group v-model="form.type">
                             <el-radio v-for="item in types" :key="item" :label="item" :value="item">{{ item
-                            }}</el-radio>
+                                }}</el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -123,8 +152,9 @@
                     </div>
                     <div class="article-generator-settings-form-content">
                         <el-radio-group v-model="form.model">
-                            <el-radio v-for="item in models" :key="item" :label="item" :value="item">{{ item
-                            }}</el-radio>
+                            <el-radio v-for="item in models" :key="item" :label="item" :value="item">
+                                {{ item }}
+                            </el-radio>
                         </el-radio-group>
                     </div>
                 </div>
@@ -132,7 +162,8 @@
                     <div class="article-generator-settings-form-title">
                     </div>
                     <div class="article-generator-settings-form-content">
-                        <el-button style="margin-top: 12px" @click="handleInit" :disabled="loading">下一步</el-button>
+                        <el-button type="primary" style="margin-top: 12px" @click="handleInit"
+                            :disabled="loading">下一步</el-button>
                     </div>
                 </div>
             </div>
@@ -148,6 +179,11 @@
                 </div>
                 <div class="article-generator-settings-form-content">
                     <el-button style="margin-top: 12px" @click="handleStep1" :disabled="loading">上一步</el-button>
+                    <el-button style="margin-top: 12px" :icon="DocumentCopy" @click="handleCopyChat()"
+                        :disabled="loading">复制</el-button>
+                    <el-button type="primary" style="margin-top: 12px" :icon="EditPen" @click="handleEditArticle()"
+                        :disabled="loading">新窗口编辑</el-button>
+
                 </div>
             </div>
         </div>
@@ -160,20 +196,29 @@
                 </div>
                 <div class="article-generator-settings-form-content">
                     <el-button style="margin-top: 12px" @click="handleStep0" :disabled="loading">上一步</el-button>
-                    <el-button style="margin-top: 12px" @click="handleResetList" :disabled="loading">生成提纲</el-button>
-                    <el-button style="margin-top: 12px" @click="handleStart" :disabled="loading">全部编写</el-button>
-                    <el-button style="margin-top: 12px" @click="handleStopLoading" v-show="loading">停止</el-button>
+                    <el-button :type="form.list.length == 1 ? 'primary' : 'info'" style="margin-top: 12px"
+                        @click="handleResetList" :disabled="loading">生成提纲</el-button>
+                    <el-button :type="form.list.length != 1 ? 'primary' : 'info'" style="margin-top: 12px"
+                        @click="handleStart" :disabled="loading || form.list.length == 1">全部编写</el-button>
+                    <el-button style="margin-top: 12px" @click="handleStopLoading" v-show="loading">中断</el-button>
                 </div>
             </div>
             <h2>段落撰写</h2>
             <div class="article-generator-list-row" v-for="item, index in form.list" :key="item">
                 <div class="article-generator-list-title">
                     {{ item.index }} {{ item.title }} <el-button type="info" :icon="EditPen" :disabled="loading"
-                        @click="handleStartItem(index, item)" />
+                        v-show="item.title != '请点击页面上方‘生成提纲’按钮创建提纲'" @click="handleStartItem(index, item)" />
+                    <el-button type="info" :icon="Picture" :disabled="loading" @click="handleDrawItem(index, item)"
+                        v-show="item.content != null && item.content.length > 5" />
                 </div>
                 <div class="article-generator-list-content">
                     <el-input v-model="item.content" :autosize="{ minRows: 2, maxRows: 4 }" type="textarea"
                         placeholder="Please input" v-loading="loading" />
+                </div>
+                <div class="article-generator-list-images" v-show="item.content != null && item.content.length > 5">
+                    <el-image v-for="image in item.images" :key="image" style="width: 100px; height: 100px" :src="image"
+                        :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" :preview-src-list="item.images"
+                        :initial-index="4" fit="cover" />
                 </div>
             </div>
             <div class="article-generator-list-row">
@@ -182,7 +227,8 @@
                 </div>
                 <div class="article-generator-settings-form-content">
                     <el-button style="margin-top: 12px" @click="handleStep0" :disabled="loading">上一步</el-button>
-                    <el-button style="margin-top: 12px" @click="handlePreview" :disabled="loading">预览内容</el-button>
+                    <el-button style="margin-top: 12px" @click="handlePreview"
+                        :disabled="loading || form.list.length == 1">预览内容</el-button>
                 </div>
             </div>
             <div class="clear"></div>
@@ -196,6 +242,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
+
                     <template #default="props">
                         <el-tooltip class="box-item" effect="dark" content="设为当前会话" placement="top">
                             <el-button type="primary" :icon="Checked" circle @click="handleSetNewArchive(props.row)" />
@@ -212,24 +259,28 @@
         </el-dialog>
     </div>
 </template>
+
 <script>
-import { EditPen, Checked, Delete } from '@element-plus/icons-vue'
+import DateInfo from '@/components/DateInfo.vue';
+import { EditPen, Checked, Delete, Picture, DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { initBaseMessage } from '@/utils/chat_transfer'
-import { makeSingleChat } from '@/api/sse'
+import { makeSingleChat, makeTextFileLineIterator } from '@/api/sse'
 import { ref, } from 'vue';
+import { copyToClipboard } from '@/utils/page'
+import { getArticleKey, updateArticle } from '@/api/public'
 export default {
     name: 'ArticleGenerator',
     components: {
-
+        DateInfo
     },
 
     setup() {
-        const models = ref(["gpt-3.5-turbo-16k", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5"])
+        const models = ref(["gpt-3.5-turbo-16k", "gemini-pro", "gpt-4", "glm-4", "SparkDesk3.5", "claude-3"])
         const loading = ref(false)
         const step = ref(1)
         const types = ref(["学术论文", "新闻报道", "叙述性文章", "描述性文章", "评论性文章", "议论文", "说明文", "报告文", "汇报材料", "研究报告", "访谈文章", "人物特写", "记叙文", "故事型文章", "列表型文章", "观点型文章", "专栏文章", "书评", "电影评论", "产品评测", "短篇小说", "诗歌", "剧本", "散文诗", "幽默文章", "随笔", "日记", "信件", "旅游指南", "美食评论", "科普文章", "商业计划书", "个人陈述或声明"])
-        const styles = ref(["篇首有‘楔子’", "严肃严谨", "轻松诙谐", "文笔优美", "善用古文", "多用成语", "猎奇搞怪", "提纲挈领", "引经据典", "细节描述", "抛砖引玉", "反面论证", "正面论证", "举例说明", "设问", "答疑解惑", "引用名言", "引用数据", "引用权威观点", "逻辑推理", "情感表达", "讲故事", "讲笑话", "讲道理", "讲历史", "讲新闻", "讲科学", "讲经济", "讲文化", "讲生活", "讲艺术", "讲体育", "讲娱乐", "讲教育", "讲政策", "讲环保", "讲健康", "讲旅游", "讲美食", "讲科技", "讲商业", "讲心理", "讲哲学", "讲法律"])
+        const styles = ref(["篇首有‘楔子’", "严肃严谨", "轻松诙谐", "文笔优美", "善用古文", "多用成语", "猎奇搞怪", "提纲挈领", "引经据典", "细节描述", "抛砖引玉", "反面论证", "正面论证", "举例说明", "设问", "答疑解惑", "引用名言", "引用数据", "引用权威观点", "逻辑推理", "情感表达", "讲故事", "讲笑话", "讲道理", "讲历史", "讲新闻", "讲科学", "讲经济", "讲文化", "讲生活", "讲艺术", "讲体育", "讲娱乐", "讲教育", "讲政策", "讲环保", "讲健康", "讲旅游", "讲美食", "讲科技", "讲商业", "讲心理", "讲哲学", "讲法律", "专业书籍"])
         const content = ref('')
         const form = ref({
             "id": "",
@@ -239,7 +290,7 @@ export default {
             "title": '未来30年的AI与人类',
             "node_size": 3,
             "item_size": 2,
-            "list": [{ "index": "1", "level": "1", "title": "请点击页面上方‘生成提纲’按钮创建提纲" }]
+            "list": [{ "index": "1", "level": "1", "title": "请点击页面上方‘生成提纲’按钮创建提纲", "images": ["https://filesystem.site/cdn/20240306/TzQdumjmJhVLOF4yxQQnbfM0EiGtZb.webp", "https://filesystem.site/cdn/20240306/VqydmfGwL1m4KJWLkBXEInIi8tK44v.webp"] }]
         })
 
         const showDialogTable = ref(false)
@@ -255,6 +306,10 @@ export default {
                 console.log(err)
                 articles.value = []
             }
+        }
+
+        const handleCopyChat = () => {
+            copyToClipboard(content.value)
         }
 
         const setToLocal = () => {
@@ -367,6 +422,15 @@ ${desc}
         }
 
         const handleStart = () => {
+            if (form.value.list == [] || form.value.list.length < 2) {
+                ElMessage({
+                    type: 'info',
+                    message: '请先生成提纲！',
+                })
+
+                return
+            }
+
             var i = 0;
             var timeJob = setInterval(function () {
                 var item;
@@ -393,6 +457,97 @@ ${desc}
                     i = 0;
                 }
             }, 100);
+        }
+
+        const handleEditArticle = () => {
+            getArticleKey().then(keyJson => {
+                ElMessage({
+                    type: 'success',
+                    message: '已获得Key!即将为您打开新窗口！',
+                })
+                updateArticle({
+                    "key": keyJson.key,
+                    "content": content.value
+                }).then((rdata) => {
+                    window.open("https://suishouji.qiangtu.com/" + keyJson.key)
+                    ElMessage({
+                        type: 'success',
+                        message: '已弹出编辑窗!',
+                    })
+                    console.log(rdata)
+                });
+            });
+        }
+
+        const handleDrawItem = async (index, item) => {
+            if (loading.value) {
+                return;
+            }
+
+            var tmpArr = []
+            for (var tmpIndex in form.value.list) {
+                var tmpItem = form.value.list[tmpIndex]
+                tmpArr.push({ "index": tmpItem.index, "level": tmpItem.level, "title": tmpItem.title })
+            }
+
+            let sysPrompt = getContentPrompt(JSON.stringify(tmpArr), "# 请给这一章绘制一张插图:")
+
+            var messages = [{
+                "role": "user",
+                "content": sysPrompt + "\n 《" + item.index + " " + item.title + "》"
+            }]
+            console.log(messages)
+
+            loading.value = true
+            var params = initBaseMessage(messages, "gpt-4-dalle", false)
+
+
+            var url = '/v1/chat/completions'
+            var result = ''
+            const lines = makeTextFileLineIterator(url, params);
+            for await (let line of lines) {
+                if (line == '') {
+                    continue;
+                }
+
+                try {
+                    const text = line.replace("data: ", "");
+                    if (text == "[DONE]") {
+                        loading.value = false
+                        form.value.list[index].images = extractImageLinks(result)
+                        console.log(form.value.list[index].images)
+                        return;
+                    }
+                    else {
+                        try {
+                            const data = JSON.parse(text);
+                            result += data.choices[0].message.content;
+                            console.log(data.choices[0].delta.content)
+                        } catch (err) {
+                            console.log("error" + err)
+                            console.log(text)
+                        }
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+        }
+
+        const extractImageLinks = (markdownContent) => {
+            const regex = /!\[.*?\]\((.*?)\)/g;
+            const matches = markdownContent.match(regex);
+
+            if (!matches) {
+                return [];
+            }
+
+            const imageLinks = matches.map(match => {
+                const url = match.match(/\((.*?)\)/)[1];
+                return url;
+            });
+
+            return imageLinks;
         }
 
         const handleStartItem = (index, item) => {
@@ -439,9 +594,23 @@ ${desc}
 
         const handleInit = () => {
             step.value = 2
+
             if (form.value.list && form.value.list.length > 0) {
+                ElMessage({
+                    type: 'info',
+                    message: '存在初始化索引，生成索引已跳过',
+                })
                 return;
             }
+
+            if (loading.value == true) {
+                ElMessage({
+                    type: 'info',
+                    message: '生成索引已跳过，请等待其他操作完成!',
+                })
+                return;
+            }
+
             form.value.list = [{ "index": "1", "level": "1", "title": "加载中", "content": "加载中" }]
             loading.value = true
 
@@ -455,6 +624,11 @@ ${desc}
             }]
 
             console.log(messages)
+
+            ElMessage({
+                type: 'info',
+                message: '索引使用高级AI,速度较慢，请耐心等待!',
+            })
 
             var params = initBaseMessage(messages, "gpt-4", false)
             makeSingleChat(params).then(data => {
@@ -471,12 +645,15 @@ ${desc}
         }
 
         const processContent = (content) => {
+            // console.log(content)
             // 去除markdown代码标记
             content = content.replace(/^```json\n/, "").replace(/```\s*$/, "");
+            // console.log(content)
             // 替换引号
             content = content.replace(/“/g, "\"").replace(/”/g, "\"");
+            // console.log(content)
             // 转换为JSON对象
-            var jsonContent = JSON.parse(content);
+            var jsonContent = JSON.parse(content.trim());
             return jsonContent;
         }
 
@@ -496,14 +673,22 @@ ${desc}
                 try {
                     var cur_content = form.value.list[index].content
                     var title_icon = form.value.list[index].level == "1" ? "##" : "###"
+                    var cur_images_arr = []
+                    var cur_images_content = ""
+                    if (form.value.list[index].images != null) {
+                        cur_images_arr = form.value.list[index].images
+                        for (var image_index in cur_images_arr) {
+                            cur_images_content += "\n![image](" + cur_images_arr[image_index] + ")"
+                        }
+                    }
+
                     if (cur_content) {
                         content.value = `
 ${content.value}
 
 ${title_icon} ${form.value.list[index].index} ${form.value.list[index].title}
 
-${cur_content}
-
+${cur_content}${cur_images_content}
                         `
                     }
                 } catch (err) {
@@ -522,18 +707,24 @@ ${cur_content}
             content,
             showDialogTable,
             articles,
+            DocumentCopy,
             EditPen,
             Checked,
             Delete,
+            Picture,
+            DateInfo,
             handleInit,
             handleStep0,
             handleStep1,
             handleStart,
             handleStartItem,
+            handleDrawItem,
             handleResetList,
             handlePreview,
             handleStopLoading,
             handleSetNewArchive,
+            handleCopyChat,
+            handleEditArticle,
             handleDeleteArchive
         }
     }

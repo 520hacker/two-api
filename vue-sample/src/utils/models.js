@@ -15,6 +15,9 @@ export function getMainModels() {
         "id": "99",
         "label": "智谱 glm-4"
     }, {
+        "id": "121",
+        "label": "零一万物 yi-34b-chat-200k"
+    }, {
         "id": "67",
         "label": "百川 Baichuan2-53B"
     }, {
@@ -31,7 +34,12 @@ export function getMainModels() {
 
 export function getCheepModel(cur_model) {
     const validModels = [
-        "net-gpt-3.5-turbo-16k", "net-gpt-4",
+        "suno-v3",
+        "sora-1.0-turbo",
+        "pika-text-to-video",
+        "domo-img-to-video",
+        "net-gpt-3.5-turbo-16k",
+        "net-gpt-4",
         'gpt-4',
         'gpt-4-0613',
         'gpt-4-0314',
@@ -53,7 +61,14 @@ export function getCheepModel(cur_model) {
         'mj',
         'mj-chat',
         'midjourney',
-        'characterglm'];
+        'claude-3',
+        "claude-3-opus-20240229",
+        "claude-3-sonnet-20240229",
+        "claude-3-haiku-20240307",
+        "yi-34b-chat-200k",
+        "yi-vl-plus",
+        'characterglm'
+    ];
 
     if (validModels.includes(cur_model)) {
         cur_model = 'gpt-3.5-turbo-16k';
@@ -296,6 +311,40 @@ export function getModel(id) {
             return "qwen-72b";
         case "115":
             return "sora-1.0-turbo";
+        case "116":
+            return "claude-3";
+        case "117":
+            return "claude-3-opus-20240229";
+        case "118":
+            return "claude-3-sonnet-20240229";
+        case "119":
+            return "claude-3-haiku-20240307";
+        case "120":
+            return "yi-34b-chat-0205";
+        case "121":
+            return "yi-34b-chat-200k";
+        case "122":
+            return "yi-vl-plus";
+        case "123":
+            return "pika-text-to-video";
+        case "124":
+            return "domo-img-to-video";
+        case "125":
+            return "suno-v3";
+        case "126":
+            return "wbot-2";
+        case "127":
+            return "kimi";
+        case "128":
+            return "step";
+        case "129":
+            return "step-1-200k";
+        case "130":
+            return "step-1v-32k";
+        case "131":
+            return "deepseek-chat";
+        case "132":
+            return "deepseek-coder";
         default:
             return "gpt-3.5-turbo-16k";
     }
@@ -343,6 +392,17 @@ export function getAllModels() {
         "claude-2-100k",
         "claude-instant-1",
         "claude-2",
+        "claude-3",
+        "claude-3-opus-20240229",
+        "claude-3-sonnet-20240229",
+        "claude-3-haiku-20240307",
+
+        "deepseek-chat",
+        "deepseek-coder",
+
+        "yi-34b-chat-0205",
+        "yi-34b-chat-200k",
+        "yi-vl-plus",
         "net-gpt-3.5-turbo-16k",
         "net-gpt-4",
         "midjourney",
@@ -412,6 +472,10 @@ export function getAllModels() {
         "gemini-ultra",
         "aqa",
 
+        "pika-text-to-video",
+        "domo-img-to-video",
+        "suno-v3",
+
         "mixtral-8x7b",
         "search-gpts-chat",
         "search-gpts",
@@ -419,6 +483,11 @@ export function getAllModels() {
         "gpts-get",
         "mistral-medium",
         "qwen-72b",
-        "sora-1.0-turbo"
+        "sora-1.0-turbo",
+        "wbot-2",
+        "kimi",
+        "step",
+        "step-1-200k",
+        "step-1v-32k"
     ];
 }
