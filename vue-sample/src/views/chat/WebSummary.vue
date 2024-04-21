@@ -50,7 +50,7 @@
                                 <el-button type="info" :icon="DocumentCopy" :disabled="generating"
                                     @click="handleCopyChat(item)" />
                             </el-tooltip>
-                        </div> 
+                        </div>
                         <div v-if="item.item_type === 'intent'">
                             <v-md-editor v-model="item.content_" mode="preview"></v-md-editor>
                         </div>
@@ -59,12 +59,12 @@
                         </el-card>
                     </el-timeline-item>
                 </el-timeline>
-                
+
                 <div class="summary-urls">
-                        <span>总结网页地址：</span>
-                        <el-input v-model="urlstr" :autosize="{ minRows: 2, maxRows: 6 }" placeholder="网址，每行一个"
-                            type="textarea" v-loading="showLoading" />
-                    </div>
+                    <span>总结网页地址：</span>
+                    <el-input v-model="urlstr" :autosize="{ minRows: 2, maxRows: 6 }" placeholder="网址，每行一个"
+                        type="textarea" v-loading="showLoading" />
+                </div>
 
                 <div class="chat-button">
                     <div class="buttons">
@@ -103,7 +103,8 @@
                     <el-table-column fixed="right" label="操作" width="100">
                         <template #default="props">
                             <el-tooltip class="box-item" effect="dark" content="设为当前会话" placement="top">
-                                <el-button type="primary" :icon="Checked" circle @click="handleSetNewArchive(props.row)" />
+                                <el-button type="primary" :icon="Checked" circle
+                                    @click="handleSetNewArchive(props.row)" />
                             </el-tooltip>
                             <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
                                 @confirm="handleDeleteArchive(props.row)">
@@ -136,6 +137,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { watch, ref, onMounted } from 'vue';
 import DateInfo from '@/components/DateInfo.vue';
 import { makeTextFileLineIterator, makeSingleChat } from '@/api/sse'
+import { getModels } from '@/api/model'
 import { Promotion, Delete, CloseBold, Operation, Finished, Memo, ArrowDown, Checked, Refresh, DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { timestampToDate } from '@/utils/date'
@@ -167,6 +169,7 @@ export default {
         const textareaContent = ref('')
         const chatContentList = ref([])
         const archiveContentList = ref([])
+        const groupModels = ref([])
         const urlstr = ref('https://www.17k.com/chapter/3006464/38107770.html')
         const chatKey = ref('')
         const curChat = ref({
@@ -219,6 +222,40 @@ export default {
             return list;
         };
 
+        const resetEnabledModels = () => {
+            mainModels.value = getMainModels(route.params.mid)
+
+            if (route.params.mid == 101 || route.params.mid == 17) {
+                mainModels.value = [{
+                    "id": "101",
+                    "label": "Midjourney"
+                }, {
+                    "id": "17",
+                    "label": "Dalle-3"
+                }]
+
+                return
+            }
+
+            showLoading.value = true
+            getModels({}).then(data => {
+                groupModels.value = data.data
+                mainModels.value = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                if (!mainModels.value || mainModels.value == [] || mainModels.value.length < 1) {
+                    mainModels.value = getMainModels(null)
+
+                    var mainModels2 = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                    if (mainModels2 != null && mainModels2.length > 1) {
+                        mainModels.value = mainModels2;
+                    }
+                }
+
+                showLoading.value = false
+            });
+        }
+
         const load = () => {
             if (route.params.id) {
                 curChat.value.short_cut_id = route.params.id
@@ -231,7 +268,10 @@ export default {
             }
 
             model.value = getModel(route.params.mid)
-            mainModels.value = getMainModels()
+            // mainModels.value = getMainModels(route.params.mid)
+            
+            resetEnabledModels();
+
             chatKey.value = getChatKey()
             chatContentList.value = loadChat(chatKey.value)
 
@@ -398,7 +438,7 @@ export default {
 
         const sendSingleAsync = async (chat_id, chat_list) => {
             var messages = initMessagesWithoutSys(chat_list, "用三到五个字总结以上发言，如果无法总结请回复'闲聊'")
-            var cur_mode = getCheepModel(model.value) 
+            var cur_mode = getCheepModel(model.value)
             var params = initBaseMessage(messages, cur_mode, false)
             makeSingleChat(params).then(data => {
                 try {
@@ -642,7 +682,7 @@ export default {
     padding-left: 10px;
 }
 
-.summary-urls{
+.summary-urls {
     margin-bottom: 20px;
 }
 </style>

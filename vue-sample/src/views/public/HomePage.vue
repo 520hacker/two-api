@@ -51,6 +51,14 @@
                             <p>第3步： 点击 按钮 <el-button type="primary" @click="setKey">更新</el-button></p>
                         </li>
                         <li>
+                            当前密钥支持以下模型:
+                            <p v-loading="showLoading">
+                                <span v-for="(item, index) in mainModels" :key="index">
+                                    <router-link :to="getHref(item.id)">{{ item.label }}</router-link> |
+                                </span>
+                            </p>
+                        </li>
+                        <li>
                             <p>选择左侧菜单，找到对话框，输入你的问题，进入 DEMO 测试吧</p>
                         </li>
                     </ul>
@@ -74,6 +82,8 @@
 </template>
 
 <script>
+import { getMainModels } from '@/utils/models'
+import { getModels } from '@/api/model'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue';
 import { getSharedToken } from '@/utils/token'
@@ -81,6 +91,9 @@ export default {
     name: 'HomePage',
     setup() {
         const key = ref('key')
+        const showLoading = ref(false)
+        const groupModels = ref([])
+        const mainModels = ref([])
 
         const onLoad = () => {
             if (!localStorage.getItem('CSK') || localStorage.getItem('CSK') == '') {
@@ -88,11 +101,37 @@ export default {
             }
 
             key.value = localStorage.getItem('CSK')
+
+            showLoading.value = true
+            getModels({}).then(data => {
+                groupModels.value = data.data
+                mainModels.value = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                if (!mainModels.value || mainModels.value == [] || mainModels.value.length < 1) {
+                    mainModels.value = getMainModels(-1)
+
+                    var mainModels2 = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                    if (mainModels2 != null && mainModels2.length > 1) {
+                        mainModels.value = mainModels2;
+                    }
+                }
+
+                showLoading.value = false
+            });
         }
 
+        const getHref = (id) => {
+            if (id == 59 || id == 74 || id == 75) {
+                return '/chat/base/0/7';
+            }
+
+            return '/chat/base/0/' + id;
+        }
+        
         const setKey = () => {
             localStorage.setItem('CSK', key.value)
-
+            onLoad();
             ElMessage({
                 type: 'success',
                 message: '已更新',
@@ -103,7 +142,10 @@ export default {
 
         return {
             key,
-            setKey
+            setKey,
+            showLoading,
+            getHref,
+            mainModels
         };
     }
 }

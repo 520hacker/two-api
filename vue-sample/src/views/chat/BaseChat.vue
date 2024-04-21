@@ -197,6 +197,7 @@ import {
 import { useRoute, useRouter } from 'vue-router';
 import { watch, ref, onMounted, nextTick } from 'vue';
 import DateInfo from '@/components/DateInfo.vue';
+import { getModels } from '@/api/model'
 import { makeTextFileLineIterator, makeTextToSpeech, makeSingleChat, makeSpeechToText } from '@/api/sse'
 import { Promotion, Delete, CloseBold, Operation, Mute, Finished, Memo, ArrowDown, Checked, Refresh, Microphone, DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -250,6 +251,7 @@ export default {
         const textareaContent = ref('')
         const chatContentList = ref([])
         const archiveContentList = ref([])
+        const groupModels = ref([])
         const chatKey = ref('')
         const curChat = ref({
             _id: 0,
@@ -443,7 +445,9 @@ export default {
                 showDocUploader.value = false;
             }
 
-            mainModels.value = getMainModels()
+            resetEnabledModels();
+
+
             chatKey.value = getChatKey()
             chatContentList.value = loadChat(chatKey.value)
 
@@ -453,6 +457,41 @@ export default {
                 scrollToBottom();
             }, 1500)
         }
+
+        const resetEnabledModels = () => {
+            mainModels.value = getMainModels(route.params.mid)
+
+            if (route.params.mid == 101 || route.params.mid == 17) {
+                mainModels.value = [{
+                    "id": "101",
+                    "label": "Midjourney"
+                }, {
+                    "id": "17",
+                    "label": "Dalle-3"
+                }]
+
+                return
+            }
+
+            showLoading.value = true
+            getModels({}).then(data => {
+                groupModels.value = data.data
+                mainModels.value = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                if (!mainModels.value || mainModels.value == [] || mainModels.value.length < 1) {
+                    mainModels.value = getMainModels(null)
+
+                    var mainModels2 = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+
+                    if (mainModels2 != null && mainModels2.length > 1) {
+                        mainModels.value = mainModels2;
+                    }
+                }
+
+                showLoading.value = false
+            });
+        }
+
         load()
 
         const save = () => {

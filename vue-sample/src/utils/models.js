@@ -1,4 +1,9 @@
-export function getMainModels() {
+
+export function getMainModels(id) {
+    if (id) {
+        return getSameChannelModels(id);
+    }
+
     return [{
         "id": "34",
         "label": "百度 ERNIE-Bot-turbo"
@@ -30,6 +35,20 @@ export function getMainModels() {
         "id": "7",
         "label": "其他"
     }]
+}
+
+export function getSameChannelModels(id) {
+    var models = getAllModelInfos();
+    if (id < 0) {
+        return models.map(({ id, label }) => ({ id, label }));
+    }
+
+    const model = models.find(model => model.id === id);
+    if (!model) return [];
+
+    const channelType = model.channelType;
+    return models.filter(model => model.channelType === channelType)
+        .map(({ id, label }) => ({ id, label }));
 }
 
 export function getCheepModel(cur_model) {
@@ -67,7 +86,25 @@ export function getCheepModel(cur_model) {
         "claude-3-haiku-20240307",
         "yi-34b-chat-200k",
         "yi-vl-plus",
-        'characterglm'
+        'characterglm',
+        "search-gpts",
+        "search-gpts-chat",
+        "gpts-search",
+        "text-search-ada-doc-001",
+        "whisper-1",
+        "tts-1",
+        "tts-1-hd",
+        "text-search-ada-doc-001",
+        "embedding_s1_v1",
+        "text-embedding-ada-002",
+        "Embedding-V1",
+        "embedding-001",
+        "embedding-bert-512-v1",
+        "embedding_s1_v1",
+        "embedding-gecko-001",
+        "embedding-gecko-002",
+        "text-embedding-3-small",
+        "text-embedding-3-large"
     ];
 
     if (validModels.includes(cur_model)) {
@@ -78,416 +115,684 @@ export function getCheepModel(cur_model) {
 }
 
 export function getModel(id) {
-    switch (id) {
-        case "0":
-            return "ada";
-        case "1":
-            return "babbage";
-        case "2":
-            return "curie";
-        case "3":
-            return "davinci";
-        case "4":
-            return "gpt-3.5-turbo";
-        case "5":
-            return "gpt-3.5-turbo-0301";
-        case "6":
-            return "gpt-3.5-turbo-0613";
-        case "7":
-            return "gpt-3.5-turbo-16k";
-        case "8":
-            return "gpt-3.5-turbo-16k-0613";
-        case "9":
-            return "gpt-3.5-turbo-instruct";
-        case "10":
-            return "gpt-3.5-turbo-instruct-0914";
-        case "11":
-            return "gpt-4";
-        case "12":
-            return "gpt-4-0314";
-        case "13":
-            return "gpt-4-0613";
-        case "14":
-            return "gpt-4-32k";
-        case "15":
-            return "gpt-4-32k-0314";
-        case "16":
-            return "gpt-4-32k-0613";
-        case "17":
-            return "gpt-4-dalle";
-        case "18":
-            return "google-palm";
-        case "19":
-            return "llama-2-70b";
-        case "20":
-            return "llama-2-13b";
-        case "21":
-            return "llama-2-7b";
-        case "22":
-            return "code-llama-34b";
-        case "23":
-            return "code-llama-13b";
-        case "24":
-            return "code-llama-7b";
-        case "25":
-            return "claude-1-100k";
-        case "26":
-            return "claude-2-100k";
-        case "27":
-            return "claude-instant-1";
-        case "28":
-            return "claude-2";
-        case "29":
-            return "net-gpt-3.5-turbo-16k";
-        case "30":
-            return "net-gpt-4";
-        case "31":
-            return "midjourney";
-        case "32":
-            return "mj";
-        case "33":
-            return "ERNIE-Bot";
-        case "34":
-            return "ERNIE-Bot-turbo";
-        case "35":
-            return "ERNIE-Bot-Pro";
-        case "36":
-            return "chatglm_pro";
-        case "37":
-            return "chatglm_std";
-        case "38":
-            return "chatglm_lite";
-        case "39":
-            return "qwen-v1";
-        case "40":
-            return "qwen-plus-v1";
-        case "41":
-            return "semantic_similarity_s1_v1";
-        case "42":
-            return "SparkDesk";
-        case "43":
-            return "SparkDesk2";
-        case "44":
-            return "SparkDesk3";
-        case "45":
-            return "360GPT_S2_V9";
-        case "46":
-            return "360GPT_S2_V9.4";
-        case "47":
-            return "dall-e";
-        case "48":
-            return "text-embedding-ada-002";
-        case "49":
-            return "text-davinci-003";
-        case "50":
-            return "text-davinci-002";
-        case "51":
-            return "text-ada-001";
-        case "52":
-            return "text-babbage-001";
-        case "53":
-            return "text-curie-001";
-        case "54":
-            return "text-davinci-edit-001";
-        case "55":
-            return "text-moderation-latest";
-        case "56":
-            return "text-moderation-stable";
-        case "57":
-            return "code-davinci-edit-001";
-        case "58":
-            return "text-search-ada-doc-001";
-        case "59":
-            return "whisper-1";
-        case "60":
-            return "Embedding-V1";
-        case "61":
-            return "PaLM-2";
-        case "62":
-            return "embedding-bert-512-v1";
-        case "63":
-            return "embedding_s1_v1";
-        case "64":
-            return "gpt-4-bing";
-        case "65":
-            return "ChatGLM_Turbo";
-        case "66":
-            return "characterglm";
-        case "67":
-            return "Baichuan2-53B";
-        case "68":
-            return "chatglm";
-        case "69":
-            return "gpt-4-all";
-        case "70":
-            return "gpt-4-v";
-        case "71":
-            return "stable-diffusion";
-        case "72":
-            return "gpt-4-1106-preview";
-        case "73":
-            return "gpt-4-1106-vision-preview";
-        case "74":
-            return "tts-1";
-        case "75":
-            return "tts-1-hd";
-        case "76":
-            return "gpt-3.5-turbo-1106";
-        case "77":
-            return "gpt-4-gizmo-g";
-        case "78":
-            return "qwen-max";
-        case "79":
-            return "qwen-turbo";
-        case "80":
-            return "qwen-plus";
-        case "81":
-            return "qwen-max-v1";
-        case "82":
-            return "gpt-4-vision-preview";
-        case "83":
-            return "moonshot-v1-8k";
-        case "84":
-            return "moonshot-v1-32k";
-        case "85":
-            return "moonshot-v1-128k";
-        case "86":
-            return "dall-e-3";
-        case "87":
-            return "hunyuan";
-        case "88":
-            return "dall-e-2";
-        case "89":
-            return "gpt-4-turbo";
-        case "90":
-            return "chat-bison-00";
-        case "91":
-            return "embedding-001";
-        case "92":
-            return "embedding-gecko-001";
-        case "93":
-            return "embedding-gecko-002";
-        case "94":
-            return "text-bison-001";
-        case "95":
-            return "gemini-pro";
-        case "96":
-            return "gemini-pro-vision";
-        case "97":
-            return "gemini-ultra";
-        case "98":
-            return "aqa";
-        case "99":
-            return "glm-4";
-        case "100":
-            return "mixtral-8x7b";
-        case "101":
-            return "mj-chat";
-        case "102":
-            return "gpt-3.5-turbo-0125";
-        case "103":
-            return "text-embedding-3-small";
-        case "104":
-            return "text-embedding-3-large";
-        case "105":
-            return "gpt-4-turbo-preview";
-        case "106":
-            return "gpt-4-0125-preview";
-        case "107":
-            return "text-moderation-007";
-        case "108":
-            return "SparkDesk3.5";
-        case "109":
-            return "search-gpts-chat";
-        case "110":
-            return "search-gpts";
-        case "111":
-            return "gpts-search";
-        case "112":
-            return "gpts-get";
-        case "113":
-            return "mistral-medium";
-        case "114":
-            return "qwen-72b";
-        case "115":
-            return "sora-1.0-turbo";
-        case "116":
-            return "claude-3";
-        case "117":
-            return "claude-3-opus-20240229";
-        case "118":
-            return "claude-3-sonnet-20240229";
-        case "119":
-            return "claude-3-haiku-20240307";
-        case "120":
-            return "yi-34b-chat-0205";
-        case "121":
-            return "yi-34b-chat-200k";
-        case "122":
-            return "yi-vl-plus";
-        case "123":
-            return "pika-text-to-video";
-        case "124":
-            return "domo-img-to-video";
-        case "125":
-            return "suno-v3";
-        case "126":
-            return "wbot-2";
-        case "127":
-            return "kimi";
-        case "128":
-            return "step";
-        case "129":
-            return "step-1-200k";
-        case "130":
-            return "step-1v-32k";
-        case "131":
-            return "deepseek-chat";
-        case "132":
-            return "deepseek-coder";
-        default:
-            return "gpt-3.5-turbo-16k";
-    }
+    var models = getAllModelInfos();
+    const foundModel = models.find(model => model.id === id);
+    return foundModel ? foundModel.label : null;
 }
 
 export function getAllModels() {
-    return [
-        "ada",
-        "babbage",
-        "curie",
-        "davinci",
-        "gpt-3.5-turbo",
-        "gpt-3.5-turbo-0301",
-        "gpt-3.5-turbo-0613",
-        "gpt-3.5-turbo-16k",
-        "gpt-3.5-turbo-16k-0613",
-        "gpt-3.5-turbo-1106",
-        "gpt-3.5-turbo-instruct",
-        "gpt-3.5-turbo-instruct-0914",
-        "gpt-3.5-turbo-0125",
-        "gpt-4",
-        "gpt-4-0314",
-        "gpt-4-0613",
-        "gpt-4-32k",
-        "gpt-4-32k-0314",
-        "gpt-4-32k-0613",
-        "gpt-4-dalle",
-        "gpt-4-v",
-        "gpt-4-all",
-        "gpt-4-1106-preview",
-        "gpt-4-1106-vision-preview",
-        "gpt-4-vision-preview",
-        "gpt-4-gizmo-g",
-        "gpt-4-turbo",
-        "gpt-4-turbo-preview",
-        "gpt-4-0125-preview",
-        "google-palm",
-        "llama-2-70b",
-        "llama-2-13b",
-        "llama-2-7b",
-        "code-llama-34b",
-        "code-llama-13b",
-        "code-llama-7b",
-        "claude-1-100k",
-        "claude-2-100k",
-        "claude-instant-1",
-        "claude-2",
-        "claude-3",
-        "claude-3-opus-20240229",
-        "claude-3-sonnet-20240229",
-        "claude-3-haiku-20240307",
+    var models = getAllModelInfos();
+    return models.map(model => model.label);
+}
 
-        "deepseek-chat",
-        "deepseek-coder",
-
-        "yi-34b-chat-0205",
-        "yi-34b-chat-200k",
-        "yi-vl-plus",
-        "net-gpt-3.5-turbo-16k",
-        "net-gpt-4",
-        "midjourney",
-        "mj",
-        "mj-chat",
-        "ERNIE-Bot",
-        "ERNIE-Bot-turbo",
-        "ERNIE-Bot-Pro",
-        "chatglm",
-        "chatglm_pro",
-        "chatglm_std",
-        "chatglm_lite",
-        "ChatGLM_Turbo",
-        "characterglm",
-        "glm-4",
-        "qwen-v1",
-        "qwen-turbo",
-        "qwen-plus-v1",
-        "qwen-plus",
-        "qwen-max-v1",
-        "semantic_similarity_s1_v1",
-        "SparkDesk",
-        "SparkDesk2",
-        "SparkDesk3",
-        "SparkDesk3.5",
-        "360GPT_S2_V9",
-        "360GPT_S2_V9.4",
-        "dall-e",
-        "dall-e-2",
-        "dall-e-3",
-        "tts-1",
-        "tts-1-hd",
-        "text-embedding-ada-002",
-        "text-davinci-003",
-        "text-davinci-002",
-        "text-ada-001",
-        "text-babbage-001",
-        "text-curie-001",
-        "text-davinci-edit-001",
-        "text-moderation-latest",
-        "text-moderation-stable",
-        "code-davinci-edit-001",
-        "text-search-ada-doc-001",
-        "text-embedding-3-small",
-        "text-embedding-3-large",
-        "text-moderation-007",
-        "whisper-1",
-        "Embedding-V1",
-        "PaLM-2",
-        "embedding-bert-512-v1",
-        "embedding_s1_v1",
-        "gpt-4-bing",
-        "Baichuan2-53B",
-        "stable-diffusion",
-        "moonshot-v1-8k",
-        "moonshot-v1-32k",
-        "moonshot-v1-128k",
-        "hunyuan",
-
-        "chat-bison-00",
-        "embedding-001",
-        "embedding-gecko-001",
-        "embedding-gecko-002",
-        "text-bison-001",
-        "gemini-pro",
-        "gemini-pro-vision",
-        "gemini-ultra",
-        "aqa",
-
-        "pika-text-to-video",
-        "domo-img-to-video",
-        "suno-v3",
-
-        "mixtral-8x7b",
-        "search-gpts-chat",
-        "search-gpts",
-        "gpts-search",
-        "gpts-get",
-        "mistral-medium",
-        "qwen-72b",
-        "sora-1.0-turbo",
-        "wbot-2",
-        "kimi",
-        "step",
-        "step-1-200k",
-        "step-1v-32k"
+export function getAllModelInfos() {
+    var models = [
+        {
+            "id": "0",
+            "channelType": "openai",
+            "label": "ada"
+        },
+        {
+            "id": "1",
+            "channelType": "openai",
+            "label": "babbage"
+        },
+        {
+            "id": "2",
+            "channelType": "openai",
+            "label": "curie"
+        },
+        {
+            "id": "3",
+            "channelType": "openai",
+            "label": "davinci"
+        },
+        {
+            "id": "4",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo"
+        },
+        {
+            "id": "5",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-0301"
+        },
+        {
+            "id": "6",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-0613"
+        },
+        {
+            "id": "7",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-16k"
+        },
+        {
+            "id": "8",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-16k-0613"
+        },
+        {
+            "id": "9",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-instruct"
+        },
+        {
+            "id": "10",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-instruct-0914"
+        },
+        {
+            "id": "11",
+            "channelType": "openai",
+            "label": "gpt-4"
+        },
+        {
+            "id": "12",
+            "channelType": "openai",
+            "label": "gpt-4-0314"
+        },
+        {
+            "id": "13",
+            "channelType": "openai",
+            "label": "gpt-4-0613"
+        },
+        {
+            "id": "14",
+            "channelType": "openai",
+            "label": "gpt-4-32k"
+        },
+        {
+            "id": "15",
+            "channelType": "openai",
+            "label": "gpt-4-32k-0314"
+        },
+        {
+            "id": "16",
+            "channelType": "openai",
+            "label": "gpt-4-32k-0613"
+        },
+        {
+            "id": "17",
+            "channelType": "openai-draw",
+            "label": "gpt-4-dalle"
+        },
+        {
+            "id": "18",
+            "channelType": "google",
+            "label": "google-palm"
+        },
+        {
+            "id": "19",
+            "channelType": "meta",
+            "label": "llama-2-70b"
+        },
+        {
+            "id": "20",
+            "channelType": "meta",
+            "label": "llama-2-13b"
+        },
+        {
+            "id": "21",
+            "channelType": "meta",
+            "label": "llama-2-7b"
+        },
+        {
+            "id": "22",
+            "channelType": "meta",
+            "label": "code-llama-34b"
+        },
+        {
+            "id": "23",
+            "channelType": "meta",
+            "label": "code-llama-13b"
+        },
+        {
+            "id": "24",
+            "channelType": "meta",
+            "label": "code-llama-7b"
+        },
+        {
+            "id": "25",
+            "channelType": "claude",
+            "label": "claude-1-100k"
+        },
+        {
+            "id": "26",
+            "channelType": "claude",
+            "label": "claude-2-100k"
+        },
+        {
+            "id": "27",
+            "channelType": "claude",
+            "label": "claude-instant-1"
+        },
+        {
+            "id": "28",
+            "channelType": "claude",
+            "label": "claude-2"
+        },
+        {
+            "id": "29",
+            "channelType": "openai",
+            "label": "net-gpt-3.5-turbo-16k"
+        },
+        {
+            "id": "30",
+            "channelType": "openai",
+            "label": "net-gpt-4"
+        },
+        {
+            "id": "31",
+            "channelType": "midjourney",
+            "label": "midjourney"
+        },
+        {
+            "id": "32",
+            "channelType": "midjourney",
+            "label": "mj"
+        },
+        {
+            "id": "33",
+            "channelType": "baidu",
+            "label": "ERNIE-Bot"
+        },
+        {
+            "id": "34",
+            "channelType": "baidu",
+            "label": "ERNIE-Bot-turbo"
+        },
+        {
+            "id": "35",
+            "channelType": "baidu",
+            "label": "ERNIE-Bot-Pro"
+        },
+        {
+            "id": "36",
+            "channelType": "chatglm",
+            "label": "chatglm_pro"
+        },
+        {
+            "id": "37",
+            "channelType": "chatglm",
+            "label": "chatglm_std"
+        },
+        {
+            "id": "38",
+            "channelType": "chatglm",
+            "label": "chatglm_lite"
+        },
+        {
+            "id": "39",
+            "channelType": "ali",
+            "label": "qwen-v1"
+        },
+        {
+            "id": "40",
+            "channelType": "ali",
+            "label": "qwen-plus-v1"
+        },
+        {
+            "id": "41",
+            "channelType": "openai",
+            "label": "semantic_similarity_s1_v1"
+        },
+        {
+            "id": "42",
+            "channelType": "xunfei",
+            "label": "SparkDesk"
+        },
+        {
+            "id": "43",
+            "channelType": "xunfei",
+            "label": "SparkDesk2"
+        },
+        {
+            "id": "44",
+            "channelType": "xunfei",
+            "label": "SparkDesk3"
+        },
+        {
+            "id": "45",
+            "channelType": "360",
+            "label": "360GPT_S2_V9"
+        },
+        {
+            "id": "46",
+            "channelType": "360",
+            "label": "360GPT_S2_V9.4"
+        },
+        {
+            "id": "47",
+            "channelType": "openai",
+            "label": "dall-e"
+        },
+        {
+            "id": "48",
+            "channelType": "openai",
+            "label": "text-embedding-ada-002"
+        },
+        {
+            "id": "49",
+            "channelType": "openai",
+            "label": "text-davinci-003"
+        },
+        {
+            "id": "50",
+            "channelType": "openai",
+            "label": "text-davinci-002"
+        },
+        {
+            "id": "51",
+            "channelType": "openai",
+            "label": "text-ada-001"
+        },
+        {
+            "id": "52",
+            "channelType": "openai",
+            "label": "text-babbage-001"
+        },
+        {
+            "id": "53",
+            "channelType": "openai",
+            "label": "text-curie-001"
+        },
+        {
+            "id": "54",
+            "channelType": "openai",
+            "label": "text-davinci-edit-001"
+        },
+        {
+            "id": "55",
+            "channelType": "openai",
+            "label": "text-moderation-latest"
+        },
+        {
+            "id": "56",
+            "channelType": "openai",
+            "label": "text-moderation-stable"
+        },
+        {
+            "id": "57",
+            "channelType": "openai",
+            "label": "code-davinci-edit-001"
+        },
+        {
+            "id": "58",
+            "channelType": "openai",
+            "label": "text-search-ada-doc-001"
+        },
+        {
+            "id": "59",
+            "channelType": "openai-tts",
+            "label": "whisper-1"
+        },
+        {
+            "id": "60",
+            "channelType": "openai",
+            "label": "Embedding-V1"
+        },
+        {
+            "id": "61",
+            "channelType": "openai",
+            "label": "PaLM-2"
+        },
+        {
+            "id": "62",
+            "channelType": "openai",
+            "label": "embedding-bert-512-v1"
+        },
+        {
+            "id": "63",
+            "channelType": "openai",
+            "label": "embedding_s1_v1"
+        },
+        {
+            "id": "64",
+            "channelType": "openai",
+            "label": "gpt-4-bing"
+        },
+        {
+            "id": "65",
+            "channelType": "chatglm",
+            "label": "ChatGLM_Turbo"
+        },
+        {
+            "id": "66",
+            "channelType": "chatglm",
+            "label": "characterglm"
+        },
+        {
+            "id": "67",
+            "channelType": "Baichuan",
+            "label": "Baichuan2-53B"
+        },
+        {
+            "id": "68",
+            "channelType": "chatglm",
+            "label": "chatglm"
+        },
+        {
+            "id": "69",
+            "channelType": "openai",
+            "label": "gpt-4-all"
+        },
+        {
+            "id": "70",
+            "channelType": "openai",
+            "label": "gpt-4-v"
+        },
+        {
+            "id": "71",
+            "channelType": "sd",
+            "label": "stable-diffusion"
+        },
+        {
+            "id": "72",
+            "channelType": "openai",
+            "label": "gpt-4-1106-preview"
+        },
+        {
+            "id": "73",
+            "channelType": "openai",
+            "label": "gpt-4-1106-vision-preview"
+        },
+        {
+            "id": "74",
+            "channelType": "openai-tts",
+            "label": "tts-1"
+        },
+        {
+            "id": "75",
+            "channelType": "openai-tts",
+            "label": "tts-1-hd"
+        },
+        {
+            "id": "76",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-1106"
+        },
+        {
+            "id": "77",
+            "channelType": "openai",
+            "label": "gpt-4-gizmo-g"
+        },
+        {
+            "id": "78",
+            "channelType": "ali",
+            "label": "qwen-max"
+        },
+        {
+            "id": "79",
+            "channelType": "ali",
+            "label": "qwen-turbo"
+        },
+        {
+            "id": "80",
+            "channelType": "ali",
+            "label": "qwen-plus"
+        },
+        {
+            "id": "81",
+            "channelType": "ali",
+            "label": "qwen-max-v1"
+        },
+        {
+            "id": "82",
+            "channelType": "openai",
+            "label": "gpt-4-vision-preview"
+        },
+        {
+            "id": "83",
+            "channelType": "kimi",
+            "label": "moonshot-v1-8k"
+        },
+        {
+            "id": "84",
+            "channelType": "kimi",
+            "label": "moonshot-v1-32k"
+        },
+        {
+            "id": "85",
+            "channelType": "kimi",
+            "label": "moonshot-v1-128k"
+        },
+        {
+            "id": "86",
+            "channelType": "openai",
+            "label": "dall-e-3"
+        },
+        {
+            "id": "87",
+            "channelType": "tencent",
+            "label": "hunyuan"
+        },
+        {
+            "id": "88",
+            "channelType": "openai",
+            "label": "dall-e-2"
+        },
+        {
+            "id": "89",
+            "channelType": "openai",
+            "label": "gpt-4-turbo"
+        },
+        {
+            "id": "90",
+            "channelType": "openai",
+            "label": "chat-bison-00"
+        },
+        {
+            "id": "91",
+            "channelType": "openai",
+            "label": "embedding-001"
+        },
+        {
+            "id": "92",
+            "channelType": "openai",
+            "label": "embedding-gecko-001"
+        },
+        {
+            "id": "93",
+            "channelType": "openai",
+            "label": "embedding-gecko-002"
+        },
+        {
+            "id": "94",
+            "channelType": "openai",
+            "label": "text-bison-001"
+        },
+        {
+            "id": "95",
+            "channelType": "google",
+            "label": "gemini-pro"
+        },
+        {
+            "id": "96",
+            "channelType": "google",
+            "label": "gemini-pro-vision"
+        },
+        {
+            "id": "97",
+            "channelType": "google",
+            "label": "gemini-ultra"
+        },
+        {
+            "id": "98",
+            "channelType": "openai",
+            "label": "aqa"
+        },
+        {
+            "id": "99",
+            "channelType": "chatglm",
+            "label": "glm-4"
+        },
+        {
+            "id": "100",
+            "channelType": "openai",
+            "label": "mixtral-8x7b"
+        },
+        {
+            "id": "101",
+            "channelType": "midjourney",
+            "label": "mj-chat"
+        },
+        {
+            "id": "102",
+            "channelType": "openai",
+            "label": "gpt-3.5-turbo-0125"
+        },
+        {
+            "id": "103",
+            "channelType": "openai",
+            "label": "text-embedding-3-small"
+        },
+        {
+            "id": "104",
+            "channelType": "openai",
+            "label": "text-embedding-3-large"
+        },
+        {
+            "id": "105",
+            "channelType": "openai",
+            "label": "gpt-4-turbo-preview"
+        },
+        {
+            "id": "106",
+            "channelType": "openai",
+            "label": "gpt-4-0125-preview"
+        },
+        {
+            "id": "107",
+            "channelType": "openai",
+            "label": "text-moderation-007"
+        },
+        {
+            "id": "108",
+            "channelType": "xunfei",
+            "label": "SparkDesk3.5"
+        },
+        {
+            "id": "109",
+            "channelType": "openai",
+            "label": "search-gpts-chat"
+        },
+        {
+            "id": "110",
+            "channelType": "openai",
+            "label": "search-gpts"
+        },
+        {
+            "id": "111",
+            "channelType": "openai",
+            "label": "gpts-search"
+        },
+        {
+            "id": "112",
+            "channelType": "openai",
+            "label": "gpts-get"
+        },
+        {
+            "id": "113",
+            "channelType": "openai",
+            "label": "mistral-medium"
+        },
+        {
+            "id": "114",
+            "channelType": "ali",
+            "label": "qwen-72b"
+        },
+        {
+            "id": "115",
+            "channelType": "openai",
+            "label": "sora-1.0-turbo"
+        },
+        {
+            "id": "116",
+            "channelType": "claude",
+            "label": "claude-3"
+        },
+        {
+            "id": "117",
+            "channelType": "claude",
+            "label": "claude-3-opus-20240229"
+        },
+        {
+            "id": "118",
+            "channelType": "claude",
+            "label": "claude-3-sonnet-20240229"
+        },
+        {
+            "id": "119",
+            "channelType": "claude",
+            "label": "claude-3-haiku-20240307"
+        },
+        {
+            "id": "120",
+            "channelType": "yi",
+            "label": "yi-34b-chat-0205"
+        },
+        {
+            "id": "121",
+            "channelType": "yi",
+            "label": "yi-34b-chat-200k"
+        },
+        {
+            "id": "122",
+            "channelType": "yi",
+            "label": "yi-vl-plus"
+        },
+        {
+            "id": "123",
+            "channelType": "pika",
+            "label": "pika-text-to-video"
+        },
+        {
+            "id": "124",
+            "channelType": "domo",
+            "label": "domo-img-to-video"
+        },
+        {
+            "id": "125",
+            "channelType": "suno",
+            "label": "suno-v3"
+        },
+        {
+            "id": "126",
+            "channelType": "wbot",
+            "label": "wbot-2"
+        },
+        {
+            "id": "127",
+            "channelType": "kimi",
+            "label": "kimi"
+        },
+        {
+            "id": "128",
+            "channelType": "step",
+            "label": "step"
+        },
+        {
+            "id": "129",
+            "channelType": "step",
+            "label": "step-1-200k"
+        },
+        {
+            "id": "130",
+            "channelType": "step",
+            "label": "step-1v-32k"
+        },
+        {
+            "id": "131",
+            "channelType": "deepseek",
+            "label": "deepseek-chat"
+        },
+        {
+            "id": "132",
+            "channelType": "deepseek",
+            "label": "deepseek-coder"
+        }
     ];
+
+    return models;
 }
