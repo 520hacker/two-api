@@ -473,23 +473,25 @@ export default {
                 return
             }
 
-            showLoading.value = true
-            getModels({}).then(data => {
-                groupModels.value = data.data
-                mainModels.value = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+            if (!groupModels.value || groupModels.value.length < 1) {
+                showLoading.value = true
+                getModels({}).then(data => {
+                    groupModels.value = data.data
+                    mainModels.value = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
 
-                if (!mainModels.value || mainModels.value == [] || mainModels.value.length < 1) {
-                    mainModels.value = getMainModels(null)
+                    if (!mainModels.value || mainModels.value == [] || mainModels.value.length < 1) {
+                        mainModels.value = getMainModels(null)
 
-                    var mainModels2 = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
+                        var mainModels2 = mainModels.value.filter(model => groupModels.value.some(models => models.id === model.label));
 
-                    if (mainModels2 != null && mainModels2.length > 1) {
-                        mainModels.value = mainModels2;
+                        if (mainModels2 != null && mainModels2.length > 1) {
+                            mainModels.value = mainModels2;
+                        }
                     }
-                }
 
-                showLoading.value = false
-            });
+                    showLoading.value = false
+                });
+            }
         }
 
         load()
@@ -771,8 +773,17 @@ export default {
                             data.choices[0].finish_reason
                         );
                     }
-                } catch (e) {
-                    console.log(e)
+                }
+                catch (e) {
+                    // ElMessage({
+                    //     type: 'error',
+                    //     message: '消息解析失败',
+                    // })
+                    console.log('消息解析失败:' + line);
+                    console.log('错误:' + e)
+
+                    showLoading.value = false;
+                    generating.value = false;
                 }
             }
         };
