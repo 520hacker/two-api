@@ -1,0 +1,4 @@
+Flask
+oss2
+requests
+Pillow
