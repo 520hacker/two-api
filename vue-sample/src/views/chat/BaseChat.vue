@@ -61,6 +61,15 @@
                         <el-card v-if="item.item_type === 'reply' && item.content">
                             <v-md-editor v-model="item.content" mode="preview"
                                 @image-click="handlePreviewImageClick"></v-md-editor>
+                            <div class="el-main-image" v-if="model == 'mj-chat' && !generating">
+                                <el-image v-for="item, index in uniqueStrings(extractImageUrls(item.content))"
+                                    :key="item" :src="'https://static2oss.qiangtu.com/o?plus=w_500&url=' + item" lazy
+                                    :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" :initial-index="index" fit="cover">
+                                    <template #error>
+                                        <span></span>
+                                    </template>
+                                </el-image>
+                            </div>
                             <div v-if="item.content != null && item.content != '' && IsVideo(item.content)">
                                 <video controls style="width: 99%;">
                                     <source :src="GetVideo(item.content)" type="video/mp4">
@@ -72,8 +81,8 @@
                 </el-timeline>
                 <div class="uploader" v-show="showImageUploader">
                     <el-upload v-model:file-list="fileList" class="upload-demo"
-                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1"
-                        list-type="picture">
+                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader"
+                        :limit="upLimit" list-type="picture">
                         <el-button type="primary">点击上传</el-button>
 
                         <template #tip>
@@ -85,7 +94,8 @@
                 </div>
                 <div class="uploader" v-show="showDocUploader">
                     <el-upload v-model:file-list="fileList" class="upload-demo"
-                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader" :limit="1">
+                        action="https://twoapi.qiangtu.com/v1/custom/file/upload" :headers="uploadHeader"
+                        :limit="upLimit">
                         <el-button type="primary">点击上传</el-button>
 
                         <template #tip>
@@ -95,11 +105,11 @@
                         </template>
                     </el-upload>
                 </div>
+                <el-alert v-if="chatContentList.length > 5" title="试试下方的绿色按钮和灰色按钮? 用好它们,你能方便的在你的多个会话中切换哦!" type="warning" />
                 <div class="chat-button">
                     <div class="buttons">
                         <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
                             @confirm="handleRemoveHistories">
-
                             <template #reference>
                                 <el-button type="danger" :icon="Delete" circle :disabled="generating" />
                             </template>
@@ -229,7 +239,7 @@ export default {
         const audioElapsedTime = ref("00:00");
         const audioTimerInterval = ref(null);
         const showAudioRecorder = ref(false)
-
+        const upLimit = ref(1)
 
         const showImageUploader = ref(false)
         const showDocUploader = ref(false)
@@ -296,6 +306,26 @@ export default {
             });
         }
 
+        const addPrefixToItems = (arr, prefix) => {
+            return arr.map(item => prefix + item);
+        }
+
+        const extractImageUrls = (markdown) => {
+            // 正则表达式匹配Markdown中的图片语法
+            const regex = /!\[.*?\]\((.*?)\)/g;
+
+            // 用于存储提取出的图片URL
+            const imageUrls = [];
+
+            // 使用正则表达式查找所有匹配项
+            let match;
+            while ((match = regex.exec(markdown)) !== null) {
+                // 将匹配到的URL添加到数组中
+                imageUrls.push(match[1]);
+            }
+
+            return imageUrls;
+        }
         const startAudioRecording = () => {
             newAudioLog("您开始了一段新的语音")
             audioDevice.value = navigator.mediaDevices.getUserMedia({ audio: true });
@@ -439,8 +469,11 @@ export default {
                 showImageUploader.value = false;
             }
 
-            if (model.value == 'gpt-4-all') {
+            if (model.value == 'gpt-4-all' || model.value == "gpt-4o" || model.value == "gpt-4o-all" || model.value == "luma-video") {
                 showDocUploader.value = true;
+                if (model.value == "luma-video") {
+                    upLimit.value = 2
+                }
             } else {
                 showDocUploader.value = false;
             }
@@ -456,6 +489,16 @@ export default {
             setTimeout(function () {
                 scrollToBottom();
             }, 1500)
+        }
+
+        const uniqueStrings = (arr) => {
+            var unique = {};
+            arr.forEach(function (i) {
+                if (i.indexOf('filesystem.site/cdn/download') < 0) {
+                    unique[i] = true;
+                }
+            });
+            return Object.keys(unique);
         }
 
         const resetEnabledModels = () => {
@@ -667,15 +710,23 @@ export default {
             try {
                 var uploadFile = '';
                 if (fileList.value && fileList.value.length > 0) {
-                    uploadFile = fileList.value[0].response.item
+                    if (fileList.value.length > 1 && model.value == "luma-video") {
+                        uploadFile = fileList.value[0].response.item + " " + fileList.value[1].response.item
+                    }
+                    else {
+                        uploadFile = fileList.value[0].response.item
+                    }
                 }
 
                 if ((
                     model.value == 'domo-img-to-video' ||
                     model.value == 'gpt-4-v' ||
                     model.value == 'gpt-4-all' ||
+                    // model.value == "luma-video" ||
                     model.value.indexOf('vision') > 0) &&
-                    (!uploadFile || uploadFile == '')) {
+                    (!uploadFile || uploadFile == '') &&
+                    content.indexOf("http") != 0
+                ) {
                     ElMessage({
                         type: 'error',
                         message: '请上传文件',
@@ -684,11 +735,15 @@ export default {
                 }
 
                 if (
-                    model.value == 'domo-img-to-video' ||
-                    model.value == 'gpt-4-v' ||
-                    model.value == 'gpt-4-all' ||
-                    model.value.indexOf('vision') > 0 ||
-                    model.value.indexOf('claude-3') > -1) {
+                    uploadFile != '' && (
+                        model.value == 'domo-img-to-video' ||
+                        model.value == 'gpt-4-v' ||
+                        model.value == 'gpt-4-all' ||
+                        model.value == "gpt-4o" ||
+                        model.value == "gpt-4o-all" ||
+                        model.value == "luma-video" ||
+                        model.value.indexOf('vision') > 0 ||
+                        model.value.indexOf('claude-3') > -1)) {
                     content = uploadFile + " " + content
                 }
 
@@ -759,7 +814,15 @@ export default {
                 }
 
                 try {
-                    const text = line.replace("data: ", "");
+                    let text = line;
+                    if (text.indexOf("data: ") == 0) {
+                        text = text.substring(6);
+                    }
+
+                    if (text.indexOf("data:") == 0) {
+                        text = text.substring(5);
+                    }
+
                     if (text == "[DONE]") {
                         updateMessage(
                             "",
@@ -884,9 +947,10 @@ export default {
             audioElapsedTime,
             audioTimerInterval,
             audioLogs,
+            upLimit,
             startAudioRecording,
             stopAudioRecording,
-
+            uniqueStrings,
 
             Delete,
             Promotion,
@@ -901,7 +965,8 @@ export default {
             DocumentCopy,
             Microphone,
             Mute,
-
+            addPrefixToItems,
+            extractImageUrls,
             handlePreviewImageClick,
             handleEnter,
             handleShowPrompt,

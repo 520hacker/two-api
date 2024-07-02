@@ -134,17 +134,7 @@ span.el-pagination__jump {
                                 </div>
                             </template></el-image>
                     </div>
-                    <div class="el-thumbnail" v-if="o.images.length > 1">
-                        <!-- <el-image v-for="item, index in uniqueStrings(filterLinks(o.images, 'png'))" :key="item"
-                            :src="'https://static2oss.qiangtu.com/o?plus=w_50&url=' + item" lazy :zoom-rate="1.2"
-                            :max-scale="7" :min-scale="0.2"
-                            :preview-src-list="addPrefix(filterLinks(o.images, 'png'), 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
-                            :initial-index="index" fit="cover">
-                            <template #error>
-                                <span></span>
-                            </template>
-                        </el-image> -->
-
+                    <div class="el-thumbnail" v-if="o.images.length > 0">
                         <div class="video-list">
                             <ul>
                                 <li v-for="(video, index) in uniqueStrings(filterLinks(o.images, 'mp4'))" :key="index"
@@ -204,7 +194,7 @@ export default {
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(["pika-text-to-video", "domo-img-to-video", "suno-v3"])
+        const models = ref(["pika-text-to-video", "luma-video", "domo-img-to-video", "suno-v3", "suno-v3.5"])
 
         watch(
             // 路由参数发生变化时重新加载数据

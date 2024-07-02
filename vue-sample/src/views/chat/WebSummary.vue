@@ -269,7 +269,7 @@ export default {
 
             model.value = getModel(route.params.mid)
             // mainModels.value = getMainModels(route.params.mid)
-            
+
             resetEnabledModels();
 
             chatKey.value = getChatKey()
@@ -464,7 +464,15 @@ export default {
                 }
 
                 try {
-                    const text = line.replace("data: ", "");
+                    let text = line;
+                    if (text.indexOf("data: ") == 0) {
+                        text = text.substring(6);
+                    }
+
+                    if (text.indexOf("data:") == 0) {
+                        text = text.substring(5);
+                    }
+
                     if (text == "[DONE]") {
                         updateMessage(
                             "",

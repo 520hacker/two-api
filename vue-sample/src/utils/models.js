@@ -54,7 +54,9 @@ export function getSameChannelModels(id) {
 export function getCheepModel(cur_model) {
     const validModels = [
         "suno-v3",
+        "suno-v3.5",
         "sora-1.0-turbo",
+        "luma-video",
         "pika-text-to-video",
         "domo-img-to-video",
         "net-gpt-3.5-turbo-16k",
@@ -73,10 +75,21 @@ export function getCheepModel(cur_model) {
         "gpt-4-1106-preview",
         "gpt-4-1106-vision-preview",
         "gpt-4-gizmo-g",
+        "yuanqi",
         "gpt-4-vision-preview",
+        "gpt-4o",
+        "gpt-4o-all",
+        "gpt-4-0125-preview",
+        "gpt-4-turbo-2024-04-09",
+        "chirp-v3-0",
+        "chirp-v2-xxl-alpha",
+        "domo-video-to-video",
+        "deepseek-coder",
         "dall-e-3",
         "dall-e-2",
         "gemini-pro-vision",
+        "gemini-1.5-flash-latest",
+        "gemini-1.5-pro-latest",
         'mj',
         'mj-chat',
         'midjourney',
@@ -84,6 +97,7 @@ export function getCheepModel(cur_model) {
         "claude-3-opus-20240229",
         "claude-3-sonnet-20240229",
         "claude-3-haiku-20240307",
+        "claude-3-5-sonnet-20240620",
         "yi-34b-chat-200k",
         "yi-vl-plus",
         'characterglm',
@@ -104,10 +118,18 @@ export function getCheepModel(cur_model) {
         "embedding-gecko-001",
         "embedding-gecko-002",
         "text-embedding-3-small",
-        "text-embedding-3-large"
+        "text-embedding-3-large",
+        "Baichuan4",
+        "Baichuan3-Turbo-128k",
+        "glm-4",
+        "glm-4-air",
+        "glm-4-520",
+        "qwen-max",
+        "ERNIE-Bot-Pro",
+        "ernie-4.0"
     ];
 
-    if (validModels.includes(cur_model)) {
+    if (validModels.includes(cur_model) || cur_model.indexOf("gpt-4-gizmo-g") > -1 || cur_model.indexOf("yuanqi-") > -1) {
         cur_model = 'gpt-3.5-turbo-16k';
     }
 
@@ -791,7 +813,162 @@ export function getAllModelInfos() {
             "id": "132",
             "channelType": "deepseek",
             "label": "deepseek-coder"
-        }
+        },
+        {
+            "id": "133",
+            "channelType": "openai",
+            "label": "gpt-4o"
+        },
+        {
+            "id": "134",
+            "channelType": "openai",
+            "label": "gpt-4-0125-preview"
+        },
+        {
+            "id": "135",
+            "channelType": "chirp",
+            "label": "chirp-v3-0",
+        },
+        {
+            "id": "136",
+            "channelType": "chirp",
+            "label": "chirp-v2-xxl-alpha"
+        },
+        {
+            "id": "137",
+            "channelType": "domo",
+            "label": "domo-video-to-video"
+        },
+        {
+            "id": "138",
+            "channelType": "tencent",
+            "label": "yuanqi-Cm2yPJjfGhtr"
+        },
+        {
+            "id": "139",
+            "channelType": "tencent",
+            "label": "yuanqi-rIUozU0pemV2"
+        },
+        {
+            "id": "140",
+            "channelType": "tencent",
+            "label": "yuanqi-mdQAL8rzCYDN"
+        },
+        {
+            "id": "141",
+            "channelType": "Baichuan",
+            "label": "Baichuan3-Turbo"
+        },
+        {
+            "id": "142",
+            "channelType": "Baichuan",
+            "label": "Baichuan4"
+        },
+        {
+            "id": "143",
+            "channelType": "Baichuan",
+            "label": "Baichuan3-Turbo-128k"
+        },
+        {
+            "id": "144",
+            "channelType": "Baichuan",
+            "label": "Baichuan2-Turbo"
+        },
+        {
+            "id": "145",
+            "channelType": "Baichuan",
+            "label": "Baichuan2-Turbo-192k"
+        },
+        {
+            "id": "146",
+            "channelType": "baidu",
+            "label": "ERNIE-Speed"
+        },
+        {
+            "id": "147",
+            "channelType": "baidu",
+            "label": "ERNIE-Lite"
+        },
+        {
+            "id": "148",
+            "channelType": "baidu",
+            "label": "ERNIE-Tiny"
+        },
+        {
+            "id": "149",
+            "channelType": "tencent",
+            "label": "yuanqi-vlLakgxQ54Kv"
+        },
+        {
+            "id": "150",
+            "channelType": "chatglm",
+            "label": "glm-4-air"
+        },
+        {
+            "id": "151",
+            "channelType": "chatglm",
+            "label": "glm-4-520"
+        },
+        {
+            "id": "152",
+            "channelType": "tencent",
+            "label": "hunyuan-lite"
+        },
+        {
+            "id": "153",
+            "channelType": "xunfei",
+            "label": "general"
+        },
+        {
+            "id": "154",
+            "channelType": "xunfei",
+            "label": "generalv3"
+        },
+        {
+            "id": "155",
+            "channelType": "xunfei",
+            "label": "generalv3.5"
+        },
+        {
+            "id": "156",
+            "channelType": "google",
+            "label": "gemini-1.5-pro-latest"
+        },
+        {
+            "id": "157",
+            "channelType": "google",
+            "label": "gemini-1.5-flash-latest"
+        },
+        {
+            "id":"158",
+            "channelType": "pika",
+            "label":"luma-video"
+        },
+        {
+            "id": "159",
+            "channelType": "suno",
+            "label": "suno-v3.5"
+        },
+        {
+            "id": "160",
+            "channelType": "claude",
+            "label": "claude-3-5-sonnet-20240620"
+        },
+        {
+            "id": "161",
+            "channelType": "openai",
+            "label": "gpt-4o-all"
+        },
+        {
+            "id": "162",
+            "channelType": "xunfei",
+            "label": "generalv2"
+        },
+        {
+            "id": "163",
+            "channelType": "xunfei",
+            "label": "generalv4"
+        },
     ];
 
     return models;

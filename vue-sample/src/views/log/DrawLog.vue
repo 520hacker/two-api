@@ -4,7 +4,7 @@
     color: #999;
 }
 
-.el-card{
+.el-card {
     word-break: break-all;
 }
 
@@ -99,6 +99,7 @@ span.el-pagination__jump {
     border-radius: 3px;
     width: auto;
     max-width: 50px;
+    max-height: 50px;
 }
 </style>
 
@@ -122,19 +123,32 @@ span.el-pagination__jump {
                 <el-card :body-style="{ padding: '0px' }">
                     <div class="el-main-image">
                         <el-image :key="o.images[o.images.length - 1]"
-                            :src="'https://static2oss.qiangtu.com/o?plus=w_500&url=' + o.images[o.images.length - 1]"
+                            :src="'https://static2oss.qiangtu.com/o?plus=w_500&url=' + encodeURIComponent(o.images[o.images.length - 1])"
                             lazy :zoom-rate="1.2" :max-scale="7" :min-scale="0.2"
                             :preview-src-list="addPrefixToItems(o.images, 'https://static2oss.qiangtu.com/o?plus=w_5000&url=')"
-                            :initial-index="o.images.length - 1" fit="cover">
+                            :initial-index="o.images.length - 1" fit="cover" @load="onImageLoad(this, index)"
+                            :ref="`image${index}`">
                             <template #error>
                                 <div class="image-slot">
                                     <span class="expired">
-                                        图片不在家
+                                        CDN 转存失败,原图:
+                                        <el-image :src="o.images[o.images.length - 1]" alt="图片不在家"
+                                            style="max-width: 100%;" :preview-src-list="o.images" />
                                     </span>
                                 </div>
-                            </template></el-image>
+                            </template>
+                        </el-image>
                     </div>
-                    <div class="el-thumbnail" v-if="o.images.length > 1">
+                    <div class="el-thumbnail" v-if="model == 'mj' && previewLoaded[index] == true">
+                        <el-image v-for="item, index2 in splitedImages[index]" :key="item" :src="item" lazy
+                            :zoom-rate="1.2" :max-scale="7" :min-scale="0.2" :preview-src-list="splitedImages[index]"
+                            :initial-index="index2" fit="cover">
+                            <template #error>
+                                <span></span>
+                            </template>
+                        </el-image>
+                    </div>
+                    <div class="el-thumbnail" v-if="uniqueStrings(o.images).length > 1">
                         <el-image v-for="item, index in uniqueStrings(o.images)" :key="item"
                             :src="'https://static2oss.qiangtu.com/o?plus=w_50&url=' + item" lazy :zoom-rate="1.2"
                             :max-scale="7" :min-scale="0.2"
@@ -168,18 +182,22 @@ span.el-pagination__jump {
 import { useRoute } from 'vue-router';
 import { timestampToDate } from '@/utils/date'
 import { getDrawLog } from '../../api/logs'
-import { watch, ref } from 'vue';
+import { watch, ref, onMounted } from 'vue';
 export default {
     name: 'DrawLog',
     setup() {
         const route = useRoute();
         const list = ref([])
+        const previewLoaded = ref([])
+        const splitedImages = ref([])
+        const elImage = ref([])
+        // const elImage1 = ref(null)
         const loading = ref(true)
         const currentPage = ref(1)
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4-gizmo-g'])
+        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4o', 'gpt-4-gizmo-g'])
 
         watch(
             // 路由参数发生变化时重新加载数据
@@ -190,22 +208,33 @@ export default {
             },
         );
 
+        onMounted(() => {
+            // console.log(elImage1.value)
+        })
+
         if (route.params.id && route.params.id.length > 0) {
             model.value = route.params.id
         }
+
         const addPrefixToItems = (arr, prefix) => {
             return arr.map(item => prefix + item);
         }
+
         const uniqueStrings = (arr) => {
             var unique = {};
             arr.forEach(function (i) {
-                // console.log(i)
                 if (i.indexOf('filesystem.site/cdn/download') < 0) {
-                    // console.log('v')
                     unique[i] = true;
                 }
             });
             return Object.keys(unique);
+        }
+
+        const onImageLoad = (e, index) => {
+            const imageComponent = e.$refs[`image${index}`][0].$el.querySelector('img');
+            elImage.value[index] = imageComponent
+            previewLoaded.value[index] = true
+            splitImage(index)
         }
 
         const load = () => {
@@ -223,6 +252,47 @@ export default {
             });
         }
 
+        const splitImage = (index) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.src = elImage.value[index].src.replace('w_500', 'w_5000');
+            img.onerror = function (err) {
+                console.log('图片加载失败' + index);
+                console.log(err);
+            };
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const partWidth = img.width / 2;
+                const partHeight = img.height / 2;
+                canvas.width = partWidth;
+                canvas.height = partHeight;
+
+                const positions = [
+                    [0, 0],
+                    [partWidth, 0],
+                    [0, partHeight],
+                    [partWidth, partHeight]
+                ];
+
+                splitedImages.value[index] = []
+                positions.forEach((pos, index3) => {
+                    ctx.clearRect(0, 0, partWidth, partHeight)
+                    ctx.drawImage(img, pos[0], pos[1], partWidth, partHeight, 0, 0, partWidth, partHeight)
+
+                    try {
+                        canvas.toBlob(blob => {
+                            let newUrl = URL.createObjectURL(blob)
+                            console.log(newUrl)
+                            splitedImages.value[index][index3] = newUrl
+                        });
+                    } catch (e) {
+                        console.log(e)
+                    }
+                });
+            }
+        };
+
         const formatDesc = () => {
             for (var index in list.value) {
                 list.value[index].content = list.value[index].prompt
@@ -236,6 +306,12 @@ export default {
         }
         load()
         return {
+            splitImage,
+            splitedImages,
+            onImageLoad,
+            previewLoaded,
+            elImage,
+            // elImage1,
             loading,
             totalCount,
             currentPage,

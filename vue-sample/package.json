@@ -8,7 +8,7 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --no-source-map",
     "lint": "vue-cli-service lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

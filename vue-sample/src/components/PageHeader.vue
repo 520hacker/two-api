@@ -13,8 +13,8 @@
                             :class="'link-item link is-menu-link ' + (pathname == '/' ? 'active' : '')">首页</router-link>
                         <router-link to="/article/generator" :class="'link-item link is-menu-link ' +
                             (pathname == '/article/generator' ? 'active' : '')">长篇</router-link>
-                        <router-link to="/log/video/suno-v3" :class="'link-item link is-menu-link ' +
-                            (pathname == '/log/video/suno-v3' ? 'active' : '')">影片</router-link>
+                        <router-link to="/log/video/suno-v3.5" :class="'link-item link is-menu-link ' +
+                            (pathname == '/log/video/suno-v3.5' ? 'active' : '')">影片</router-link>
                         <router-link to="/log/draw/mj" :class="'link-item link is-menu-link ' +
                             (pathname == '/log/draw/mj' ? 'active' : '')">图册</router-link>
                         <a href="https://yibu.qiangtu.com" target="_blank" class="link-item link is-menu-link">插件</a>

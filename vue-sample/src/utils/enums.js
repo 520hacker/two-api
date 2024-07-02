@@ -11,7 +11,7 @@ export function getMainMenus() {
                         { title: "+ 撰稿", href: "/go/4" },
                         { title: "+ 视频", href: "/go/5" },
                         { title: "+ 绘图", href: "/go/6" },
-                        { title: "+ 功能", href: "/go/7" }, 
+                        { title: "+ 功能", href: "/go/7" },
                     ]
                 }
             ]
@@ -25,9 +25,10 @@ export function getMainMenus() {
                         { title: "<=默认", href: "/go/1" },
                         { title: "哄哄模拟", href: "/chat/base/120/7" },
                         { title: "助手", href: "/chat/base/3/4" },
-                        { title: "祖母", href: "/chat/base/5/72" },
+                        { title: "祖母", href: "/chat/base/5/138" },
                         { title: "半仙", href: "/chat/base/4/72" },
-                        { title: "佛祖", href: "/chat/base/106/8" },
+                        { title: "算仙", href: "/chat/base/135/77/984qxMQkT" },
+                        { title: "禅师", href: "/chat/base/106/139" },
                         { title: "牛破天", href: "/chat/base/102/72" },
                         { title: "分析师", href: "/chat/base/6/72" },
                         { title: "DBA", href: "/chat/base/104/72" },
@@ -44,6 +45,7 @@ export function getMainMenus() {
                         { title: "<=默认", href: "/go/1" },
                         { title: "长文编撰", href: "/article/generator" },
                         { title: "优秀文笔", href: "/chat/base/118/77/dse9iXvor" },
+                        { title: "生成PPT", href: "/chat/base/131/77/Gt6Z8pqWF" },
                         { title: "理解图片", href: "/chat/base/112/70" },
                         { title: "文档阅读", href: "/chat/base/113/69" },
                         { title: "语法优化", href: "/chat/base/1/7" },
@@ -61,12 +63,15 @@ export function getMainMenus() {
                     "title": "视频AI",
                     "links": [
                         { title: "<=默认", href: "/go/1" },
-                        { title: "SORA", href: "/chat/base/121/115" },
+                        { title: "LUMA", href: "/chat/base/137/158" },
+                        { title: "LUMA集", href: "/log/video/luma-video" },
                         { title: "PIKA", href: "/chat/base/125/123" },
                         { title: "PIKA集", href: "/log/video/pika-text-to-video" },
+                        { title: "SUNO", href: "/chat/base/127/159" },
+                        { title: "SUNO集", href: "/log/video/suno-v3" },
+                        { title: "SORA", href: "/chat/base/121/115" },
                         { title: "DOMO", href: "/chat/base/126/124" },
-                        { title: "SUNO", href: "/chat/base/127/125" },
-                        { title: "SUNO集", href: "/log/video/suno-v3" }
+                        { title: "Chirp", href: "/chat/base/126/135" }
                     ]
                 }
             ]
@@ -97,15 +102,18 @@ export function getMainMenus() {
                         { title: "智谱", href: "/chat/base/12/99" },
                         { title: "一言", href: "/chat/base/3/34" },
                         { title: "星火", href: "/chat/base/123/108" },
+                        // { title: "元器", href: "/chat/base/132/140" },
+                        { title: "百川", href: "/chat/base/133/141" },
+                        { title: "混元", href: "/chat/base/134/140" },
                         { title: "智脑", href: "/chat/base/11/45" },
                         { title: "千问", href: "/chat/base/115/78" },
                         { title: "Yi", href: "/chat/base/124/121" },
                         { title: "STEP", href: "/chat/base/128/128" },
+                        { title: "DeepSeek", href: "/chat/base/130/131" },
                         { title: "WBot", href: "/chat/base/129/126" },
                         { title: "Claude", href: "/chat/base/122/116" },
                         { title: "OpenAI", href: "/chat/base/13/11" },
                         { title: "Gemini", href: "/chat/base/117/95" },
-                        { title: "DeepSeek", href: "/chat/base/130/131" },
                         // { title: "Bing", href: "/chat/base/119/64" },
                     ]
                 }
@@ -118,6 +126,9 @@ export function getMainMenus() {
                     "title": "撰稿人",
                     "links": [
                         { title: "<=默认", href: "/go/1" },
+                        { title: "宇辉文风", href: "/chat/base/118/77/dse9iXvor" },
+                        { title: "评书文风", href: "/chat/base/136/77/HoVcPBOz2" },
+                        { title: "废话大师", href: "/chat/base/132/149" },
                         { title: "周报", href: "/chat/base/110/8" },
                         { title: "助手", href: "/chat/base/3/72" },
                         { title: "小说家", href: "/chat/base/2/72" },

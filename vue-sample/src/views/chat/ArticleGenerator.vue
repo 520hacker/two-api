@@ -511,7 +511,15 @@ ${desc}
                 }
 
                 try {
-                    const text = line.replace("data: ", "");
+                    let text = line;
+                    if(text.indexOf("data: ")==0){
+                        text = text.substring(6);
+                    }
+
+                    if(text.indexOf("data:")==0){
+                        text = text.substring(5);
+                    }
+                    
                     if (text == "[DONE]") {
                         loading.value = false
                         form.value.list[index].images = extractImageLinks(result)
