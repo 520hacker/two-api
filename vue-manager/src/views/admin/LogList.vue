@@ -227,7 +227,7 @@ export default {
         const tableData = ref([]);
         const loadList = () => {
             types.value = getAllLogTypes();
-            models.value = getAllModels(0);
+            models.value = getAllModels(1);
             loading.value = true
 
             getLogs({

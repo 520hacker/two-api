@@ -56,7 +56,7 @@ export function getDefaultOptions() {
                 "type": 1,
                 "updateTimeonConnection": true
             }
-        }, 
+        },
         {
             value: 'CustomErrors',
             label: '自定义错误消息',
@@ -153,8 +153,13 @@ export function getDefaultOptions() {
             default: {
                 "360GPT_S2_V9": 0.8572,
                 "360GPT_S2_V9.4": 0.8572,
+
                 "ERNIE-Bot": 0.8572,
                 "ERNIE-Bot-turbo": 0.5715,
+                "ERNIE-Bot-8K": 1,
+                "ERNIE-3.5-8K": 1,
+                "ERNIE-4.0-8K": 1,
+
                 "Embedding-V1": 0.1429,
                 "PaLM-2": 1,
                 "SparkDesk": 0.8572,
@@ -164,8 +169,27 @@ export function getDefaultOptions() {
                 "chatglm_lite": 0.1429,
                 "chatglm_pro": 0.7143,
                 "chatglm_std": 0.3572,
-                "glm-4": 1,
+
+                "glm-4": 40,
+                "glm-4-air": 0.4,
+                "glm-4-520": 50,
+                "glm-4v": 30,
+                "glm-3-turbo": 0.2, 
+                "cogview-3": 2,
+
+                "yi-34b-chat-0205": 1,
+                "yi-34b-chat-200k": 15,
+                "yi-vl-plus": 30,
+
+                "pika-text-to-video": 120,
+                "domo-img-to-video": 120,
+                "suno-v3": 30,
+
                 "claude-2": 5.51,
+                "claude-3": 15,
+                "claude-3-opus-20240229": 15,
+                "claude-3-sonnet-20240229": 10,
+                "claude-3-haiku-20240307": 5,
                 "claude-instant-1": 0.815,
                 // "code-davinci-edit-001": 10,
                 "curie": 10,
@@ -180,6 +204,8 @@ export function getDefaultOptions() {
                 "gpt-3.5-turbo-0613": 0.75,
                 "gpt-3.5-turbo-16k": 1.5,
                 "gpt-3.5-turbo-16k-0613": 2,
+
+
                 "gpt-4": 15,
                 "gpt-4-0314": 15,
                 "gpt-4-0613": 15,
@@ -194,6 +220,17 @@ export function getDefaultOptions() {
                 "gpt-4-32k": 30,
                 "gpt-4-32k-0314": 30,
                 "gpt-4-32k-0613": 30,
+
+                "gpt-4o": 15,
+                "gpt-4-0125-preview": 30,
+                "gpt-4-turbo": 30,
+                "gpt-4-turbo-2024-04-09": 30,
+                "chirp-v3-0": 60,
+                "chirp-v2-xxl-alpha": 60,
+                "domo-video-to-video": 60,
+                "deepseek-chat": 0.1,
+                "deepseek-coder": 0.1,
+
                 "qwen-plus-v1": 0.5715,
                 "qwen-plus": 0.5715,
                 "qwen-v1": 0.8572,
@@ -216,14 +253,16 @@ export function getDefaultOptions() {
                 "moonshot-v1-32k": 0.8572,
                 "moonshot-v1-128k": 0.8572,
                 "hunyuan": 10,
+                "yuanqi": 10,
                 "gemini-pro": 2,
+                "gemini-1.5-pro": 10,
+                "gemini-1.5-flash": 5,
                 "gemini-pro-vision": 2,
 
                 "gpt-3.5-turbo-0125": 1,
                 "text-embedding-3-small": 1,
                 "text-embedding-3-large": 1,
                 "gpt-4-turbo-preview": 1,
-                "gpt-4-0125-preview": 1,
                 "text-moderation-007": 1
             }
         },
@@ -392,6 +431,9 @@ export function getActivatedChannelTypes() {
     }, {
         "value": 13,
         "label": "百川AI",
+    }, {
+        "value": 15,
+        "label": "腾讯",
     }]
 }
 
@@ -432,6 +474,10 @@ export function get40Models() {
         "gpt-4-32k-0314",
         "gpt-4-32k-0613",
         "gpt-4-1106-preview",
+        "gpt-4o",
+        "gpt-4-0125-preview",
+        "gpt-4-turbo",
+        "gpt-4-turbo-2024-04-09"
     ];
 }
 
@@ -444,6 +490,8 @@ export function getAllModels(channelType = -1) {
             "embedding-gecko-002",
             "text-bison-001",
             "gemini-pro",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash",
             "gemini-pro-vision",
             "gemini-ultra",
             "aqa",
@@ -462,6 +510,9 @@ export function getAllModels(channelType = -1) {
             "ERNIE-Bot",
             "ERNIE-Bot-turbo",
             "ERNIE-Bot-Pro",
+            "ERNIE-Bot-8K",
+            "ERNIE-3.5-8K",
+            "ERNIE-4.0-8K"
         ]
     }
 
@@ -478,14 +529,23 @@ export function getAllModels(channelType = -1) {
             "baichuan-7b-v1"]
     }
 
+    if (channelType == 15) {
+        return ["yuanqi"]
+    }
+
     if (channelType == 5) {
         return [
             "ChatGLM_Turbo",
             "chatglm_pro",
             "chatglm_std",
             "chatglm_lite",
-            "characterglm",
-            "glm-4"
+            "charglm-3",
+            "glm-4",
+            "glm-4-air",
+            "glm-4-520",
+            "glm-4v",
+            "glm-3-turbo",
+            "cogview-3"
         ]
     }
 
@@ -537,6 +597,16 @@ export function getAllModels(channelType = -1) {
             "gpt-4-1106-vision-preview",
             "gpt-4-gizmo-g",
 
+            "gpt-4o",
+            "gpt-4-0125-preview",
+            "gpt-4-turbo",
+            "gpt-4-turbo-2024-04-09",
+            "chirp-v3-0",
+            "chirp-v2-xxl-alpha",
+            "domo-video-to-video",
+            "deepseek-chat",
+            "deepseek-coder",
+
             "gpt-3.5-turbo-0125",
             "text-embedding-3-small",
             "text-embedding-3-large",
@@ -553,10 +623,20 @@ export function getAllModels(channelType = -1) {
             "code-llama-34b",
             "code-llama-13b",
             "code-llama-7b",
+            "yi-34b-chat-0205",
+            "yi-34b-chat-200k",
+            "yi-vl-plus",
             "claude-1-100k",
             "claude-2-100k",
             "claude-instant-1",
+            "pika-text-to-video",
+            "domo-img-to-video",
+            "suno-v3",
             "claude-2",
+            "claude-3",
+            "claude-3-opus-20240229",
+            "claude-3-sonnet-20240229",
+            "claude-3-haiku-20240307",
             "net-gpt-3.5-turbo-16k",
             "net-gpt-4",
             "midjourney",
@@ -573,13 +653,23 @@ export function getAllModels(channelType = -1) {
             "ERNIE-Bot",
             "ERNIE-Bot-turbo",
             "ERNIE-Bot-Pro",
+            "ERNIE-Bot-8K",
+            "ERNIE-3.5-8K",
+            "ERNIE-4.0-8K",
+
             "chatglm",
             "chatglm_pro",
             "chatglm_std",
             "chatglm_lite",
-            "characterglm",
+            "charglm-3",
             "chatglm-6b-v2",
+
+            "glm-3-turbo",
             "glm-4",
+            "glm-4-air",
+            "glm-4-520",
+            "glm-4v",
+            "cogview-3",
             "qwen-v1",
             "qwen-plus-v1",
             "qwen-max-v1",
@@ -625,12 +715,15 @@ export function getAllModels(channelType = -1) {
             "moonshot-v1-32k",
             "moonshot-v1-128k",
             "hunyuan",
+            "yuanqi",
             "chat-bison-00",
             "embedding-001",
             "embedding-gecko-001",
             "embedding-gecko-002",
             "text-bison-001",
             "gemini-pro",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash",
             "gemini-pro-vision",
             "gemini-ultra",
             "aqa",
@@ -659,6 +752,14 @@ export function getAllModels(channelType = -1) {
             "gpt-4-vision-preview",
             "gpt-4-1106-preview",
             "gpt-4-1106-vision-preview",
+
+            "gpt-4o",
+            "gpt-4-0125-preview",
+            "gpt-4-turbo",
+            "gpt-4-turbo-2024-04-09",
+
+
+
             "tts-1",
             "tts-1-1106",
             "tts-1-hd",
@@ -694,6 +795,8 @@ export function getChannelType(type) {
             return "百川AI"
         case 14:
             return "月之暗面"
+        case 15:
+            return "腾讯元器"
         default:
             return "未知"
     }
