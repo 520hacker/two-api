@@ -75,9 +75,12 @@ export function getCheepModel(cur_model) {
         "gpt-4-1106-preview",
         "gpt-4-1106-vision-preview",
         "gpt-4-gizmo-g",
+        "st-gpt-4o",
         "yuanqi",
         "gpt-4-vision-preview",
         "gpt-4o",
+        "gpt-4o-2024-08-06",
+        "gpt-4o-mini",
         "gpt-4o-all",
         "gpt-4-0125-preview",
         "gpt-4-turbo-2024-04-09",
@@ -92,6 +95,9 @@ export function getCheepModel(cur_model) {
         "gemini-1.5-pro-latest",
         'mj',
         'mj-chat',
+        "playground-v2.5",
+        'flux',
+        "stable-diffusion-3-2b",
         'midjourney',
         'claude-3',
         "claude-3-opus-20240229",
@@ -122,6 +128,7 @@ export function getCheepModel(cur_model) {
         "Baichuan4",
         "Baichuan3-Turbo-128k",
         "glm-4",
+        "glm-4-alltools",
         "glm-4-air",
         "glm-4-520",
         "qwen-max",
@@ -130,7 +137,7 @@ export function getCheepModel(cur_model) {
     ];
 
     if (validModels.includes(cur_model) || cur_model.indexOf("gpt-4-gizmo-g") > -1 || cur_model.indexOf("yuanqi-") > -1) {
-        cur_model = 'gpt-3.5-turbo-16k';
+        cur_model = 'gpt-4o-mini';
     }
 
     return cur_model;
@@ -306,12 +313,12 @@ export function getAllModelInfos() {
         },
         {
             "id": "31",
-            "channelType": "midjourney",
+            "channelType": "draw",
             "label": "midjourney"
         },
         {
             "id": "32",
-            "channelType": "midjourney",
+            "channelType": "draw",
             "label": "mj"
         },
         {
@@ -656,7 +663,7 @@ export function getAllModelInfos() {
         },
         {
             "id": "101",
-            "channelType": "midjourney",
+            "channelType": "draw",
             "label": "mj-chat"
         },
         {
@@ -820,11 +827,6 @@ export function getAllModelInfos() {
             "label": "gpt-4o"
         },
         {
-            "id": "134",
-            "channelType": "openai",
-            "label": "gpt-4-0125-preview"
-        },
-        {
             "id": "135",
             "channelType": "chirp",
             "label": "chirp-v3-0",
@@ -940,9 +942,9 @@ export function getAllModelInfos() {
             "label": "gemini-1.5-flash-latest"
         },
         {
-            "id":"158",
+            "id": "158",
             "channelType": "pika",
-            "label":"luma-video"
+            "label": "luma-video"
         },
         {
             "id": "159",
@@ -969,6 +971,86 @@ export function getAllModelInfos() {
             "channelType": "xunfei",
             "label": "generalv4"
         },
+        {
+            "id": "164",
+            "channelType": "openai",
+            "label": "gpt-4o-mini"
+        },
+        {
+            "id": "165",
+            "channelType": "chatglm",
+            "label": "glm-4-alltools"
+        },
+        {
+            "id": "166",
+            "channelType": "openai",
+            "label": "st-gpt-4o"
+        },
+        {
+            "id": "167",
+            "channelType": "draw",
+            "label": "playground-v2.5"
+        },
+        {
+            "id": "168",
+            "channelType": "draw",
+            "label": "stable-diffusion-3-2b"
+        },
+        {
+            "id": "169",
+            "channelType": "meta",
+            "label": "llama-3.1-8b"
+        },
+        {
+            "id": "170",
+            "channelType": "meta",
+            "label": "llama-3.1-70b"
+        },
+        {
+            "id": "171",
+            "channelType": "meta",
+            "label": "llama-3.1-405b"
+        },
+        {
+            "id": "172",
+            "channelType": "360",
+            "label": "360gpt-pro"
+        },
+        {
+            "id": "173",
+            "channelType": "360",
+            "label": "360gpt2-pro"
+        },
+        {
+            "id": "174",
+            "channelType": "360",
+            "label": "360gpt-turbo-responsibility-8k"
+        },
+        {
+            "id": "175",
+            "channelType": "360",
+            "label": "360gpt-turbo"
+        },
+        {
+            "id": "176",
+            "channelType": "vidu",
+            "label": "vidu-vip-video"
+        },
+        {
+            "id": "177",
+            "channelType": "vidu",
+            "label": "vidu-video"
+        },
+        {
+            "id": "178",
+            "channelType": "flux",
+            "label": "flux"
+        },
+        {
+            "id": "179",
+            "channelType": "openai",
+            "label": "gpt-4o-2024-08-06",
+        }
     ];
 
     return models;

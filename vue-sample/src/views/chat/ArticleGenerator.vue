@@ -2,6 +2,7 @@
 .article-generator-list-images {
     padding-top: 10px;
 }
+
 .article-generator-list-images .el-image {
     display: inline-block;
 }
@@ -512,14 +513,14 @@ ${desc}
 
                 try {
                     let text = line;
-                    if(text.indexOf("data: ")==0){
+                    if (text.indexOf("data: ") == 0) {
                         text = text.substring(6);
                     }
 
-                    if(text.indexOf("data:")==0){
+                    if (text.indexOf("data:") == 0) {
                         text = text.substring(5);
                     }
-                    
+
                     if (text == "[DONE]") {
                         loading.value = false
                         form.value.list[index].images = extractImageLinks(result)
@@ -638,10 +639,11 @@ ${desc}
                 message: '索引使用高级AI,速度较慢，请耐心等待!',
             })
 
-            var params = initBaseMessage(messages, "gpt-4", false)
+            var params = initBaseMessage(messages, "gpt-4o-mini", false)
             makeSingleChat(params).then(data => {
                 try {
-                    var json = data.choices[0].message.content
+                    var content = data.choices[0].message.content
+                    var json = content.trim()
                     form.value.list = processContent(json)
                 } catch (err) {
                     console.log(err)
@@ -652,18 +654,45 @@ ${desc}
             })
         }
 
+ 
         const processContent = (content) => {
-            // console.log(content)
-            // 去除markdown代码标记
-            content = content.replace(/^```json\n/, "").replace(/```\s*$/, "");
-            // console.log(content)
-            // 替换引号
-            content = content.replace(/“/g, "\"").replace(/”/g, "\"");
-            // console.log(content)
-            // 转换为JSON对象
-            var jsonContent = JSON.parse(content.trim());
-            return jsonContent;
+            // 匹配包含 JSON 类型标记的 Markdown 代码块
+            const jsonWithTypeRegex = /```json\n([\s\S]*?)\n```/;
+            const jsonWithTypeMatch = content.match(jsonWithTypeRegex);
+            if (jsonWithTypeMatch && jsonWithTypeMatch[1]) {
+                const jsonString = jsonWithTypeMatch[1].replace(/"/g, '"').replace(/"/g, '"').trim();
+                try {
+                    return JSON.parse(jsonString);
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                    return null;
+                }
+            }
+
+            // 匹配不包含 JSON 类型标记的 Markdown 代码块
+            const jsonWithoutTypeRegex = /```\n([\s\S]*?)\n```/;
+            const jsonWithoutTypeMatch = content.match(jsonWithoutTypeRegex);
+            if (jsonWithoutTypeMatch && jsonWithoutTypeMatch[1]) {
+                const jsonString = jsonWithoutTypeMatch[1].replace(/"/g, '"').replace(/"/g, '"').trim();
+                try {
+                    return JSON.parse(jsonString);
+                } catch (error) {
+                    console.error("Error parsing JSON:", error);
+                    return null;
+                }
+            }
+
+            // 匹配不包含在 Markdown 代码块中的 JSON 字符串
+            try {
+                return JSON.parse(content.trim());
+            } catch (error) {
+                alert("JSON格式错误:\n"+ content.trim())
+                console.error("Error parsing JSON:", error);
+                return null;
+            }
         }
+
+
 
         const handleStep0 = () => {
             step.value = 1

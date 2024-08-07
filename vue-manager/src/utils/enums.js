@@ -582,6 +582,7 @@ export function getAllModels(channelType = -1) {
             "gpt-3.5-turbo-1106",
             "gpt-3.5-turbo-instruct",
             "gpt-3.5-turbo-instruct-0914",
+            
             "gpt-4",
             "gpt-4-0314",
             "gpt-4-0613",
@@ -598,12 +599,18 @@ export function getAllModels(channelType = -1) {
             "gpt-4-gizmo-g",
 
             "gpt-4o",
+            "gpt-4o-mini",
+            "st-gpt-4o",
+
             "gpt-4-0125-preview",
             "gpt-4-turbo",
             "gpt-4-turbo-2024-04-09",
+
             "chirp-v3-0",
             "chirp-v2-xxl-alpha",
+
             "domo-video-to-video",
+
             "deepseek-chat",
             "deepseek-coder",
 
@@ -620,25 +627,37 @@ export function getAllModels(channelType = -1) {
             "llama-2-7b",
             "llama2-7b-chat-v2",
             "llama2-13b-chat-v2",
+
+            "luma-video",
+            "luma-video-vip",
+
             "code-llama-34b",
             "code-llama-13b",
             "code-llama-7b",
+
             "yi-34b-chat-0205",
             "yi-34b-chat-200k",
             "yi-vl-plus",
+
             "claude-1-100k",
             "claude-2-100k",
             "claude-instant-1",
+
             "pika-text-to-video",
             "domo-img-to-video",
+
             "suno-v3",
+
             "claude-2",
             "claude-3",
             "claude-3-opus-20240229",
             "claude-3-sonnet-20240229",
             "claude-3-haiku-20240307",
+            "claude-3-5-sonnet-20240620",
+
             "net-gpt-3.5-turbo-16k",
             "net-gpt-4",
+            
             "midjourney",
             "mj",
             "mj-chat",
@@ -647,6 +666,7 @@ export function getAllModels(channelType = -1) {
             "search-gpts",
             "gpts-search",
             "gpts-get",
+            
             "mistral-medium",
             "qwen-72b",
 
@@ -670,6 +690,8 @@ export function getAllModels(channelType = -1) {
             "glm-4-520",
             "glm-4v",
             "cogview-3",
+
+
             "qwen-v1",
             "qwen-plus-v1",
             "qwen-max-v1",
@@ -678,18 +700,23 @@ export function getAllModels(channelType = -1) {
             "qwen-max",
             "qwen-14b-chat",
             "qwen-7b-chat",
+
             "semantic_similarity_s1_v1",
             "SparkDesk",
             "SparkDesk2",
             "SparkDesk3",
             "SparkDesk3.5",
+
             "360GPT_S2_V9",
             "360GPT_S2_V9.4",
+
             "dall-e",
             "dall-e-2",
             "dall-e-3",
             "DALL·E 3",
+
             "stable-diffusion",
+
             "tts-1",
             "tts-1-1106",
             "tts-1-hd",
@@ -711,9 +738,12 @@ export function getAllModels(channelType = -1) {
             "embedding-bert-512-v1",
             "embedding_s1_v1",
             "Baichuan2-53B",
+
+            "kimi",
             "moonshot-v1-8k",
             "moonshot-v1-32k",
             "moonshot-v1-128k",
+
             "hunyuan",
             "yuanqi",
             "chat-bison-00",
@@ -727,6 +757,10 @@ export function getAllModels(channelType = -1) {
             "gemini-pro-vision",
             "gemini-ultra",
             "aqa",
+
+            "playground-v2.5",
+            "stable-diffusion-3-2b",
+            "flux"
         ];
     }
 

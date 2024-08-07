@@ -20,7 +20,7 @@
     "axios": "^1.4.0",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.8",
-    "element-plus": "^2.3.6",
+    "element-plus": "^2.7.8",
     "http-proxy-middleware": "^2.0.6",
     "json-editor-vue3": "^1.0.8",
     "mitt": "^3.0.0",

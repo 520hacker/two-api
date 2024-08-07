@@ -398,9 +398,9 @@ const prompts = [
     {
         suggestions: getRandomThree(drawPrompts),
         category: "Drawing",
-        name: "Dalle-3",
+        name: "繪圖助手",
         id: "114",
-        prompt: "[Dalle-3] 根据要求绘图"
+        prompt: "根据要求绘图"
     },
     {
         suggestions: getRandomThree(textPrompts),
@@ -661,7 +661,28 @@ const prompts = [
         name: "LUMA",
         id: "137",
         prompt: "you are LUMA, please create video As :"
-    }
+    },
+    {
+        suggestions: getRandomThree(textPrompts),
+        category: "Tool",
+        name: "Meta",
+        id: "138",
+        prompt: "你是强大的Meta AI"
+    },
+    {
+        suggestions: ['按照要求生成一个头像，返回给我图片'],
+        category: "Assistant",
+        name: "gpts-avatar",
+        id: "139",
+        prompt: "请基于要求创建图片，画出图片，返回给我"
+    },
+    {
+        suggestions: getRandomThree(soraPrompts),
+        category: "Assistant",
+        name: "VIDU",
+        id: "140",
+        prompt: "you are VIDU, please create video As :"
+    },
 ];
 
 export function getPrompts(id) {

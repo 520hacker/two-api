@@ -23,7 +23,7 @@ export function getMainMenus() {
                     "title": "人设",
                     "links": [
                         { title: "<=默认", href: "/go/1" },
-                        { title: "哄哄模拟", href: "/chat/base/120/7" },
+                        { title: "哄哄模拟", href: "/chat/base/120/164" },
                         { title: "助手", href: "/chat/base/3/4" },
                         { title: "祖母", href: "/chat/base/5/138" },
                         { title: "半仙", href: "/chat/base/4/72" },
@@ -46,10 +46,11 @@ export function getMainMenus() {
                         { title: "长文编撰", href: "/article/generator" },
                         { title: "优秀文笔", href: "/chat/base/118/77/dse9iXvor" },
                         { title: "生成PPT", href: "/chat/base/131/77/Gt6Z8pqWF" },
+                        { title: "生头像", href: "/chat/base/139/77/Wk77jayA0" },
                         { title: "理解图片", href: "/chat/base/112/70" },
                         { title: "文档阅读", href: "/chat/base/113/69" },
-                        { title: "语法优化", href: "/chat/base/1/7" },
-                        { title: "中英互译", href: "/chat/base/7/99" },
+                        { title: "语法优化", href: "/chat/base/1/164" },
+                        { title: "中英互译", href: "/chat/base/7/164" },
                         { title: "联网搜索", href: "/chat/base/8/5" },
                         { title: "网页总结", href: "/chat/summary/111/72" }
                     ]
@@ -63,15 +64,17 @@ export function getMainMenus() {
                     "title": "视频AI",
                     "links": [
                         { title: "<=默认", href: "/go/1" },
-                        { title: "LUMA", href: "/chat/base/137/158" },
-                        { title: "LUMA集", href: "/log/video/luma-video" },
-                        { title: "PIKA", href: "/chat/base/125/123" },
-                        { title: "PIKA集", href: "/log/video/pika-text-to-video" },
+                        { title: "VIDU", href: "/chat/base/140/177" },
+                        { title: "VIDU历史", href: "/log/video/vidu-video" },
                         { title: "SUNO", href: "/chat/base/127/159" },
-                        { title: "SUNO集", href: "/log/video/suno-v3" },
-                        { title: "SORA", href: "/chat/base/121/115" },
-                        { title: "DOMO", href: "/chat/base/126/124" },
-                        { title: "Chirp", href: "/chat/base/126/135" }
+                        { title: "SUNO历史", href: "/log/video/suno-v3.5" },
+                        // { title: "LUMA", href: "/chat/base/137/158" },
+                        { title: "LUMA历史", href: "/log/video/luma-video" },
+                        // { title: "PIKA", href: "/chat/base/125/123" },
+                        { title: "PIKA历史", href: "/log/video/pika-text-to-video" },
+                        // { title: "SORA", href: "/chat/base/121/115" },
+                        // { title: "DOMO", href: "/chat/base/126/124" },
+                        // { title: "Chirp", href: "/chat/base/126/135" }
                     ]
                 }
             ]
@@ -85,8 +88,16 @@ export function getMainMenus() {
                         { title: "<=默认", href: "/go/1" },
                         { title: "Midjourney", href: "/chat/base/9/101" },
                         { title: "MJ相册", href: "/log/draw/mj" },
+                        { title: "头像", href: "/chat/base/139/77/Wk77jayA0" },
+                        { title: "头像相册", href: "/log/draw/gpt-4-gizmo-g" },
                         { title: "Dalle-3", href: "/chat/base/114/17" },
-                        { title: "DL相册", href: "/log/draw/gpt-4-dalle" }
+                        { title: "DL相册", href: "/log/draw/gpt-4-dalle" },
+                        { title: "playground", href: "/chat/base/114/167" },
+                        { title: "PG相册", href: "/log/draw/playground-v2.5" },
+                        { title: "stable-diffusion", href: "/chat/base/114/168" },
+                        { title: "SD相册", href: "/log/draw/stable-diffusion-3-2b" },
+                        { title: "flux", href: "/chat/base/114/178" },
+                        { title: "flux相册", href: "/log/draw/flux" }
                     ]
                 }
             ]
@@ -112,8 +123,9 @@ export function getMainMenus() {
                         { title: "DeepSeek", href: "/chat/base/130/131" },
                         { title: "WBot", href: "/chat/base/129/126" },
                         { title: "Claude", href: "/chat/base/122/116" },
-                        { title: "OpenAI", href: "/chat/base/13/11" },
+                        { title: "OpenAI", href: "/chat/base/13/164" },
                         { title: "Gemini", href: "/chat/base/117/95" },
+                        { title: "Meta", href: "/chat/base/138/170" }
                         // { title: "Bing", href: "/chat/base/119/64" },
                     ]
                 }
@@ -150,6 +162,8 @@ export function getMainMenus() {
                     "links": [
                         { title: "<=默认", href: "/go/1" },
                         { title: "董宇辉说", href: "/chat/base/118/77/dse9iXvor" },
+                        { title: "画头像", href: "/chat/base/139/77/Wk77jayA0" },
+                        { title: "生成PPT", href: "/chat/base/131/77/Gt6Z8pqWF" },
                         { title: "图文故事", href: "/chat/base/8/77/56aUtyaYF" },
                         { title: "谐音梗🤪", href: "/chat/base/8/77/7nunLIRz8" },
                         { title: "清晰指南", href: "/chat/base/8/77/yIE7C91N3" },

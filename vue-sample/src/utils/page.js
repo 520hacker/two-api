@@ -37,3 +37,25 @@ export function copyToClipboard(content) {
             });
     }
 }
+
+export function maskIP(ip) {
+    try{
+        // 将IP地址按.分割成数组
+        let parts = ip.split('.');
+    
+        // 检查IP地址是否是有效的
+        if (parts.length !== 4) {
+            throw new Error("Invalid IP address");
+        }
+    
+        // 将最后两个部分替换为 *
+        parts[2] = '*';
+        parts[3] = '*';
+    
+        // 重新组合成新的IP地址
+        return parts.join('.');
+    }catch (error) {
+        console.error(error);
+        return "0.0.*.*";
+    }
+}

@@ -160,7 +160,7 @@ span.el-pagination__jump {
                         <span>{{ o.content }}</span>
                         <div class="bottom">
                             <time class="time">{{ timestampToDate(o.createAt) }}</time>
-                            <span class="ip">{{ o.ip }}</span>
+                            <span class="ip">{{ maskIP(o.ip) }}</span>
                         </div>
                     </div>
                 </el-card>
@@ -184,6 +184,7 @@ import { useRoute } from 'vue-router';
 import { timestampToDate } from '@/utils/date'
 import { getDrawLog } from '../../api/logs'
 import { watch, ref } from 'vue';
+import { maskIP } from '@/utils/page'
 export default {
     name: 'VideoLog',
     setup() {
@@ -194,8 +195,8 @@ export default {
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(["pika-text-to-video", "luma-video", "domo-img-to-video", "suno-v3", "suno-v3.5"])
-
+        const models = ref(["pika-text-to-video", "luma-video", "suno-v3", "suno-v3.5", "vidu-video"])
+        // "domo-img-to-video",
         watch(
             // 路由参数发生变化时重新加载数据
             () => route.params.id,
@@ -298,6 +299,7 @@ export default {
             // videoOptions,
             playVideo,
             // playPause,
+            maskIP,
             loading,
             totalCount,
             currentPage,

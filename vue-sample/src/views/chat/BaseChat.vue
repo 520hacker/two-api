@@ -88,6 +88,7 @@
                         <template #tip>
                             <div class="el-upload__tip">
                                 如果文件过大，可能会导致上传失败且仍然扣除积分。
+                                <pre>当前成功上传的图片：{{ getFirstImageUrl() }}</pre>
                             </div>
                         </template>
                     </el-upload>
@@ -105,7 +106,8 @@
                         </template>
                     </el-upload>
                 </div>
-                <el-alert v-if="chatContentList.length > 5" title="试试下方的绿色按钮和灰色按钮? 用好它们,你能方便的在你的多个会话中切换哦!" type="warning" />
+                <el-alert v-if="chatContentList.length > 5" title="试试下方的绿色按钮和灰色按钮? 用好它们,你能方便的在你的多个会话中切换哦!"
+                    type="warning" />
                 <div class="chat-button">
                     <div class="buttons">
                         <el-popconfirm title="确认删除?不能恢复的哦。" confirm-button-text="删除" cancel-button-text="再想想"
@@ -216,6 +218,7 @@ import { loadChat, saveChat } from '@/utils/browser_db'
 import { getPrompts } from '@/utils/prompts'
 import { getModel, getCheepModel, getMainModels } from '@/utils/models'
 import { scrollToBottom, copyToClipboard } from '@/utils/page'
+import { getSharedToken } from '@/utils/token'
 
 export default {
     name: 'BaseChat',
@@ -270,7 +273,7 @@ export default {
             model_id: 7
         })
         const uploadHeader = ref({
-            'Authorization': `Bearer ${localStorage.getItem('CSK')}`
+            'Authorization': `Bearer ${getSharedToken()}`
         })
         const handleSetTextArea = (txt) => {
             textareaContent.value = txt
@@ -304,6 +307,15 @@ export default {
                     console.log(err)
                 }
             });
+        }
+
+        const getFirstImageUrl = () => {
+            try {
+                console.log(fileList.value)
+                return fileList.value && fileList.value.length <= 0 ? "未上传" : fileList.value[0].response.item;
+            } catch {
+                return '未上传'
+            }
         }
 
         const addPrefixToItems = (arr, prefix) => {
@@ -408,6 +420,12 @@ export default {
 
         onMounted(() => {
             document.addEventListener('keydown', handleKeyDown);
+            let key = getSharedToken()
+
+            uploadHeader.value = {
+                'Authorization': `Bearer ${key}`,
+                'Test': 'application/json',
+            }
         });
 
         const handleKeyDown = (event) => {
@@ -459,11 +477,16 @@ export default {
             }
 
             model.value = getModel(route.params.mid)
+            console.log(model.value)
             if (model.value == 'gpt-4-v' ||
+                model.value.indexOf('gpt-4-gizmo-g') == 0 ||
                 model.value == 'domo-img-to-video' ||
                 model.value == 'gpt-4-vision-preview' ||
+                model.value == 'st-gpt-4o' ||
                 model.value.indexOf('vision') > 0 ||
-                model.value.indexOf('claude-3') > -1) {
+                model.value.indexOf('claude-3') > -1 ||
+                curChat.value.short_cut_id == 112 // check image
+            ) {
                 showImageUploader.value = true;
             } else {
                 showImageUploader.value = false;
@@ -710,6 +733,7 @@ export default {
             try {
                 var uploadFile = '';
                 if (fileList.value && fileList.value.length > 0) {
+                    console.log(fileList.value)
                     if (fileList.value.length > 1 && model.value == "luma-video") {
                         uploadFile = fileList.value[0].response.item + " " + fileList.value[1].response.item
                     }
@@ -738,6 +762,7 @@ export default {
                     uploadFile != '' && (
                         model.value == 'domo-img-to-video' ||
                         model.value == 'gpt-4-v' ||
+                        model.value.indexOf('gpt-4-gizmo-g') == 0 ||
                         model.value == 'gpt-4-all' ||
                         model.value == "gpt-4o" ||
                         model.value == "gpt-4o-all" ||
@@ -747,7 +772,10 @@ export default {
                     content = uploadFile + " " + content
                 }
 
-                if (model.value == 'gpt-4-vision-preview') {
+                console.log(model.value)
+                if (model.value == 'gpt-4-vision-preview' ||
+                    model.value == 'st-gpt-4o'
+                ) {
                     content = getDefaultVersionParam(content, uploadFile)
                 }
             }
@@ -801,10 +829,13 @@ export default {
         const sendAsync = async () => {
             var url = '/v1/chat/completions'
 
+            console.log('sendAsync')
             var messages = initMessages(chatContentList.value, cur_prompt.value.prompt)
+            console.log(messages)
             var model = getModelBySkey()
             var params = initBaseMessage(messages, model, true)
 
+            console.log(params)
             textareaContent.value = "";
 
             const lines = makeTextFileLineIterator(url, params);
@@ -986,7 +1017,7 @@ export default {
             loadArchives,
             getRequestContent,
             setShowLoading,
-
+            getFirstImageUrl,
             uploadHeader,
             preivewImageList,
             preivewImageUrl,

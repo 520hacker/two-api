@@ -163,7 +163,7 @@ span.el-pagination__jump {
                         <span>{{ o.content }}</span>
                         <div class="bottom">
                             <time class="time">{{ timestampToDate(o.createAt) }}</time>
-                            <span class="ip">{{ o.ip }}</span>
+                            <span class="ip">{{ maskIP(o.ip) }}</span>
                         </div>
                     </div>
                 </el-card>
@@ -183,6 +183,7 @@ import { useRoute } from 'vue-router';
 import { timestampToDate } from '@/utils/date'
 import { getDrawLog } from '../../api/logs'
 import { watch, ref, onMounted } from 'vue';
+import { maskIP } from '@/utils/page'
 export default {
     name: 'DrawLog',
     setup() {
@@ -197,7 +198,7 @@ export default {
         const pageSize = ref(21)
         const totalCount = ref(0)
         const model = ref('mj')
-        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4o', 'gpt-4-gizmo-g'])
+        const models = ref(['mj', 'gpt-4-dalle', 'gpt-4-v', 'gpt-4-all', 'gpt-4o', 'gpt-4-gizmo-g', 'playground-v2.5', 'stable-diffusion-3-2b','flux'])
 
         watch(
             // 路由参数发生变化时重新加载数据
@@ -229,6 +230,8 @@ export default {
             });
             return Object.keys(unique);
         }
+
+
 
         const onImageLoad = (e, index) => {
             const imageComponent = e.$refs[`image${index}`][0].$el.querySelector('img');
@@ -312,6 +315,7 @@ export default {
             previewLoaded,
             elImage,
             // elImage1,
+            maskIP,
             loading,
             totalCount,
             currentPage,

@@ -17,17 +17,17 @@ export default {
 
             if (id == "2") {
                 localStorage.setItem('job', "人设")
-                router.push(`/chat/base/3/76`);
+                router.push(`/chat/base/3/164`);
             }
 
             if (id == "3") {
                 localStorage.setItem('job', "对话AI")
-                router.push(`/chat/base/12/76`);
+                router.push(`/chat/base/12/164`);
             }
 
             if (id == "4") {
                 localStorage.setItem('job', "撰稿人")
-                router.push(`/chat/base/2/76`);
+                router.push(`/chat/base/2/164`);
             }
 
             if (id == "5") {

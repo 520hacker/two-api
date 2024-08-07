@@ -65,8 +65,8 @@
                         </div>
                         <el-divider border-style="dotted" style="margin: 10px 0 0 0;" />
                         <div class="mt-4">
-                            <el-input v-model="searchForm.keyword" placeholder="请输入名称关键词 keyword" class="input-with-select"
-                                @keydown.enter="loadList">
+                            <el-input v-model="searchForm.keyword" placeholder="请输入名称关键词 keyword"
+                                class="input-with-select" @keydown.enter="loadList">
                                 <template #prepend>
                                     <el-select v-model="searchForm.group" placeholder="Select" style="width: 115px">
                                         <el-option label="不限分组" value="all" />
@@ -81,9 +81,10 @@
                             </el-input>
                         </div>
                         <div class="mt-4">
-                            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :small="false"
-                                :disabled="false" :hide-on-single-page="true" :background="background"
-                                layout="prev,  jumper, next, ->, total" :total="totalCount" @current-change="loadList" />
+                            <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
+                                :small="false" :disabled="false" :hide-on-single-page="true" :background="background"
+                                layout="prev,  jumper, next, ->, total" :total="totalCount"
+                                @current-change="loadList" />
                         </div>
                     </div>
                     <el-divider border-style="dotted" style="margin: 10px 0 4px 0;" />
@@ -92,7 +93,7 @@
                             <template #default="props">
                                 <div m="4">
                                     <p m="t-0 b-2">id: {{ props.row.id }}</p>
-                                    <p m="t-0 b-2">分类: {{ getType(props.row.type) }}</p>
+                                    <p m="t-0 b-2">分类: {{ getType(props.row) }}</p>
                                     <p m="t-0 b-2">状态: {{ getStatus(props.row.status) }}</p>
                                     <p m="t-0 b-2">名称: {{ props.row.name }}</p>
                                     <p m="t-0 b-2">响应时间: {{ props.row.responseTime }}</p>
@@ -138,7 +139,7 @@
                         <el-table-column label="类型" width="100" sortable prop="type">
                             <template #default="props">
                                 <div m="4">
-                                    <p m="t-0 b-2">{{ getType(props.row.type) }}</p>
+                                    <p m="t-0 b-2">{{ getType(props.row) }}</p>
                                 </div>
                             </template>
                         </el-table-column>
@@ -162,13 +163,13 @@
                             <template #default="props">
                                 <div m="4">
                                     <el-tooltip class="box-item" effect="dark" content="点击进行更新" placement="top"
-                                        v-if="(props.row.baseUrl && props.row.baseUrl != '') || props.row.key.indexOf('sess') == 0">
+                                        v-if="!isOffical(props.row)">
                                         <p m="t-0 b-2" @click="getNewChannelBalance(props.row.id)"
-                                            style="cursor: pointer; text-align: center;">${{ props.row.balance.toFixed(2) }}
+                                            style="cursor: pointer; text-align: center;">${{
+                                                props.row.balance.toFixed(2) }}
                                         </p>
                                     </el-tooltip>
-                                    <el-text class="mx-1" type="primary" v-if="(!props.row.baseUrl || props.row.baseUrl == '') &&
-                                        (props.row.key.indexOf('sess') != 0)">官key</el-text>
+                                    <el-text class="mx-1" type="primary" v-if="isOffical(props.row)">官key</el-text>
                                 </div>
                             </template>
                         </el-table-column>
@@ -213,7 +214,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import { useRouter } from 'vue-router';
 import { getChannels, getChannelResponseTime, getChannelBalance, deleteChannel, updateChannel, getChannel } from '@/api/channel'
@@ -356,7 +357,51 @@ export default {
         const getStatus = (status) => {
             return getChannelStatus(status)
         }
-        const getType = (type) => {
+
+        const isOffical = (row) => {
+            var baseUrl = row.baseUrl;
+            switch (baseUrl) {
+                case 'hhttps://api.moonshot.cn':
+                case 'https://spark-api-open.xf-yun.com':
+                case 'https://api.siliconflow.cn':
+                case 'https://api.deepseek.com':
+                case 'https://api.stepfun.com':
+                case 'http://enbot.qiangtu.com':
+                case 'https://api.lingyiwanwu.com':
+                case 'https://aichat-openai.api.ecylt.top':
+                    return true;
+                default:
+                    break;
+            }
+
+            return (!row.baseUrl || row.baseUrl == '') &&
+                (row.key.indexOf('sess') != 0);
+        }
+
+        const getType = (row) => {
+            var baseUrl = row.baseUrl;
+            switch (baseUrl) {
+                case 'https://api.stepfun.com':
+                    return 'stepfun'
+                case 'https://spark-api-open.xf-yun.com':
+                    return 'XunFei'
+                case 'https://api.lingyiwanwu.com':
+                    return 'Yi'
+                case 'https://api.siliconflow.cn':
+                    return "siliconflow"
+                case 'https://api.deepseek.com':
+                    return "deepseek"
+                case 'https://api.moonshot.cn':
+                    return "moonshot"
+                case 'http://enbot.qiangtu.com':
+                    return "baidu"
+                case 'https://aichat-openai.api.ecylt.top':
+                    return 'wbot'
+                default:
+                    break;
+            }
+
+            var type = row.type
             return getChannelType(type)
         }
 
@@ -464,7 +509,9 @@ export default {
 
             for (var rowIndex in aliveRows) {
                 var row = aliveRows[rowIndex]
-                getItemChannelBalance(row.id, row.name)
+                if (!isOffical(row)) {
+                    getItemChannelBalance(row.id, row.name)
+                }
             }
 
             setTimeout(function () {
@@ -547,6 +594,7 @@ export default {
         onLoad();
 
         return {
+            isOffical,
             tableData,
             loading,
             input3,
