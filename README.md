@@ -113,7 +113,65 @@
   - [ ] 代理分润
   - [ ] 代理个性化魔改
   
-  
+
+## TWOAPI衍生验证清单
+
+- 对话：【[NetWeb UI 测试](https://www.8ai.link/)】最强模型【[o1-preview](https://twoapi-ui.qiangtu.com/chat/base/13/186)】【[Claude-3.5](https://twoapi-ui.qiangtu.com/chat/base/122/160)】【[ERNIE-Bot-Pro](https://twoapi-ui.qiangtu.com/chat/base/3/35)】【[glm-4-long](https://twoapi-ui.qiangtu.com/chat/base/12/181)】开源【[Two API UI源码](https://github.com/520hacker/two-api)】
+- 翻译：【[语法优化](https://twoapi-ui.qiangtu.com/chat/base/1/164)】【[中英互译](https://twoapi-ui.qiangtu.com/chat/base/7/164)】
+- 文案：【[董宇辉风格](https://twoapi-ui.qiangtu.com/chat/base/118/77/dse9iXvor)】【[小红书](https://twoapi-ui.qiangtu.com/chat/base/107/72)】【[小红书2](https://twoapi-ui.qiangtu.com/chat/base/108/11)】
+- 微信：清单【 [主流微信BOT方案](https://github.com/520hacker/awesome-ai/blob/main/%E5%BE%AE%E4%BF%A1ChatGPT.md) 】音色加持【 [福利：微信萌妹子语音](https://odin.mblog.club/%E5%B0%8F%E5%A7%90%E5%A7%90%E8%AF%AD%E9%9F%B3)】
+- 语音：【板块建设中...】
+- 论文：**论文神器**【[免费测试](https://twoapi-ui.qiangtu.com/article/generator)】开源【[论文神器源码](https://github.com/520hacker/lunwenshenqi)】【[教学](https://odin.mblog.club/AI%E9%95%BF%E6%96%87%E7%94%9F%E6%88%90%E5%99%A8)】
+- 助学：【[笔记测验](https://note2exam.qiangtu.com/)】开源【[笔记测验源码](https://github.com/520hacker/note2exam)】
+- 读文件：【[基于文档对话](https://twoapi-ui.qiangtu.com/chat/base/113/69)】
+- 做图片： 【[识别图片](https://twoapi-ui.qiangtu.com/chat/base/112/70)】【[生成头像](https://twoapi-ui.qiangtu.com/chat/base/139/77/Wk77jayA0)】 开源【[批量出图源码](https://github.com/520hacker/mj-chat-autorun)】
+- 写歌：【[SUNO](https://twoapi-ui.qiangtu.com/chat/base/127/159)】
+- 做PPT：【[GPTS](https://twoapi-ui.qiangtu.com/chat/base/131/77/Gt6Z8pqWF)】
+- 做视频： 转发成本较高,不稳定:【[RUNWAY](https://twoapi-ui.qiangtu.com/chat/base/141/180)】【[LUMA](https://twoapi-ui.qiangtu.com/log/video/luma-video)】【[VIDU](https://twoapi-ui.qiangtu.com/chat/base/140/177)】
+- 游戏：【[哄哄女友](https://twoapi-ui.qiangtu.com/chat/base/120/164) 】【 [辩论会](https://twoapi-ui.qiangtu.com/chat/base/143/164)】
+- 卡片：【[答案之书](https://twoapi-ui.qiangtu.com/chat/base/142/164)】【[新解词语卡](https://twoapi-ui.qiangtu.com/chat/base/144/164)】
+- 人物：【[禅师](https://twoapi-ui.qiangtu.com/chat/base/106/139)】【[祖母](https://twoapi-ui.qiangtu.com/chat/base/5/138)】【[半仙](https://twoapi-ui.qiangtu.com/chat/base/135/77/984qxMQkT)】
+- 插件：【[一步](https://yibu.qiangtu.com/)】开源【[ECHO-一步](https://github.com/520hacker/markdown-AI-editor/tree/main/source-vue)】应用：【[随手记](https://suishouji.qiangtu.com/)】
+- 编程：开源【[给整个项目添加注释源码](https://github.com/520hacker/CodeCommenter)】
+
+### 汇总本站点已开源模块：
+
+- 开源【[给整个项目添加注释 源码](https://github.com/520hacker/CodeCommenter)】
+- 开源【[Two API UI 源码](https://github.com/520hacker/two-api)】
+- 开源【[论文神器 源码](https://github.com/520hacker/lunwenshenqi)】
+- 开源【[笔记测验 源码](https://github.com/520hacker/note2exam)】
+- 开源【[批量出图 源码](https://github.com/520hacker/mj-chat-autorun)】
+- 开源【[随手记 源码](https://github.com/520hacker/markdown-AI-editor)】
+
+### 其他开源项目
+
+- 开源【[今日词云 源码](https://github.com/520hacker/Today.WordCloud)】
+- 开源【[AI摆摊海报](https://github.com/520hacker/qrcode_maper)】
+- 开源【[RSS广场](https://github.com/520hacker/rss-square)】
+- 开源【[图片协议转存OSS](https://github.com/520hacker/img2oss)】
+
+
+
+## 国产AI
+
+| 厂家                                        | 主站MODEL                                                    | Free                                                         | 开源                                                         |
+| ------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [百度](https://aistudio.baidu.com/index)    | [ERNIE-Bot-Pro](https://twoapi-ui.qiangtu.com/chat/base/3/35),[ERNIE-Bot-turbo](https://twoapi-ui.qiangtu.com/chat/base/3/34),[ERNIE-Bot](https://twoapi-ui.qiangtu.com/chat/base/3/33) | [ERNIE-Lite](https://twoapi-ui.qiangtu.com/chat/base/3/147),[ERNIE-Speed](https://twoapi-ui.qiangtu.com/chat/base/3/146),[ERNIE-Tiny](https://twoapi-ui.qiangtu.com/chat/base/3/148) |                                                              |
+| [阿里](https://bailian.console.aliyun.com/) | [qwen-max](https://twoapi-ui.qiangtu.com/chat/base/115/78),[qwen-2-70b](https://twoapi-ui.qiangtu.com/chat/base/115/114),[qwen-long](https://twoapi-ui.qiangtu.com/chat/base/115/192) |                                                              | [qwen2-72b-instruct](https://www.ollama.com/library/qwen2)   |
+| [腾讯](https://hunyuan.tencent.com/)        | [hunyuan](https://twoapi-ui.qiangtu.com/chat/base/134/87)    | [yuanqi](https://twoapi-ui.qiangtu.com/chat/base/5/138),hunyuan-lite |                                                              |
+| 月之暗面                                    | [kimi](https://twoapi-ui.qiangtu.com/chat/base/116/127),[moonshot-v1-128k](https://twoapi-ui.qiangtu.com/chat/base/116/85) |                                                              |                                                              |
+| DEEPPSEEK                                   | [deepseek-chat](https://twoapi-ui.qiangtu.com/chat/base/130/131),[deepseek-coder](https://twoapi-ui.qiangtu.com/chat/base/130/132) |                                                              | [deepseek-v2.5](https://www.ollama.com/library/deepseek-v2.5) [deepseek-coder-v2](https://www.ollama.com/library/deepseek-coder-v2) |
+| 智谱                                        | [glm-4](https://twoapi-ui.qiangtu.com/chat/base/12/99)       | [GLM-4-Flash](https://twoapi-ui.qiangtu.com/chat/base/12/191) | [glm4-9B](https://www.ollama.com/library/glm4)               |
+| 讯飞                                        | [generalv3.5](https://twoapi-ui.qiangtu.com/chat/base/123/108) |                                                              |                                                              |
+| 百川                                        | Baichuan4,Baichuan3-Turbo,Baichuan3-Turbo-128k               |                                                              | [baichuan2-13b-chat-v1](https://www.ollama.com/maxkb/baichuan2) |
+| 360                                         | [360gpt2-pro](https://twoapi-ui.qiangtu.com/chat/base/11/173),[360gpt-turbo](https://twoapi-ui.qiangtu.com/chat/base/11/175),[360GPT_S2_V9.4](https://twoapi-ui.qiangtu.com/chat/base/11/46) |                                                              |                                                              |
+| 零一万物                                    | [yi-vl-plus](https://twoapi-ui.qiangtu.com/chat/base/124/122),[yi-34b-chat-200k](https://twoapi-ui.qiangtu.com/chat/base/124/121),yi-large,yi-large-turbo,yi-large-rag,yi-medium | Yi-1.5-6B-Chat,Yi-1.5-9B-Chat-16K                            |                                                              |
+| STEP                                        | [step-2-16k](https://twoapi-ui.qiangtu.com/chat/base/128/188) |                                                              |                                                              |
+| MINMAX                                      | abab6.5s-245k,abab6.5t-8k,abab6.5g-8k                        |                                                              |                                                              |
+| 字节                                        |                                                              |                                                              |                                                              |
+| 其他                                        |                                                              | [wbot-2](https://twoapi-ui.qiangtu.com/chat/base/129/126)    |                                                              |
+
+价格对比参考: https://www.llmintro.com/
 
 ## 开发和升级计划
 
